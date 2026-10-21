@@ -12,19 +12,31 @@
   --font-sans:
     system-ui, -apple-system, 'Segoe UI Variable', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
-  --color-canvas: #0a0a0f;
-  --color-surface: #131319;
-  --color-surface-raised: #191922;
-  --color-surface-hover: #1e1e29;
-  --color-border: #26262f;
-  --color-border-strong: #34343f;
-  --color-ink: #f2f1f7;
-  --color-ink-soft: #a6a4b3;
-  --color-muted: #6f6d7d;
+  /*
+   * Three deliberate lightness tiers, not two. Chrome (sidebar/top bar)
+   * sits on `chrome` — nearly the same tone as `canvas` so navigation
+   * recedes — while content surfaces (`surface`) are a clearly distinct
+   * step lighter so cards actually read as elevated panels rather than
+   * blending into the page. `surface-raised` (modals/popovers) and
+   * `surface-hover` step up again from there. On a near-black page,
+   * box-shadow alone is invisible (shadows need a lighter ambient to
+   * read against), so the gap between these steps — not shadow blur —
+   * is what carries the elevation.
+   */
+  --color-canvas: #08080b;
+  --color-chrome: #0c0c10;
+  --color-surface: #18181f;
+  --color-surface-raised: #202029;
+  --color-surface-hover: #26262f;
+  --color-border: #2a2a34;
+  --color-border-strong: #3c3c49;
+  --color-ink: #f4f3f8;
+  --color-ink-soft: #a9a7b6;
+  --color-muted: #716f80;
 
-  --color-brand: #8b7bff;
-  --color-brand-soft: #211d3d;
-  --color-brand-ink: #c7befe;
+  --color-brand: #8d7bff;
+  --color-brand-soft: #241f45;
+  --color-brand-ink: #c9c0ff;
 
   --color-success: #5fc98b;
   --color-success-soft: #15291f;
@@ -47,12 +59,13 @@
  */
 @media (prefers-color-scheme: light) {
   :root {
-    --color-canvas: #f6f6fb;
+    --color-canvas: #f3f2f8;
+    --color-chrome: #f7f6fb;
     --color-surface: #ffffff;
     --color-surface-raised: #ffffff;
     --color-surface-hover: #f1f0f9;
-    --color-border: #e5e3ef;
-    --color-border-strong: #d4d1e3;
+    --color-border: #e1dfec;
+    --color-border-strong: #cdc9e0;
     --color-ink: #17151f;
     --color-ink-soft: #5c5969;
     --color-muted: #938fa0;
@@ -142,4 +155,15 @@ body {
     linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
   background-size: 28px 28px;
   opacity: 0.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

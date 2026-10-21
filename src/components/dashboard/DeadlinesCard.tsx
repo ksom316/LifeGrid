@@ -15,7 +15,14 @@ export function DeadlinesCard() {
     .slice(0, 6)
 
   return (
-    <Card title="Upcoming deadlines">
+    <Card
+      title={
+        <span className="flex items-center gap-2">
+          <IconTimer width={14} height={14} className="text-brand-ink" />
+          Upcoming deadlines
+        </span>
+      }
+    >
       {upcoming.length === 0 ? (
         <EmptyState
           icon={<IconTimer width={28} height={28} />}
@@ -23,14 +30,14 @@ export function DeadlinesCard() {
           description="Tasks with a due date will appear here, soonest first."
         />
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul className="-mx-2 flex flex-col divide-y divide-border">
           {upcoming.map((task) => {
             const project = projects.find((p) => p.id === task.projectId)
             const overdue = isOverdue(task.dueDate!)
             return (
               <li
                 key={task.id}
-                className="flex items-center gap-3 rounded-lg border border-border px-3 py-2"
+                className="flex items-center gap-3 rounded-lg px-2 py-2.5 transition-colors hover:bg-surface-hover"
               >
                 {project ? (
                   <Link

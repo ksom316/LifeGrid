@@ -52,7 +52,7 @@ export function ProjectDetailPage() {
 
   if (status === 'error') {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
+      <div className="flex flex-col items-center gap-3 rounded-2xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
         <p className="text-sm font-medium text-danger">Life Grid couldn't load this project.</p>
         {error && <p className="max-w-md text-xs text-ink-soft">{error}</p>}
         <Button variant="secondary" onClick={refresh}>
@@ -66,7 +66,7 @@ export function ProjectDetailPage() {
 
   if (!project) {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border bg-surface px-6 py-12 text-center">
+      <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border-strong bg-surface px-6 py-12 text-center">
         <IconFolder width={32} height={32} className="text-muted" />
         <p className="text-sm font-medium text-ink">Project not found</p>
         <p className="max-w-sm text-sm text-ink-soft">
@@ -104,7 +104,7 @@ export function ProjectDetailPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-2xl font-semibold text-ink">{project.name}</h1>
+            <h1 className="text-[1.75rem] font-bold tracking-tight text-ink">{project.name}</h1>
             <Badge tone={STATUS_TONE[project.status]}>{project.status}</Badge>
             <Badge tone={PRIORITY_TONE[projectPriority(project)]}>{projectPriority(project)}</Badge>
           </div>
@@ -162,7 +162,7 @@ export function ProjectDetailPage() {
       </div>
 
       {projectTasks.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-surface px-6 py-10 text-center">
+        <div className="rounded-2xl border border-dashed border-border-strong bg-surface px-6 py-10 text-center">
           <p className="text-sm font-medium text-ink">No tasks in this project yet</p>
           <p className="mx-auto mt-1 max-w-sm text-sm text-ink-soft">
             Add your first task to start tracking progress on {project.name}.
@@ -193,7 +193,7 @@ export function ProjectDetailPage() {
       </div>
 
       {projectNotes.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-surface px-6 py-10 text-center">
+        <div className="rounded-2xl border border-dashed border-border-strong bg-surface px-6 py-10 text-center">
           <p className="text-sm font-medium text-ink">No notes linked to this project yet</p>
           <p className="mx-auto mt-1 max-w-sm text-sm text-ink-soft">
             Link a note to {project.name} to keep context alongside its tasks.
@@ -281,7 +281,9 @@ export function ProjectDetailPage() {
 function Stat({ label, value, tone }: { label: string; value: number; tone?: 'danger' }) {
   return (
     <div>
-      <p className={`text-2xl font-semibold ${tone === 'danger' && value > 0 ? 'text-danger' : 'text-ink'}`}>
+      <p
+        className={`text-3xl font-bold tracking-tight tabular-nums ${tone === 'danger' && value > 0 ? 'text-danger' : 'text-ink'}`}
+      >
         {value}
       </p>
       <p className="text-xs text-ink-soft">{label}</p>

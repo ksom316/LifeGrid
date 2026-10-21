@@ -83,7 +83,7 @@ describe('ProjectDetailPage', () => {
 
     renderProjectsApp(`/projects/${project.id}`)
     const taskTitle = await screen.findByText('Lay the stones')
-    const card = taskTitle.closest('div.rounded-lg') as HTMLElement
+    const card = taskTitle.closest('div.rounded-xl') as HTMLElement
     const statusSelect = within(card).getByRole('combobox')
 
     fireEvent.change(statusSelect, { target: { value: 'done' } })
@@ -109,7 +109,7 @@ describe('ProjectDetailPage', () => {
 
     renderProjectsApp(`/projects/${origin.id}`)
     const taskTitle = await screen.findByText('Movable task')
-    const card = taskTitle.closest('div.rounded-lg') as HTMLElement
+    const card = taskTitle.closest('div.rounded-xl') as HTMLElement
     fireEvent.click(within(card).getByRole('button', { name: /edit "movable task"/i }))
 
     const dialog = await screen.findByRole('dialog')
@@ -132,7 +132,7 @@ describe('ProjectDetailPage', () => {
 
     renderProjectsApp(`/projects/${project.id}`)
     const taskTitle = await screen.findByText('Freeable task')
-    const card = taskTitle.closest('div.rounded-lg') as HTMLElement
+    const card = taskTitle.closest('div.rounded-xl') as HTMLElement
     fireEvent.click(within(card).getByRole('button', { name: /edit "freeable task"/i }))
 
     const dialog = await screen.findByRole('dialog')
@@ -266,7 +266,7 @@ describe('ProjectDetailPage', () => {
 
     renderProjectsApp(`/projects/${project.id}`)
     const taskTitle = await screen.findByText('Daily standup notes')
-    const card = taskTitle.closest('div.rounded-lg') as HTMLElement
+    const card = taskTitle.closest('div.rounded-xl') as HTMLElement
     const statusSelect = within(card).getByRole('combobox')
     fireEvent.change(statusSelect, { target: { value: 'done' } })
 
@@ -298,7 +298,7 @@ describe('ProjectDetailPage', () => {
 
     renderProjectsApp(`/projects/${project.id}`)
     const taskTitle = await screen.findByText('Stoppable task')
-    const card = taskTitle.closest('div.rounded-lg') as HTMLElement
+    const card = taskTitle.closest('div.rounded-xl') as HTMLElement
     fireEvent.click(within(card).getByRole('button', { name: /edit "stoppable task"/i }))
 
     const dialog = await screen.findByRole('dialog')

@@ -57,7 +57,7 @@ export function TaskCard({ task, projectId, projects, highlighted = false }: Tas
     <div
       ref={cardRef}
       id={`task-${task.id}`}
-      className={`flex flex-col gap-2 rounded-lg border bg-canvas p-3 transition-colors ${
+      className={`flex flex-col gap-2 rounded-xl border bg-canvas p-3 shadow-[inset_0_1px_2px_0_rgba(0,0,0,0.25)] transition-colors hover:border-border-strong ${
         highlighted ? 'border-brand ring-2 ring-brand/40' : 'border-border'
       }`}
     >

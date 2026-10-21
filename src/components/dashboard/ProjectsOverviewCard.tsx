@@ -16,7 +16,14 @@ export function ProjectsOverviewCard() {
   const active = projects.filter((p) => p.status === 'active').slice(0, 5)
 
   return (
-    <Card title="Active projects">
+    <Card
+      title={
+        <span className="flex items-center gap-2">
+          <IconFolder width={14} height={14} className="text-brand-ink" />
+          Active projects
+        </span>
+      }
+    >
       {active.length === 0 ? (
         <EmptyState
           icon={<IconFolder width={28} height={28} />}
@@ -24,7 +31,7 @@ export function ProjectsOverviewCard() {
           description="Create a project to start grouping tasks, notes, and focus time."
         />
       ) : (
-        <ul className="flex flex-col gap-3">
+        <ul className="flex flex-col gap-4">
           {active.map((project) => {
             const projectTasks = tasks.filter((t) => t.projectId === project.id)
             const done = projectTasks.filter((t) => t.status === 'done').length
@@ -32,12 +39,12 @@ export function ProjectsOverviewCard() {
             const pct = total === 0 ? 0 : Math.round((done / total) * 100)
             return (
               <li key={project.id}>
-                <div className="mb-1 flex items-center gap-2">
-                  <span className={`h-2 w-2 rounded-full ${COLOR_DOT[project.color]}`} />
+                <div className="mb-1.5 flex items-center gap-2">
+                  <span className={`h-2 w-2 shrink-0 rounded-full ${COLOR_DOT[project.color]}`} />
                   <span className="flex-1 truncate text-sm font-medium text-ink">
                     {project.name}
                   </span>
-                  <span className="text-xs text-ink-soft">
+                  <span className="text-xs tabular-nums text-ink-soft">
                     {total === 0 ? 'No tasks' : `${done}/${total}`}
                   </span>
                 </div>

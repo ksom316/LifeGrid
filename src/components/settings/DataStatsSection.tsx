@@ -23,7 +23,7 @@ export function DataStatsSection() {
           const demo = records.length - real
           return (
             <div key={key}>
-              <p className="text-2xl font-semibold text-ink">{real}</p>
+              <p className="text-3xl font-bold tracking-tight tabular-nums text-ink">{real}</p>
               <p className="text-xs text-ink-soft">
                 {label}
                 {demo > 0 && <span className="text-muted"> (+{demo} sample)</span>}

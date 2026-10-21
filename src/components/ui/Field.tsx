@@ -39,6 +39,6 @@ export function Field({ label, error, children }: FieldProps) {
 }
 
 const inputClasses =
-  'w-full rounded-lg border border-border bg-canvas px-3 py-2 text-sm text-ink placeholder:text-muted transition-colors focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25 aria-invalid:border-danger aria-invalid:focus:ring-danger/25'
+  'w-full rounded-xl border border-border-strong bg-canvas px-3.5 py-2.5 text-sm text-ink placeholder:text-muted shadow-[inset_0_1px_2px_0_rgba(0,0,0,0.3)] transition-colors focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25 aria-invalid:border-danger aria-invalid:focus:ring-danger/25'
 
 export { inputClasses }

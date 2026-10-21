@@ -84,7 +84,7 @@ export function ProjectsPage() {
 
   if (status === 'error') {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
+      <div className="flex flex-col items-center gap-3 rounded-2xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
         <p className="text-sm font-medium text-danger">Life Grid couldn't load your projects.</p>
         {error && <p className="max-w-md text-xs text-ink-soft">{error}</p>}
         <Button variant="secondary" onClick={refresh}>
@@ -98,8 +98,8 @@ export function ProjectsPage() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-ink">Projects</h1>
-          <p className="mt-1 text-sm text-ink-soft">
+          <h1 className="text-[1.75rem] font-bold tracking-tight text-ink">Projects</h1>
+          <p className="mt-1.5 text-sm text-ink-soft">
             Organise your work into projects and track their tasks in one place.
           </p>
         </div>
@@ -113,7 +113,7 @@ export function ProjectsPage() {
       </div>
 
       {projects.length > 0 && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:flex-wrap sm:items-end">
+        <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-4 sm:flex-row sm:flex-wrap sm:items-end">
           <div className="flex-1 sm:min-w-[220px]">
             <Field label="Search">
               <div className="relative">
@@ -184,7 +184,7 @@ export function ProjectsPage() {
       )}
 
       {projects.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-surface px-6 py-12">
+        <div className="rounded-2xl border border-dashed border-border-strong bg-surface px-6 py-12">
           <EmptyState
             icon={<IconFolder width={32} height={32} />}
             title="No projects yet"
@@ -197,7 +197,7 @@ export function ProjectsPage() {
           />
         </div>
       ) : filteredProjects.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-surface px-6 py-12">
+        <div className="rounded-2xl border border-dashed border-border-strong bg-surface px-6 py-12">
           <EmptyState
             icon={<IconSearch width={32} height={32} />}
             title="No projects match your filters"

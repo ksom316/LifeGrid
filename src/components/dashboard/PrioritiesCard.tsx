@@ -22,7 +22,14 @@ export function PrioritiesCard() {
     .slice(0, 6)
 
   return (
-    <Card title="Today's priorities">
+    <Card
+      title={
+        <span className="flex items-center gap-2">
+          <IconFlag width={14} height={14} className="text-brand-ink" />
+          Today's priorities
+        </span>
+      }
+    >
       {priorities.length === 0 ? (
         <EmptyState
           icon={<IconFlag width={28} height={28} />}
@@ -30,7 +37,7 @@ export function PrioritiesCard() {
           description="High-priority tasks and anything due today will show up here."
         />
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul className="-mx-2 flex flex-col divide-y divide-border">
           {priorities.map((task) => (
             <PriorityRow
               key={task.id}
@@ -58,12 +65,12 @@ function PriorityRow({
   onToggle: () => void
 }) {
   return (
-    <li className="flex items-center gap-3 rounded-lg border border-border px-3 py-2">
+    <li className="flex items-center gap-3 rounded-lg px-2 py-2.5 transition-colors hover:bg-surface-hover">
       <button
         type="button"
         onClick={onToggle}
         aria-label={`Mark "${task.title}" as done`}
-        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border text-transparent hover:border-brand hover:text-brand"
+        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border-strong text-transparent transition-colors hover:border-brand hover:bg-brand-soft hover:text-brand"
       >
         <IconCheck width={12} height={12} />
       </button>

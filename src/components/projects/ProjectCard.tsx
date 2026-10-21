@@ -35,7 +35,7 @@ export function ProjectCard({ project, tasks }: ProjectCardProps) {
   return (
     <Link
       to={`/projects/${project.id}`}
-      className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-5 transition-colors hover:border-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+      className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-all hover:-translate-y-0.5 hover:border-brand/50 hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">

@@ -44,17 +44,17 @@ export function Modal({ title, isOpen, onClose, children, maxWidthClassName = 'm
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className={`max-h-[calc(100vh-2rem)] w-full ${maxWidthClassName} overflow-y-auto rounded-2xl border border-border bg-surface-raised p-5 shadow-2xl shadow-black/50`}
+        className={`max-h-[calc(100vh-2rem)] w-full ${maxWidthClassName} overflow-y-auto rounded-2xl border border-border-strong bg-surface-raised p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]`}
       >
-        <div className="mb-4 flex items-center justify-between">
-          <h2 id="modal-title" className="text-base font-semibold text-ink">
+        <div className="mb-5 flex items-center justify-between border-b border-border pb-4">
+          <h2 id="modal-title" className="text-lg font-semibold tracking-tight text-ink">
             {title}
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="rounded-md p-1.5 text-ink-soft hover:bg-surface-hover hover:text-ink cursor-pointer"
+            className="rounded-lg p-1.5 text-ink-soft hover:bg-surface-hover hover:text-ink cursor-pointer"
           >
             <IconX width={16} height={16} />
           </button>

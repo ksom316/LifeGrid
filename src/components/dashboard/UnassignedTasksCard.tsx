@@ -28,7 +28,15 @@ export function UnassignedTasksCard() {
   const editingTask = tasks.find((t) => t.id === editingTaskId)
 
   return (
-    <Card title="Other tasks">
+    <Card
+      title={
+        <span className="flex items-center gap-2">
+          <IconClipboard width={14} height={14} className="text-brand-ink" />
+          Other tasks
+        </span>
+      }
+      action={unassigned.length > 0 ? <Badge tone="neutral">{unassigned.length}</Badge> : undefined}
+    >
       {unassigned.length === 0 ? (
         <EmptyState
           icon={<IconClipboard width={28} height={28} />}
@@ -36,17 +44,17 @@ export function UnassignedTasksCard() {
           description="Tasks you add without a project will show up here."
         />
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul className="-mx-2 flex flex-col divide-y divide-border">
           {unassigned.map((task) => (
             <li
               key={task.id}
-              className="flex items-center gap-3 rounded-lg border border-border px-3 py-2"
+              className="flex items-center gap-3 rounded-lg px-2 py-2.5 transition-colors hover:bg-surface-hover"
             >
               <button
                 type="button"
                 onClick={() => toggleTaskDone(task.id)}
                 aria-label={`Mark "${task.title}" as done`}
-                className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border text-transparent hover:border-brand hover:text-brand"
+                className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border-strong text-transparent transition-colors hover:border-brand hover:bg-brand-soft hover:text-brand"
               >
                 <IconCheck width={12} height={12} />
               </button>

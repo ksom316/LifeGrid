@@ -22,7 +22,7 @@ export function NoteCard({ note, project, projects }: NoteCardProps) {
   const pinned = notePinned(note)
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-5 transition-colors hover:border-brand">
+    <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-colors hover:border-brand/50">
       <div className="flex items-start justify-between gap-2">
         <Link to={`/vault/${note.id}`} className="min-w-0 flex-1 focus-visible:outline-none">
           <h3 className="truncate text-base font-semibold text-ink hover:text-brand-ink">

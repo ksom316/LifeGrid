@@ -16,7 +16,22 @@ export function FocusSummaryCard() {
   const mostRecentProject = mostRecent && projects.find((p) => p.id === mostRecent.projectId)
 
   return (
-    <Card title="Focus today" action={<Link to="/focus" className="text-xs font-medium text-brand-ink hover:underline">Open timer</Link>}>
+    <Card
+      title={
+        <span className="flex items-center gap-2">
+          <IconTimer width={14} height={14} className="text-brand-ink" />
+          Focus today
+        </span>
+      }
+      action={
+        <Link
+          to="/focus"
+          className="rounded-lg border border-border px-2.5 py-1 text-xs font-medium text-ink-soft transition-colors hover:border-border-strong hover:text-ink"
+        >
+          Open timer
+        </Link>
+      }
+    >
       {stats.todayMinutes === 0 && !mostRecent ? (
         <EmptyState
           icon={<IconTimer width={28} height={28} />}
@@ -27,7 +42,9 @@ export function FocusSummaryCard() {
         <div className="flex flex-col gap-3">
           <div className="flex items-end gap-4">
             <div>
-              <p className="text-3xl font-semibold text-ink">{stats.todayMinutes}</p>
+              <p className="text-4xl font-bold tracking-tight tabular-nums text-ink">
+                {stats.todayMinutes}
+              </p>
               <p className="text-xs text-ink-soft">minutes focused today</p>
             </div>
           </div>

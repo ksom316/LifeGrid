@@ -49,7 +49,7 @@ export function FocusStatsPanel() {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-2xl font-semibold text-ink">{value}</p>
+      <p className="text-3xl font-bold tracking-tight tabular-nums text-ink">{value}</p>
       <p className="text-xs text-ink-soft">{label}</p>
     </div>
   )

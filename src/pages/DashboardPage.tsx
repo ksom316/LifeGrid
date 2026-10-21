@@ -23,7 +23,7 @@ export function DashboardPage() {
 
   if (status === 'error') {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
+      <div className="flex flex-col items-center gap-3 rounded-2xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
         <p className="text-sm font-medium text-danger">
           Life Grid couldn't load your data.
         </p>
@@ -45,21 +45,21 @@ export function DashboardPage() {
       <DemoDataBanner />
 
       {isEmpty && (
-        <div className="rounded-xl border border-dashed border-border bg-surface px-6 py-10 text-center">
+        <div className="rounded-2xl border border-dashed border-border-strong bg-surface px-6 py-12 text-center">
           <p className="text-sm font-medium text-ink">Your dashboard is empty</p>
-          <p className="mx-auto mt-1 max-w-sm text-sm text-ink-soft">
+          <p className="mx-auto mt-1.5 max-w-sm text-sm text-ink-soft">
             Add your first task, project, or note above
             {dataSource === 'local' && ' — or explore Life Grid with a small set of sample data you can remove at any time'}.
           </p>
           {dataSource === 'local' && (
-            <Button className="mt-4" variant="primary" onClick={loadSampleData}>
+            <Button className="mt-5" variant="primary" onClick={loadSampleData}>
               Load sample data
             </Button>
           )}
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <PrioritiesCard />
         <DeadlinesCard />
         <ProjectsOverviewCard />

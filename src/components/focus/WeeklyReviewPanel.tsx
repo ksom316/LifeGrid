@@ -106,15 +106,15 @@ export function WeeklyReviewPanel() {
 
       <div className="mb-5 grid grid-cols-2 gap-4 border-b border-border pb-5 sm:grid-cols-3">
         <div>
-          <p className="text-2xl font-semibold text-ink">{completedTasksThisWeek.length}</p>
+          <p className="text-3xl font-bold tracking-tight tabular-nums text-ink">{completedTasksThisWeek.length}</p>
           <p className="text-xs text-ink-soft">Tasks completed</p>
         </div>
         <div>
-          <p className="text-2xl font-semibold text-ink">{focusMinutesThisWeek}</p>
+          <p className="text-3xl font-bold tracking-tight tabular-nums text-ink">{focusMinutesThisWeek}</p>
           <p className="text-xs text-ink-soft">Focus minutes</p>
         </div>
         <div className="col-span-2 sm:col-span-1">
-          <p className="text-2xl font-semibold text-ink">{touchedProjects.length}</p>
+          <p className="text-3xl font-bold tracking-tight tabular-nums text-ink">{touchedProjects.length}</p>
           <p className="text-xs text-ink-soft">Projects touched</p>
         </div>
       </div>
