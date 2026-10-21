@@ -59,15 +59,20 @@ export function DashboardPage() {
         </div>
       )}
 
+      {/*
+        Exactly six cards in a two-column grid — three full, evenly matched
+        rows with no dangling cell. FocusSummaryCard previously spanned both
+        columns on its own row, which left an empty cell beside
+        UnassignedTasksCard above it; letting it flow naturally pairs them
+        instead.
+      */}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <PrioritiesCard />
         <DeadlinesCard />
         <ProjectsOverviewCard />
         <RecentNotesCard />
         <UnassignedTasksCard />
-        <div className="lg:col-span-2">
-          <FocusSummaryCard />
-        </div>
+        <FocusSummaryCard />
       </div>
     </div>
   )

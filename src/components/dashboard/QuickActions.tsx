@@ -16,7 +16,10 @@ export function QuickActions() {
 
   return (
     <>
-      <div className="flex flex-wrap gap-2">
+      {/* A even 2-column grid on mobile (so four actions line up cleanly
+          instead of ragged-wrapping by label width); desktop keeps the
+          natural content-hugging row since there's room for it. */}
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
         <Button variant="primary" icon={<IconPlus width={16} height={16} />} onClick={() => setActive('task')}>
           Add task
         </Button>
