@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
+import { IconX } from './icons'
 
 interface ModalProps {
   title: string
@@ -33,7 +34,7 @@ export function Modal({ title, isOpen, onClose, children, maxWidthClassName = 'm
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
@@ -43,7 +44,7 @@ export function Modal({ title, isOpen, onClose, children, maxWidthClassName = 'm
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className={`w-full ${maxWidthClassName} rounded-xl border border-border bg-surface p-5 shadow-xl`}
+        className={`max-h-[calc(100vh-2rem)] w-full ${maxWidthClassName} overflow-y-auto rounded-2xl border border-border bg-surface-raised p-5 shadow-2xl shadow-black/50`}
       >
         <div className="mb-4 flex items-center justify-between">
           <h2 id="modal-title" className="text-base font-semibold text-ink">
@@ -53,9 +54,9 @@ export function Modal({ title, isOpen, onClose, children, maxWidthClassName = 'm
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="rounded-md p-1 text-ink-soft hover:bg-canvas hover:text-ink cursor-pointer"
+            className="rounded-md p-1.5 text-ink-soft hover:bg-surface-hover hover:text-ink cursor-pointer"
           >
-            ✕
+            <IconX width={16} height={16} />
           </button>
         </div>
         {children}

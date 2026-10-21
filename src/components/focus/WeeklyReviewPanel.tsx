@@ -86,7 +86,7 @@ export function WeeklyReviewPanel() {
           type="button"
           onClick={() => setWeekStart((d) => addDays(d, -7))}
           aria-label="Previous week"
-          className="rounded-md p-1.5 text-ink-soft hover:bg-canvas hover:text-ink"
+          className="rounded-md p-1.5 text-ink-soft hover:bg-surface-hover hover:text-ink"
         >
           <IconChevronLeft width={18} height={18} />
         </button>
@@ -98,7 +98,7 @@ export function WeeklyReviewPanel() {
           type="button"
           onClick={() => setWeekStart((d) => addDays(d, 7))}
           aria-label="Next week"
-          className="rounded-md p-1.5 text-ink-soft hover:bg-canvas hover:text-ink"
+          className="rounded-md p-1.5 text-ink-soft hover:bg-surface-hover hover:text-ink"
         >
           <IconChevronRight width={18} height={18} />
         </button>

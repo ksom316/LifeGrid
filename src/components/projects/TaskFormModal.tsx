@@ -116,6 +116,7 @@ export function TaskFormModal({
   const [titleError, setTitleError] = useState<string | null>(null)
   const [dueDateError, setDueDateError] = useState<string | null>(null)
   const [recurrenceError, setRecurrenceError] = useState<string | null>(null)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
@@ -124,6 +125,7 @@ export function TaskFormModal({
       setTitleError(null)
       setDueDateError(null)
       setRecurrenceError(null)
+      setSubmitError(null)
     }
   }, [isOpen, task, projectId])
 
@@ -191,6 +193,7 @@ export function TaskFormModal({
     if (hasError) return
 
     setSubmitting(true)
+    setSubmitError(null)
     try {
       const payload = {
         title: trimmedTitle,
@@ -210,6 +213,8 @@ export function TaskFormModal({
         isEditing && task ? await updateTask(task.id, payload) : await addTask(payload)
       onSaved?.(saved)
       onClose()
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
     } finally {
       setSubmitting(false)
     }
@@ -316,7 +321,7 @@ export function TaskFormModal({
                     onClick={() => setForm((f) => ({ ...f, recurrenceFrequency: freq }))}
                     className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                       form.recurrenceFrequency === freq
-                        ? 'bg-surface text-ink shadow-sm'
+                        ? 'bg-surface-raised text-ink shadow-sm ring-1 ring-border-strong'
                         : 'text-ink-soft hover:text-ink'
                     }`}
                     aria-pressed={form.recurrenceFrequency === freq}
@@ -382,6 +387,11 @@ export function TaskFormModal({
           )}
         </div>
 
+        {submitError && (
+          <p role="alert" className="mb-2 text-sm text-danger">
+            {submitError}
+          </p>
+        )}
         <div className="mt-2 flex justify-end gap-2">
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancel

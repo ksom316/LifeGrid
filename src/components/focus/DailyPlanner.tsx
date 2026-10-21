@@ -103,7 +103,7 @@ export function DailyPlanner() {
                   type="button"
                   onClick={() => removeDailyPriority(today, task.id)}
                   aria-label={`Remove "${task.title}" from today's priorities`}
-                  className="rounded-md p-1 text-ink-soft hover:bg-canvas hover:text-ink"
+                  className="rounded-md p-1 text-ink-soft hover:bg-surface-hover hover:text-ink"
                 >
                   <IconX width={14} height={14} />
                 </button>
@@ -207,7 +207,7 @@ function TaskGroup({
                 type="button"
                 onClick={() => onAddPriority(task.id)}
                 aria-label={`Add "${task.title}" to today's priorities`}
-                className="rounded-md p-1 text-ink-soft hover:bg-canvas hover:text-ink"
+                className="rounded-md p-1 text-ink-soft hover:bg-surface-hover hover:text-ink"
               >
                 <IconPlus width={14} height={14} />
               </button>

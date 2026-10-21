@@ -239,7 +239,7 @@ export function RestoreSection() {
             </Button>
             <Button
               variant={strategy === 'replace' ? 'danger' : 'primary'}
-              className={strategy === 'replace' ? 'bg-danger text-white hover:bg-danger/90' : ''}
+              className={strategy === 'replace' ? '!bg-danger !text-white hover:!bg-danger/90' : ''}
               onClick={handleRestore}
               disabled={strategy === 'replace' && !hasSafetyBackup}
             >

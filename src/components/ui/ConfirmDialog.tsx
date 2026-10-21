@@ -47,7 +47,7 @@ export function ConfirmDialog({
           variant={danger ? 'danger' : 'primary'}
           onClick={handleConfirm}
           disabled={submitting}
-          className={danger ? 'bg-danger text-white hover:bg-danger/90' : ''}
+          className={danger ? '!bg-danger !text-white hover:!bg-danger/90' : ''}
         >
           {confirmLabel}
         </Button>

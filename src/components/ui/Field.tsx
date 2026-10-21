@@ -25,7 +25,9 @@ export function Field({ label, error, children }: FieldProps) {
 
   return (
     <label htmlFor={inputId} className="mb-3 block text-sm">
-      <span className="mb-1 block font-medium text-ink">{label}</span>
+      <span className="mb-1.5 block text-xs font-medium tracking-wide text-ink-soft uppercase">
+        {label}
+      </span>
       {control}
       {error && (
         <span id={errorId} role="alert" className="mt-1 block text-xs text-danger">
@@ -37,6 +39,6 @@ export function Field({ label, error, children }: FieldProps) {
 }
 
 const inputClasses =
-  'w-full rounded-lg border border-border bg-canvas px-3 py-2 text-sm text-ink placeholder:text-muted focus:border-brand focus:outline-none aria-invalid:border-danger'
+  'w-full rounded-lg border border-border bg-canvas px-3 py-2 text-sm text-ink placeholder:text-muted transition-colors focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25 aria-invalid:border-danger aria-invalid:focus:ring-danger/25'
 
 export { inputClasses }

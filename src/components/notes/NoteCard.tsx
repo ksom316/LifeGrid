@@ -45,7 +45,7 @@ export function NoteCard({ note, project, projects }: NoteCardProps) {
             type="button"
             onClick={() => setEditOpen(true)}
             aria-label={`Edit "${note.title}"`}
-            className="rounded-md p-1 text-ink-soft hover:bg-canvas hover:text-ink"
+            className="rounded-md p-1 text-ink-soft hover:bg-surface-hover hover:text-ink"
           >
             <IconPencil width={14} height={14} />
           </button>

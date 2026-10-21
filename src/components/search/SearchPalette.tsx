@@ -104,14 +104,14 @@ export function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Search projects, tasks, and notes…"
-          className="w-full rounded-lg border border-border bg-canvas py-2 pl-9 pr-9 text-sm text-ink placeholder:text-muted focus:border-brand focus:outline-none"
+          className="w-full rounded-lg border border-border bg-canvas py-2 pl-9 pr-9 text-sm text-ink placeholder:text-muted transition-colors focus:border-brand focus:ring-2 focus:ring-brand/25 focus:outline-none"
         />
         {query && (
           <button
             type="button"
             onClick={() => setQuery('')}
             aria-label="Clear search"
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-ink-soft hover:bg-surface hover:text-ink"
+            className="absolute top-1/2 right-2 -translate-y-1/2 rounded-md p-1 text-ink-soft hover:bg-surface-hover hover:text-ink"
           >
             <IconX width={14} height={14} />
           </button>
@@ -154,7 +154,7 @@ export function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                     onMouseEnter={() => setActiveIndex(index)}
                     onClick={() => handleSelect(result)}
                     className={`flex w-full items-start gap-3 rounded-lg px-3 py-2 text-left transition-colors ${
-                      active ? 'bg-brand-soft' : 'hover:bg-canvas'
+                      active ? 'bg-brand-soft' : 'hover:bg-surface-hover'
                     }`}
                   >
                     <Icon width={16} height={16} className="mt-0.5 shrink-0 text-ink-soft" />

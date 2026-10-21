@@ -6,6 +6,7 @@ import { PrioritiesCard } from '../components/dashboard/PrioritiesCard'
 import { ProjectsOverviewCard } from '../components/dashboard/ProjectsOverviewCard'
 import { QuickActions } from '../components/dashboard/QuickActions'
 import { RecentNotesCard } from '../components/dashboard/RecentNotesCard'
+import { UnassignedTasksCard } from '../components/dashboard/UnassignedTasksCard'
 import { Button } from '../components/ui/Button'
 import { useAppData } from '../state/AppDataContext'
 
@@ -63,6 +64,7 @@ export function DashboardPage() {
         <DeadlinesCard />
         <ProjectsOverviewCard />
         <RecentNotesCard />
+        <UnassignedTasksCard />
         <div className="lg:col-span-2">
           <FocusSummaryCard />
         </div>

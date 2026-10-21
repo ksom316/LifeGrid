@@ -1,46 +1,76 @@
 @import 'tailwindcss';
 
+/*
+ * Life Grid's visual identity is "premium dark": deep charcoal surfaces with
+ * a restrained violet/blue accent. Dark is the unconditional (default)
+ * block below so it's what most users see; a refined light palette takes
+ * over under `prefers-color-scheme: light`. There is no in-app theme
+ * toggle — this mirrors the OS-preference-driven approach the app already
+ * had, just with both ends of it redesigned.
+ */
 @theme {
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-sans:
+    system-ui, -apple-system, 'Segoe UI Variable', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
-  --color-canvas: #f6f5f2;
-  --color-surface: #ffffff;
-  --color-border: #e6e3dc;
-  --color-ink: #1c1a17;
-  --color-ink-soft: #6b6659;
-  --color-muted: #9b9686;
+  --color-canvas: #0a0a0f;
+  --color-surface: #131319;
+  --color-surface-raised: #191922;
+  --color-surface-hover: #1e1e29;
+  --color-border: #26262f;
+  --color-border-strong: #34343f;
+  --color-ink: #f2f1f7;
+  --color-ink-soft: #a6a4b3;
+  --color-muted: #6f6d7d;
 
-  --color-brand: #5b4bd6;
-  --color-brand-soft: #efecfb;
-  --color-brand-ink: #3c2fa0;
+  --color-brand: #8b7bff;
+  --color-brand-soft: #211d3d;
+  --color-brand-ink: #c7befe;
 
-  --color-success: #2f8f5b;
-  --color-success-soft: #e7f5ed;
-  --color-warning: #b4791e;
-  --color-warning-soft: #faf0dd;
-  --color-danger: #c0433f;
-  --color-danger-soft: #fbeae9;
+  --color-success: #5fc98b;
+  --color-success-soft: #15291f;
+  --color-warning: #e0ab52;
+  --color-warning-soft: #332710;
+  --color-danger: #ea7a74;
+  --color-danger-soft: #341c1a;
 }
 
-@media (prefers-color-scheme: dark) {
-  @theme {
-    --color-canvas: #16151a;
-    --color-surface: #1e1d24;
-    --color-border: #2f2d36;
-    --color-ink: #efeef2;
-    --color-ink-soft: #b2aebc;
-    --color-muted: #7d7988;
+/*
+ * Tailwind's `@theme` at-rule always registers its variables at `:root`
+ * regardless of any `@media` it's nested inside — the nesting is discarded
+ * at build time, so a second `@theme` block can't be used to scope an
+ * override to a media query (verified empirically: with `@theme` used here,
+ * computed `--color-canvas` was the override value under every
+ * `prefers-color-scheme`, not just the intended one). Overriding the plain
+ * CSS custom properties on `:root` instead works correctly, since the
+ * utility classes Tailwind generates just reference `var(--color-canvas)`
+ * and resolve it through the normal cascade at paint time.
+ */
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-canvas: #f6f6fb;
+    --color-surface: #ffffff;
+    --color-surface-raised: #ffffff;
+    --color-surface-hover: #f1f0f9;
+    --color-border: #e5e3ef;
+    --color-border-strong: #d4d1e3;
+    --color-ink: #17151f;
+    --color-ink-soft: #5c5969;
+    --color-muted: #938fa0;
 
-    --color-brand: #9484ff;
-    --color-brand-soft: #2a2550;
-    --color-brand-ink: #d6cfff;
+    --color-brand: #5b4bd6;
+    --color-brand-soft: #efecfb;
+    --color-brand-ink: #3c2fa0;
 
-    --color-success: #5fc98b;
-    --color-success-soft: #173427;
-    --color-warning: #e0ab52;
-    --color-warning-soft: #3a2d14;
-    --color-danger: #e5726d;
-    --color-danger-soft: #3b1e1d;
+    --color-success: #2f8f5b;
+    --color-success-soft: #e7f5ed;
+    --color-warning: #b4791e;
+    --color-warning-soft: #faf0dd;
+    --color-danger: #c0433f;
+    --color-danger-soft: #fbeae9;
+
+    /* Switches native control chrome (checkboxes, date/time pickers,
+       select popups) back from the dark default below. */
+    color-scheme: light;
   }
 }
 
@@ -50,22 +80,60 @@ body,
   height: 100%;
 }
 
+:root {
+  color-scheme: dark;
+}
+
 body {
   margin: 0;
   background-color: var(--color-canvas);
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
   box-sizing: border-box;
 }
 
+::selection {
+  background-color: var(--color-brand);
+  color: #ffffff;
+}
+
 :focus-visible {
   outline: 2px solid var(--color-brand);
   outline-offset: 2px;
   border-radius: 6px;
+}
+
+/* Thin, unobtrusive scrollbars that match the dark surface rather than the OS default. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-border-strong);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Soft radial glow behind the app shell for a "command center" feel, kept
+   subtle enough not to affect text contrast anywhere content sits on top. */
+.app-glow {
+  background-image:
+    radial-gradient(60rem 30rem at 15% -10%, color-mix(in srgb, var(--color-brand) 10%, transparent), transparent),
+    radial-gradient(40rem 24rem at 100% 0%, color-mix(in srgb, var(--color-brand) 6%, transparent), transparent);
+  background-repeat: no-repeat;
 }
 
 .grid-texture {

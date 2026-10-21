@@ -204,7 +204,7 @@ export function FocusTimerCard() {
             type="button"
             onClick={() => setSelectedType(type)}
             className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-              selectedType === type ? 'bg-surface text-ink shadow-sm' : 'text-ink-soft hover:text-ink'
+              selectedType === type ? 'bg-surface-raised text-ink shadow-sm ring-1 ring-border-strong' : 'text-ink-soft hover:text-ink'
             }`}
             aria-pressed={selectedType === type}
           >

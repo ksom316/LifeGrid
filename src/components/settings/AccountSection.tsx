@@ -91,7 +91,7 @@ export function AccountSection() {
             clearError()
           }}
           className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-            mode === 'signIn' ? 'bg-surface text-ink shadow-sm' : 'text-ink-soft hover:text-ink'
+            mode === 'signIn' ? 'bg-surface-raised text-ink shadow-sm ring-1 ring-border-strong' : 'text-ink-soft hover:text-ink'
           }`}
           aria-pressed={mode === 'signIn'}
         >
@@ -104,7 +104,7 @@ export function AccountSection() {
             clearError()
           }}
           className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-            mode === 'signUp' ? 'bg-surface text-ink shadow-sm' : 'text-ink-soft hover:text-ink'
+            mode === 'signUp' ? 'bg-surface-raised text-ink shadow-sm ring-1 ring-border-strong' : 'text-ink-soft hover:text-ink'
           }`}
           aria-pressed={mode === 'signUp'}
         >

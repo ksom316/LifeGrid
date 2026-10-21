@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import { useAppData } from '../../state/AppDataContext'
 import { IconBook, IconFolder, IconHome, IconSearch, IconSettings, IconTimer, IconX } from '../ui/icons'
 
 const NAV_ITEMS = [
@@ -19,35 +20,37 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, onClose, onOpenSearch }: SidebarProps) {
+  const { dataSource } = useAppData()
+
   return (
     <>
       {isOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/30 lg:hidden"
+          className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden"
           onClick={onClose}
           aria-hidden="true"
         />
       )}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 shrink-0 border-r border-border bg-surface transition-transform duration-200 lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col border-r border-border bg-surface transition-transform duration-200 lg:static lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex items-center justify-between px-5 py-5">
-          <div className="flex items-center gap-2">
-            <div className="grid h-7 w-7 grid-cols-2 gap-0.5">
-              <span className="rounded-[2px] bg-brand" />
-              <span className="rounded-[2px] bg-brand/60" />
-              <span className="rounded-[2px] bg-brand/60" />
-              <span className="rounded-[2px] bg-brand" />
+          <div className="flex items-center gap-2.5">
+            <div className="grid h-7 w-7 grid-cols-2 gap-0.5 rounded-md bg-gradient-to-br from-brand to-brand-ink p-1 shadow-sm shadow-brand/30">
+              <span className="rounded-[2px] bg-white/90" />
+              <span className="rounded-[2px] bg-white/50" />
+              <span className="rounded-[2px] bg-white/50" />
+              <span className="rounded-[2px] bg-white/90" />
             </div>
-            <span className="text-sm font-semibold text-ink">Life Grid</span>
+            <span className="text-sm font-semibold tracking-tight text-ink">Life Grid</span>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close navigation"
-            className="rounded-md p-1 text-ink-soft hover:bg-canvas lg:hidden"
+            className="rounded-md p-1 text-ink-soft hover:bg-surface-hover lg:hidden"
           >
             <IconX width={18} height={18} />
           </button>
@@ -61,7 +64,7 @@ export function Sidebar({ isOpen, onClose, onOpenSearch }: SidebarProps) {
               onOpenSearch()
             }}
             aria-label="Open search"
-            className="flex w-full items-center gap-2 rounded-lg border border-border bg-canvas px-3 py-2 text-sm text-ink-soft transition-colors hover:border-brand hover:text-ink"
+            className="flex w-full items-center gap-2 rounded-lg border border-border bg-canvas px-3 py-2 text-sm text-ink-soft transition-colors hover:border-border-strong hover:text-ink"
           >
             <IconSearch width={16} height={16} />
             <span className="flex-1 text-left">Search</span>
@@ -71,7 +74,7 @@ export function Sidebar({ isOpen, onClose, onOpenSearch }: SidebarProps) {
           </button>
         </div>
 
-        <nav className="flex flex-col gap-1 px-3" aria-label="Primary">
+        <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3" aria-label="Primary">
           {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}
@@ -79,18 +82,36 @@ export function Sidebar({ isOpen, onClose, onOpenSearch }: SidebarProps) {
               end={to === '/'}
               onClick={onClose}
               className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                `group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   isActive
                     ? 'bg-brand-soft text-brand-ink'
-                    : 'text-ink-soft hover:bg-canvas hover:text-ink'
+                    : 'text-ink-soft hover:bg-surface-hover hover:text-ink'
                 }`
               }
             >
-              <Icon width={18} height={18} />
-              {label}
+              {({ isActive }) => (
+                <>
+                  <span
+                    className={`absolute top-1/2 left-0 h-5 w-0.5 -translate-y-1/2 rounded-full bg-brand transition-opacity ${
+                      isActive ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    aria-hidden="true"
+                  />
+                  <Icon width={18} height={18} />
+                  {label}
+                </>
+              )}
             </NavLink>
           ))}
         </nav>
+
+        <div className="flex items-center gap-2 border-t border-border px-5 py-4 text-xs text-muted">
+          <span
+            className={`h-1.5 w-1.5 rounded-full ${dataSource === 'hosted' ? 'bg-success' : 'bg-muted'}`}
+            aria-hidden="true"
+          />
+          {dataSource === 'hosted' ? 'Synced to your account' : 'Private & local-first'}
+        </div>
       </aside>
     </>
   )
