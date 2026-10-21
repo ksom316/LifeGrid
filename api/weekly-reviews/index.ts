@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { requireMethod, withAuth } from '../../server/http.ts'
-import { listWeeklyReviews } from '../../server/repositories/weeklyReviews.ts'
+import { requireMethod, withAuth } from '../../server/http.js'
+import { listWeeklyReviews } from '../../server/repositories/weeklyReviews.js'
 
 export default withAuth(async (req: VercelRequest, res: VercelResponse, { sql, user }) => {
   if (!requireMethod(req, res, ['GET'])) return

@@ -1,11 +1,11 @@
 import { randomUUID } from 'node:crypto'
-import type { Sql, SqlPool } from '../db.ts'
-import { withTransaction } from '../db.ts'
-import { notFound } from '../http.ts'
-import { assertOwnsProject } from '../ownership.ts'
-import { toDateStringOrUndefined, toDateTimeString, toDateTimeStringOrUndefined } from '../mapping.ts'
-import { computeNextDueDate } from '../../src/utils/recurrence.ts'
-import type { Task, TaskPriority, TaskRecurrence, TaskStatus } from '../../src/types/domain.ts'
+import type { Sql, SqlPool } from '../db.js'
+import { withTransaction } from '../db.js'
+import { notFound } from '../http.js'
+import { assertOwnsProject } from '../ownership.js'
+import { toDateStringOrUndefined, toDateTimeString, toDateTimeStringOrUndefined } from '../mapping.js'
+import { computeNextDueDate } from '../../src/utils/recurrence.js'
+import type { Task, TaskPriority, TaskRecurrence, TaskStatus } from '../../src/types/domain.js'
 
 interface TaskRow {
   id: string

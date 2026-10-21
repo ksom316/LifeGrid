@@ -1,10 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { createSession, normalizeEmail, sessionCookie, verifyPassword } from '../../server/auth.ts'
-import { getPool } from '../../server/db.ts'
-import { HttpError, readJsonBody, requireMethod, withErrorHandling } from '../../server/http.ts'
-import { clientIp, enforceRateLimit } from '../../server/rateLimit.ts'
-import { asRecord, requireString } from '../../server/validation.ts'
-import { findUserByEmail } from '../../server/repositories/users.ts'
+import { createSession, normalizeEmail, sessionCookie, verifyPassword } from '../../server/auth.js'
+import { getPool } from '../../server/db.js'
+import { HttpError, readJsonBody, requireMethod, withErrorHandling } from '../../server/http.js'
+import { clientIp, enforceRateLimit } from '../../server/rateLimit.js'
+import { asRecord, requireString } from '../../server/validation.js'
+import { findUserByEmail } from '../../server/repositories/users.js'
 
 export default withErrorHandling(async (req: VercelRequest, res: VercelResponse) => {
   if (!requireMethod(req, res, ['POST'])) return

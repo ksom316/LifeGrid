@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { notFound, readJsonBody, requireMethod, withAuth } from '../../server/http.ts'
+import { notFound, readJsonBody, requireMethod, withAuth } from '../../server/http.js'
 import {
   asRecord,
   optionalDate,
@@ -8,9 +8,9 @@ import {
   optionalRecurrence,
   optionalString,
   optionalUuid,
-} from '../../server/validation.ts'
-import { getTask, removeTask, updateTask } from '../../server/repositories/tasks.ts'
-import type { TaskPriority, TaskStatus } from '../../src/types/domain.ts'
+} from '../../server/validation.js'
+import { getTask, removeTask, updateTask } from '../../server/repositories/tasks.js'
+import type { TaskPriority, TaskStatus } from '../../src/types/domain.js'
 
 const STATUSES: TaskStatus[] = ['todo', 'in-progress', 'done']
 const PRIORITIES: TaskPriority[] = ['low', 'medium', 'high']

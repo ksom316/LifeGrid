@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { badRequest, notFound, readJsonBody, requireMethod, withAuth } from '../../server/http.ts'
-import { asRecord, requireString } from '../../server/validation.ts'
-import { addDailyPriority, getDailyPlan, removeDailyPriority } from '../../server/repositories/dailyPlans.ts'
+import { badRequest, notFound, readJsonBody, requireMethod, withAuth } from '../../server/http.js'
+import { asRecord, requireString } from '../../server/validation.js'
+import { addDailyPriority, getDailyPlan, removeDailyPriority } from '../../server/repositories/dailyPlans.js'
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
 

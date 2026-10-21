@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto'
-import type { Sql, SqlPool } from '../db.ts'
-import type { BackupData, LifeGridBackup, RestoreResult, RestoreStrategy } from '../../src/types/backup.ts'
-import { restoreBackupForUser } from './backup.ts'
+import type { Sql, SqlPool } from '../db.js'
+import type { BackupData, LifeGridBackup, RestoreResult, RestoreStrategy } from '../../src/types/backup.js'
+import { restoreBackupForUser } from './backup.js'
 
 /**
  * A content fingerprint of a local backup's record identity — which ids

@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { notFound, readJsonBody, requireMethod, withAuth } from '../../server/http.ts'
-import { asRecord, optionalDate, optionalEnum, optionalString } from '../../server/validation.ts'
-import { deleteProjectPreservingRecords, getProject, updateProject } from '../../server/repositories/projects.ts'
-import type { ProjectColor, ProjectPriority, ProjectStatus } from '../../src/types/domain.ts'
+import { notFound, readJsonBody, requireMethod, withAuth } from '../../server/http.js'
+import { asRecord, optionalDate, optionalEnum, optionalString } from '../../server/validation.js'
+import { deleteProjectPreservingRecords, getProject, updateProject } from '../../server/repositories/projects.js'
+import type { ProjectColor, ProjectPriority, ProjectStatus } from '../../src/types/domain.js'
 
 const STATUSES: ProjectStatus[] = ['active', 'paused', 'completed', 'archived']
 const PRIORITIES: ProjectPriority[] = ['low', 'medium', 'high']

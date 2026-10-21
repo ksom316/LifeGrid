@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { notFound, readJsonBody, requireMethod, withAuth } from '../../../server/http.ts'
-import { asRecord } from '../../../server/validation.ts'
-import { finalizeFocusSession } from '../../../server/repositories/focusSessions.ts'
+import { notFound, readJsonBody, requireMethod, withAuth } from '../../../server/http.js'
+import { asRecord } from '../../../server/validation.js'
+import { finalizeFocusSession } from '../../../server/repositories/focusSessions.js'
 
 export default withAuth(async (req: VercelRequest, res: VercelResponse, { sql, user }) => {
   if (!requireMethod(req, res, ['POST'])) return

@@ -1,4 +1,4 @@
-import type { FocusSession, FocusSessionStatus, FocusSessionType } from '../types/domain'
+import type { FocusSession, FocusSessionStatus, FocusSessionType } from '../types/domain.js'
 
 export const DEFAULT_DURATIONS: Record<FocusSessionType, number> = {
   focus: 25,

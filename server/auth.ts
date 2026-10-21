@@ -1,6 +1,6 @@
 import { createHash, randomBytes, randomUUID, scrypt as scryptCallback, timingSafeEqual } from 'node:crypto'
 import { promisify } from 'node:util'
-import type { Sql } from './db.ts'
+import type { Sql } from './db.js'
 
 const scrypt = promisify(scryptCallback)
 

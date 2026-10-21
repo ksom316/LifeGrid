@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import type { AuthUser } from './auth.ts'
-import { parseCookies, resolveSession, SESSION_COOKIE_NAME } from './auth.ts'
-import { getPool } from './db.ts'
-import type { SqlPool } from './db.ts'
+import type { AuthUser } from './auth.js'
+import { parseCookies, resolveSession, SESSION_COOKIE_NAME } from './auth.js'
+import { getPool } from './db.js'
+import type { SqlPool } from './db.js'
 
 /** A handler failure with a specific HTTP status, as opposed to an unexpected server error. */
 export class HttpError extends Error {

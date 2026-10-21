@@ -6,8 +6,8 @@
  * conflict rules the local app uses, instead of maintaining a second,
  * drift-prone copy — "same backup format, same rules, both places."
  */
-import { DB_VERSION } from '../types/dbVersion'
-import { BACKUP_FORMAT, BACKUP_STORE_KEYS, BACKUP_VERSION } from '../types/backup'
+import { DB_VERSION } from '../types/dbVersion.js'
+import { BACKUP_FORMAT, BACKUP_STORE_KEYS, BACKUP_VERSION } from '../types/backup.js'
 import type {
   BackupCounts,
   BackupData,
@@ -17,8 +17,8 @@ import type {
   RecordAction,
   RestoreCounts,
   RestoreStrategy,
-} from '../types/backup'
-import type { BaseRecord } from '../types/domain'
+} from '../types/backup.js'
+import type { BaseRecord } from '../types/domain.js'
 
 export function emptyData(): BackupData {
   return { projects: [], tasks: [], notes: [], focusSessions: [], dailyPlans: [], weeklyReviews: [] }

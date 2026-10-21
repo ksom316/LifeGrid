@@ -1,10 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { createSession, hashPassword, normalizeEmail, sessionCookie } from '../../server/auth.ts'
-import { getPool } from '../../server/db.ts'
-import { badRequest, readJsonBody, requireMethod, withErrorHandling } from '../../server/http.ts'
-import { clientIp, enforceRateLimit } from '../../server/rateLimit.ts'
-import { asRecord, requireString } from '../../server/validation.ts'
-import { createUser, findUserByEmail } from '../../server/repositories/users.ts'
+import { createSession, hashPassword, normalizeEmail, sessionCookie } from '../../server/auth.js'
+import { getPool } from '../../server/db.js'
+import { badRequest, readJsonBody, requireMethod, withErrorHandling } from '../../server/http.js'
+import { clientIp, enforceRateLimit } from '../../server/rateLimit.js'
+import { asRecord, requireString } from '../../server/validation.js'
+import { createUser, findUserByEmail } from '../../server/repositories/users.js'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 

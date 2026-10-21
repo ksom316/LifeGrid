@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { notFound, requireMethod, withAuth } from '../../server/http.ts'
-import { getFocusSession, removeFocusSession } from '../../server/repositories/focusSessions.ts'
+import { notFound, requireMethod, withAuth } from '../../server/http.js'
+import { getFocusSession, removeFocusSession } from '../../server/repositories/focusSessions.js'
 
 export default withAuth(async (req: VercelRequest, res: VercelResponse, { sql, user }) => {
   if (!requireMethod(req, res, ['GET', 'DELETE'])) return

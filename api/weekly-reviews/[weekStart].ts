@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { notFound, readJsonBody, requireMethod, withAuth } from '../../server/http.ts'
-import { asRecord, optionalString } from '../../server/validation.ts'
-import { getWeeklyReview, upsertWeeklyReview } from '../../server/repositories/weeklyReviews.ts'
+import { notFound, readJsonBody, requireMethod, withAuth } from '../../server/http.js'
+import { asRecord, optionalString } from '../../server/validation.js'
+import { getWeeklyReview, upsertWeeklyReview } from '../../server/repositories/weeklyReviews.js'
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
 

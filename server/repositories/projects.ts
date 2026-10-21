@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto'
-import type { Sql } from '../db.ts'
-import { notFound } from '../http.ts'
-import { toDateStringOrUndefined, toDateTimeString } from '../mapping.ts'
-import type { Project, ProjectColor, ProjectPriority, ProjectStatus } from '../../src/types/domain.ts'
+import type { Sql } from '../db.js'
+import { notFound } from '../http.js'
+import { toDateStringOrUndefined, toDateTimeString } from '../mapping.js'
+import type { Project, ProjectColor, ProjectPriority, ProjectStatus } from '../../src/types/domain.js'
 
 interface ProjectRow {
   id: string

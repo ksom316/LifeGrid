@@ -1,11 +1,11 @@
 import { randomUUID } from 'node:crypto'
-import type { Sql, SqlPool } from '../db.ts'
-import { withTransaction } from '../db.ts'
-import { notFound } from '../http.ts'
-import { assertOwnsProject, assertOwnsTask } from '../ownership.ts'
-import { toDateTimeString, toDateTimeStringOrUndefined } from '../mapping.ts'
-import { computeElapsedMs, msToMinutesRounded } from '../../src/utils/focusTimer.ts'
-import type { FocusSession, FocusSessionStatus, FocusSessionType } from '../../src/types/domain.ts'
+import type { Sql, SqlPool } from '../db.js'
+import { withTransaction } from '../db.js'
+import { notFound } from '../http.js'
+import { assertOwnsProject, assertOwnsTask } from '../ownership.js'
+import { toDateTimeString, toDateTimeStringOrUndefined } from '../mapping.js'
+import { computeElapsedMs, msToMinutesRounded } from '../../src/utils/focusTimer.js'
+import type { FocusSession, FocusSessionStatus, FocusSessionType } from '../../src/types/domain.js'
 
 interface FocusSessionRow {
   id: string

@@ -1,5 +1,5 @@
-import type { Sql } from './db.ts'
-import { badRequest } from './http.ts'
+import type { Sql } from './db.js'
+import { badRequest } from './http.js'
 
 /**
  * `tasks.project_id`, `notes.project_id`, `focus_sessions.project_id`, and

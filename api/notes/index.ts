@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { readJsonBody, requireMethod, withAuth } from '../../server/http.ts'
-import { asRecord, optionalBoolean, optionalString, optionalStringArray, optionalUuid, requireString } from '../../server/validation.ts'
-import { createNote, listNotes } from '../../server/repositories/notes.ts'
+import { readJsonBody, requireMethod, withAuth } from '../../server/http.js'
+import { asRecord, optionalBoolean, optionalString, optionalStringArray, optionalUuid, requireString } from '../../server/validation.js'
+import { createNote, listNotes } from '../../server/repositories/notes.js'
 
 export default withAuth(async (req: VercelRequest, res: VercelResponse, { sql, user }) => {
   if (!requireMethod(req, res, ['GET', 'POST'])) return

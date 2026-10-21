@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { previewRestore, validateBackup } from '../../src/data/backupValidation.ts'
-import { badRequest, readJsonBody, requireMethod, withAuth } from '../../server/http.ts'
-import { asRecord, requireEnum } from '../../server/validation.ts'
-import { exportBackup } from '../../server/repositories/backup.ts'
+import { previewRestore, validateBackup } from '../../src/data/backupValidation.js'
+import { badRequest, readJsonBody, requireMethod, withAuth } from '../../server/http.js'
+import { asRecord, requireEnum } from '../../server/validation.js'
+import { exportBackup } from '../../server/repositories/backup.js'
 
 export default withAuth(async (req: VercelRequest, res: VercelResponse, { sql, user }) => {
   if (!requireMethod(req, res, ['POST'])) return

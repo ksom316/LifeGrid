@@ -1,6 +1,6 @@
-import type { Sql } from '../db.ts'
-import { toDateTimeString } from '../mapping.ts'
-import type { WeeklyReview } from '../../src/types/domain.ts'
+import type { Sql } from '../db.js'
+import { toDateTimeString } from '../mapping.js'
+import type { WeeklyReview } from '../../src/types/domain.js'
 
 interface WeeklyReviewRow {
   id: string

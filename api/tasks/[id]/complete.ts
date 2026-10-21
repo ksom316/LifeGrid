@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { notFound, requireMethod, withAuth } from '../../../server/http.ts'
-import { completeTask } from '../../../server/repositories/tasks.ts'
+import { notFound, requireMethod, withAuth } from '../../../server/http.js'
+import { completeTask } from '../../../server/repositories/tasks.js'
 
 export default withAuth(async (req: VercelRequest, res: VercelResponse, { sql, user }) => {
   if (!requireMethod(req, res, ['POST'])) return

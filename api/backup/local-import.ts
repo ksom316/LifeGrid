@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { validateBackup } from '../../src/data/backupValidation.ts'
-import { badRequest, readJsonBody, requireMethod, withAuth } from '../../server/http.ts'
-import { asRecord, requireEnum } from '../../server/validation.ts'
-import { importLocalBackup } from '../../server/repositories/migration.ts'
+import { validateBackup } from '../../src/data/backupValidation.js'
+import { badRequest, readJsonBody, requireMethod, withAuth } from '../../server/http.js'
+import { asRecord, requireEnum } from '../../server/validation.js'
+import { importLocalBackup } from '../../server/repositories/migration.js'
 
 /**
  * The commit step of the "safe migration of existing local data" onboarding

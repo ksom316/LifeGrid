@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { parseCookies, resolveSession, SESSION_COOKIE_NAME } from '../../server/auth.ts'
-import { getPool } from '../../server/db.ts'
-import { requireMethod, withErrorHandling } from '../../server/http.ts'
+import { parseCookies, resolveSession, SESSION_COOKIE_NAME } from '../../server/auth.js'
+import { getPool } from '../../server/db.js'
+import { requireMethod, withErrorHandling } from '../../server/http.js'
 
 export default withErrorHandling(async (req: VercelRequest, res: VercelResponse) => {
   if (!requireMethod(req, res, ['GET'])) return

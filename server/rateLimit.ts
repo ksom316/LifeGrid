@@ -1,6 +1,6 @@
 import type { VercelRequest } from '@vercel/node'
-import type { Sql } from './db.ts'
-import { HttpError } from './http.ts'
+import type { Sql } from './db.js'
+import { HttpError } from './http.js'
 
 /**
  * A fixed-window rate limit backed by Postgres (db/migrations/0002_rate_limits.sql),

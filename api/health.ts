@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { getPool } from '../server/db.ts'
-import { requireMethod, withErrorHandling } from '../server/http.ts'
+import { getPool } from '../server/db.js'
+import { requireMethod, withErrorHandling } from '../server/http.js'
 
 /**
  * Unauthenticated on purpose (so uptime monitors don't need credentials),

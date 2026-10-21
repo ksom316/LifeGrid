@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
-import type { Sql } from '../db.ts'
-import { normalizeEmail } from '../auth.ts'
+import type { Sql } from '../db.js'
+import { normalizeEmail } from '../auth.js'
 
 export interface UserRow {
   id: string

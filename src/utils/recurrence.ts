@@ -1,5 +1,5 @@
-import { addDays, parseDate, toDateKey } from './date'
-import type { TaskRecurrence } from '../types/domain'
+import { addDays, parseDate, toDateKey } from './date.js'
+import type { TaskRecurrence } from '../types/domain.js'
 
 const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 

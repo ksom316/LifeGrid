@@ -1,9 +1,9 @@
 import { randomUUID } from 'node:crypto'
-import type { Sql } from '../db.ts'
-import { notFound } from '../http.ts'
-import { assertOwnsProject } from '../ownership.ts'
-import { toDateTimeString } from '../mapping.ts'
-import type { Note } from '../../src/types/domain.ts'
+import type { Sql } from '../db.js'
+import { notFound } from '../http.js'
+import { assertOwnsProject } from '../ownership.js'
+import { toDateTimeString } from '../mapping.js'
+import type { Note } from '../../src/types/domain.js'
 
 interface NoteRow {
   id: string

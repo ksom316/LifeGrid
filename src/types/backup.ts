@@ -1,4 +1,4 @@
-import type { DailyPlan, FocusSession, Note, Project, Task, WeeklyReview } from './domain'
+import type { DailyPlan, FocusSession, Note, Project, Task, WeeklyReview } from './domain.js'
 
 /** Bumped only if the backup envelope shape itself changes (not the app's IndexedDB schema). */
 export const BACKUP_FORMAT = 'life-grid-backup'
