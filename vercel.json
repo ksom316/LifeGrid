@@ -2,6 +2,32 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
+    { "source": "/api/auth/login", "destination": "/api/auth?action=login" },
+    { "source": "/api/auth/logout", "destination": "/api/auth?action=logout" },
+    { "source": "/api/auth/session", "destination": "/api/auth?action=session" },
+    { "source": "/api/auth/signup", "destination": "/api/auth?action=signup" },
+
+    { "source": "/api/backup/export", "destination": "/api/backup?action=export" },
+    { "source": "/api/backup/local-import", "destination": "/api/backup?action=local-import" },
+    { "source": "/api/backup/preview", "destination": "/api/backup?action=preview" },
+    { "source": "/api/backup/restore", "destination": "/api/backup?action=restore" },
+
+    { "source": "/api/daily-plans/:date", "destination": "/api/daily-plans?date=:date" },
+
+    { "source": "/api/focus-sessions/:id/pause", "destination": "/api/focus-sessions?id=:id&action=pause" },
+    { "source": "/api/focus-sessions/:id/resume", "destination": "/api/focus-sessions?id=:id&action=resume" },
+    { "source": "/api/focus-sessions/:id/complete", "destination": "/api/focus-sessions?id=:id&action=complete" },
+    { "source": "/api/focus-sessions/:id", "destination": "/api/focus-sessions?id=:id" },
+
+    { "source": "/api/notes/:id", "destination": "/api/notes?id=:id" },
+
+    { "source": "/api/projects/:id", "destination": "/api/projects?id=:id" },
+
+    { "source": "/api/tasks/:id/complete", "destination": "/api/tasks?id=:id&action=complete" },
+    { "source": "/api/tasks/:id", "destination": "/api/tasks?id=:id" },
+
+    { "source": "/api/weekly-reviews/:weekStart", "destination": "/api/weekly-reviews?weekStart=:weekStart" },
+
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
