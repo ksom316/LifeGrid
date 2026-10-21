@@ -66,4 +66,16 @@ describe('DashboardPage — priorities and deadlines navigation', () => {
     const link = await screen.findByRole('link', { name: 'File quarterly estimate' })
     expect(link).toHaveAttribute('href', `/projects/${project.id}?task=${task.id}`)
   })
+
+  it('links each project in Active projects to its own detail page', async () => {
+    const garden = await projectsRepo.create({ name: 'Garden' })
+    const taxes = await projectsRepo.create({ name: 'Taxes' })
+
+    renderShellApp('/')
+
+    const gardenLink = await screen.findByRole('link', { name: /Garden/ })
+    const taxesLink = await screen.findByRole('link', { name: /Taxes/ })
+    expect(gardenLink).toHaveAttribute('href', `/projects/${garden.id}`)
+    expect(taxesLink).toHaveAttribute('href', `/projects/${taxes.id}`)
+  })
 })
