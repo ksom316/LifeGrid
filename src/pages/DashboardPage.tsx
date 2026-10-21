@@ -23,7 +23,7 @@ export function DashboardPage() {
 
   if (status === 'error') {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-2xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
+      <div className="flex flex-col items-center gap-3 rounded-xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
         <p className="text-sm font-medium text-danger">
           Life Grid couldn't load your data.
         </p>
@@ -37,15 +37,13 @@ export function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <GreetingHeader />
-        <QuickActions />
-      </div>
+      <GreetingHeader />
+      <QuickActions />
 
       <DemoDataBanner />
 
       {isEmpty && (
-        <div className="rounded-2xl border border-dashed border-border-strong bg-surface px-6 py-12 text-center">
+        <div className="rounded-xl border border-dashed border-border-strong bg-surface px-6 py-12 text-center">
           <p className="text-sm font-medium text-ink">Your dashboard is empty</p>
           <p className="mx-auto mt-1.5 max-w-sm text-sm text-ink-soft">
             Add your first task, project, or note above
@@ -59,20 +57,17 @@ export function DashboardPage() {
         </div>
       )}
 
-      {/*
-        Exactly six cards in a two-column grid — three full, evenly matched
-        rows with no dangling cell. FocusSummaryCard previously spanned both
-        columns on its own row, which left an empty cell beside
-        UnassignedTasksCard above it; letting it flow naturally pairs them
-        instead.
-      */}
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <PrioritiesCard />
-        <DeadlinesCard />
-        <ProjectsOverviewCard />
-        <RecentNotesCard />
-        <UnassignedTasksCard />
         <FocusSummaryCard />
+        <DeadlinesCard />
+        <div className="md:col-span-2 [&>*]:h-full">
+          <ProjectsOverviewCard />
+        </div>
+        <RecentNotesCard />
+        <div className="md:col-span-2 lg:col-span-3 [&>*]:h-full">
+          <UnassignedTasksCard />
+        </div>
       </div>
     </div>
   )

@@ -26,16 +26,16 @@ export function RecentNotesCard() {
           description="Capture ideas, references, or research in the Knowledge Vault."
         />
       ) : (
-        <ul className="-mx-2 flex flex-col divide-y divide-border">
+        <ul className="flex flex-col gap-2">
           {recent.map((note) => (
             <li key={note.id}>
               <Link
                 to={`/vault/${note.id}`}
-                className="block rounded-lg px-2 py-2.5 transition-colors hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                className="block rounded-lg border border-border bg-canvas px-2.5 py-2.5 transition-colors hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               >
-                <p className="truncate text-sm font-medium text-ink">{note.title}</p>
+                <p className="truncate text-xs font-medium text-ink">{note.title}</p>
                 {note.content && (
-                  <p className="mt-0.5 line-clamp-2 text-xs text-ink-soft">{note.content}</p>
+                  <p className="mt-0.5 line-clamp-2 text-[11px] text-ink-soft">{note.content}</p>
                 )}
               </Link>
             </li>

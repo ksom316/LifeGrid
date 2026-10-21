@@ -301,7 +301,7 @@ export function TaskFormModal({
         )}
 
         <div className="mb-3 rounded-lg border border-border p-3">
-          <label className="flex items-center gap-2 text-sm font-medium text-ink">
+          <label className="flex items-center gap-2 text-xs font-medium text-ink">
             <input
               type="checkbox"
               checked={form.recurrenceEnabled}

@@ -30,24 +30,24 @@ export function DeadlinesCard() {
           description="Tasks with a due date will appear here, soonest first."
         />
       ) : (
-        <ul className="-mx-2 flex flex-col divide-y divide-border">
+        <ul className="flex flex-col gap-2">
           {upcoming.map((task) => {
             const project = projects.find((p) => p.id === task.projectId)
             const overdue = isOverdue(task.dueDate!)
             return (
               <li
                 key={task.id}
-                className="flex items-center gap-3 rounded-lg px-2 py-2.5 transition-colors hover:bg-surface-hover"
+                className="flex items-center gap-3 rounded-lg border border-border bg-canvas px-2.5 py-2.5 transition-colors hover:border-border-strong"
               >
                 {project ? (
                   <Link
                     to={`/projects/${project.id}?task=${task.id}`}
-                    className="min-w-0 flex-1 truncate text-sm text-ink hover:text-brand-ink"
+                    className="min-w-0 flex-1 truncate text-xs font-medium text-ink hover:text-brand-ink"
                   >
                     {task.title}
                   </Link>
                 ) : (
-                  <span className="min-w-0 flex-1 truncate text-sm text-ink">{task.title}</span>
+                  <span className="min-w-0 flex-1 truncate text-xs font-medium text-ink">{task.title}</span>
                 )}
                 {project && (
                   <span className="hidden truncate text-xs text-ink-soft sm:block">

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { SearchPalette } from '../search/SearchPalette'
 import { isSearchShortcut, isTypingTarget } from '../../utils/keyboard'
+import { MobileNav } from './MobileNav'
 import { Sidebar } from './Sidebar'
 import { TopBar } from './TopBar'
 
@@ -33,13 +34,14 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-canvas">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} onOpenSearch={openSearch} />
-      <div className="app-glow flex min-h-screen flex-1 flex-col">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col">
         <TopBar onMenuClick={() => setSidebarOpen(true)} onOpenSearch={openSearch} />
-        <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
-          <div className="mx-auto max-w-6xl">{children}</div>
+        <main className="flex-1 px-4 pt-6 pb-[calc(6rem+env(safe-area-inset-bottom))] sm:px-6 lg:pb-6">
+          <div className="mx-auto max-w-7xl">{children}</div>
         </main>
       </div>
+      <MobileNav />
       <SearchPalette isOpen={searchOpen} onClose={closeSearch} />
     </div>
   )

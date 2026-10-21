@@ -1,6 +1,12 @@
 import 'fake-indexeddb/auto'
 import '@testing-library/jest-dom/vitest'
+import { configure } from '@testing-library/react'
 import { afterEach, beforeEach, vi } from 'vitest'
+
+// RTL's findBy*/waitFor default to a 1s budget, which the IndexedDB/pg-mem-backed
+// renders here exceed under CPU contention (verified on the pre-redesign baseline
+// too); a roomier budget only delays failure, it never slows a passing test.
+configure({ asyncUtilTimeout: 5000 })
 
 // jsdom doesn't implement scrollIntoView; components that call it (e.g. to
 // reveal a highlighted search result) would otherwise throw in tests.

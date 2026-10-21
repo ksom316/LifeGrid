@@ -44,11 +44,11 @@ export function UnassignedTasksCard() {
           description="Tasks you add without a project will show up here."
         />
       ) : (
-        <ul className="-mx-2 flex flex-col divide-y divide-border">
+        <ul className="flex flex-col gap-2">
           {unassigned.map((task) => (
             <li
               key={task.id}
-              className="flex items-center gap-3 rounded-lg px-2 py-2.5 transition-colors hover:bg-surface-hover"
+              className="flex items-center gap-3 rounded-lg border border-border bg-canvas px-2.5 py-2.5 transition-colors hover:border-border-strong"
             >
               <button
                 type="button"
@@ -61,7 +61,7 @@ export function UnassignedTasksCard() {
               <button
                 type="button"
                 onClick={() => setEditingTaskId(task.id)}
-                className="min-w-0 flex-1 truncate text-left text-sm text-ink hover:text-brand-ink"
+                className="min-w-0 flex-1 truncate text-left text-xs font-medium text-ink hover:text-brand-ink"
               >
                 {task.title}
               </button>

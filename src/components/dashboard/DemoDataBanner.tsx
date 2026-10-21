@@ -9,7 +9,7 @@ export function DemoDataBanner() {
   if (!hasDemoData) return null
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-brand-soft bg-brand-soft px-4 py-3 text-sm text-brand-ink">
+    <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-brand/20 bg-brand/10 px-4 py-3 text-xs text-brand-ink">
       <span>You're viewing sample data so you can see how Life Grid works.</span>
       <Button
         variant="secondary"

@@ -74,7 +74,7 @@ export function DangerZoneSection() {
                 />
                 <Button
                   variant="danger"
-                  className="!bg-danger !text-white hover:!bg-danger/90"
+                  className="!bg-red-600 !text-white hover:!bg-red-700"
                   onClick={handleClearReal}
                   disabled={confirmText !== CONFIRM_PHRASE || clearing}
                 >

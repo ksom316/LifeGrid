@@ -15,9 +15,9 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 // brightens/dims the same hue so the color identity stays put.
 const variantClasses: Record<Variant, string> = {
   primary:
-    'bg-brand text-white shadow-[0_1px_0_0_rgba(255,255,255,0.15)_inset,0_6px_16px_-6px_var(--color-brand)] hover:brightness-110 active:scale-[0.98] active:brightness-95 disabled:opacity-50 disabled:active:scale-100',
+    'bg-brand-strong text-white shadow-md shadow-brand-strong/20 hover:bg-brand active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100',
   secondary:
-    'bg-surface-hover text-ink border border-border-strong hover:border-brand/40 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100',
+    'bg-canvas text-ink-soft border border-border hover:border-border-strong hover:bg-surface-hover hover:text-ink active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100',
   ghost:
     'bg-transparent text-ink-soft hover:bg-surface-hover hover:text-ink active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100',
   danger:
@@ -25,8 +25,8 @@ const variantClasses: Record<Variant, string> = {
 }
 
 const sizeClasses: Record<Size, string> = {
-  sm: 'px-3 py-1.5 text-sm gap-1.5',
-  md: 'px-4 py-2.5 text-sm gap-2',
+  sm: 'px-3 py-1.5 text-xs gap-1.5',
+  md: 'px-3.5 py-2 text-xs gap-2',
 }
 
 export function Button({
@@ -39,7 +39,7 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
-      className={`inline-flex items-center justify-center rounded-xl font-medium transition-all duration-150 cursor-pointer disabled:cursor-not-allowed ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      className={`inline-flex items-center justify-center rounded-lg font-medium transition-all duration-150 cursor-pointer disabled:cursor-not-allowed ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       {...rest}
     >
       {icon}

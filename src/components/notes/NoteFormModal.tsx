@@ -111,7 +111,7 @@ export function NoteFormModal({
           />
         </Field>
         <div className="mb-3">
-          <label htmlFor={tagsFieldId} className="mb-1 block text-sm font-medium text-ink">
+          <label htmlFor={tagsFieldId} className="mb-1.5 block text-xs text-ink-soft">
             Tags
           </label>
           <TagInput

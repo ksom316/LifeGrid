@@ -22,7 +22,7 @@ export function TaskBoard({ projectId, tasks, projects, highlightTaskId }: TaskB
         return (
           <div
             key={column.status}
-            className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-3 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]"
+            className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-3 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]"
           >
             <div className="flex items-center justify-between px-1 pt-1">
               <h3 className="text-xs font-semibold tracking-wider text-ink-soft uppercase">

@@ -37,7 +37,7 @@ export function PrioritiesCard() {
           description="High-priority tasks and anything due today will show up here."
         />
       ) : (
-        <ul className="-mx-2 flex flex-col divide-y divide-border">
+        <ul className="flex flex-col gap-2">
           {priorities.map((task) => (
             <PriorityRow
               key={task.id}
@@ -65,7 +65,7 @@ function PriorityRow({
   onToggle: () => void
 }) {
   return (
-    <li className="flex items-center gap-3 rounded-lg px-2 py-2.5 transition-colors hover:bg-surface-hover">
+    <li className="flex items-center gap-3 rounded-lg border border-border bg-canvas px-2.5 py-2.5 transition-colors hover:border-border-strong">
       <button
         type="button"
         onClick={onToggle}
@@ -77,13 +77,13 @@ function PriorityRow({
       {projectId ? (
         <Link
           to={`/projects/${projectId}?task=${task.id}`}
-          className="min-w-0 flex-1 truncate text-sm text-ink hover:text-brand-ink"
+          className="min-w-0 flex-1 truncate text-xs font-medium text-ink hover:text-brand-ink"
           title={projectName}
         >
           {task.title}
         </Link>
       ) : (
-        <span className="min-w-0 flex-1 truncate text-sm text-ink">{task.title}</span>
+        <span className="min-w-0 flex-1 truncate text-xs font-medium text-ink">{task.title}</span>
       )}
       <Badge tone={PRIORITY_TONE[task.priority]}>{task.priority}</Badge>
     </li>

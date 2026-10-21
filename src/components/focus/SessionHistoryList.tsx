@@ -53,7 +53,7 @@ export function SessionHistoryList() {
   return (
     <div className="flex flex-col gap-4">
       {finishedSessions.length > 0 && (
-        <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-4 sm:flex-row sm:flex-wrap sm:items-end">
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:flex-wrap sm:items-end">
           {projects.length > 0 && (
             <div className="sm:w-48">
               <Field label="Project">
@@ -99,7 +99,7 @@ export function SessionHistoryList() {
       )}
 
       {finishedSessions.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border-strong bg-surface px-6 py-12">
+        <div className="rounded-xl border border-dashed border-border-strong bg-surface px-6 py-12">
           <EmptyState
             icon={<IconTimer width={32} height={32} />}
             title="No focus sessions yet"
@@ -107,7 +107,7 @@ export function SessionHistoryList() {
           />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border-strong bg-surface px-6 py-12">
+        <div className="rounded-xl border border-dashed border-border-strong bg-surface px-6 py-12">
           <EmptyState
             icon={<IconSearch width={32} height={32} />}
             title="No sessions match your filters"
@@ -124,7 +124,7 @@ export function SessionHistoryList() {
           />
         </div>
       ) : (
-        <ul className="divide-y divide-border rounded-2xl border border-border bg-surface shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
+        <ul className="divide-y divide-border rounded-xl border border-border bg-surface shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
           {filtered.map((session) => {
             const project = projects.find((p) => p.id === session.projectId)
             const task = tasks.find((t) => t.id === session.taskId)

@@ -35,18 +35,18 @@ export function ProjectCard({ project, tasks }: ProjectCardProps) {
   return (
     <Link
       to={`/projects/${project.id}`}
-      className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-all hover:-translate-y-0.5 hover:border-brand/50 hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+      className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-5  shadow-sm transition-colors hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">
           <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${COLOR_DOT[project.color]}`} />
-          <h3 className="truncate text-base font-semibold text-ink">{project.name}</h3>
+          <h3 className="truncate text-sm font-semibold text-ink">{project.name}</h3>
         </div>
         <Badge tone={PRIORITY_TONE[projectPriority(project)]}>{projectPriority(project)}</Badge>
       </div>
 
       {project.description && (
-        <p className="line-clamp-2 text-sm text-ink-soft">{project.description}</p>
+        <p className="line-clamp-2 text-xs text-ink-soft">{project.description}</p>
       )}
 
       <div className="flex flex-wrap items-center gap-2">
@@ -70,7 +70,7 @@ export function ProjectCard({ project, tasks }: ProjectCardProps) {
         </div>
         <div className="h-1.5 w-full rounded-full bg-canvas">
           <div
-            className="h-1.5 rounded-full bg-brand transition-all"
+            className="h-1.5 rounded-full bg-gradient-to-r from-brand to-violet-500 transition-all"
             style={{ width: `${stats.percent}%` }}
           />
         </div>

@@ -15,7 +15,7 @@ export function TabNav() {
           to={tab.to}
           end
           className={({ isActive }) =>
-            `border-b-2 px-3 py-2 text-sm font-medium transition-colors ${
+            `border-b-2 px-3 py-2.5 text-xs font-medium transition-colors ${
               isActive
                 ? 'border-brand text-brand-ink'
                 : 'border-transparent text-ink-soft hover:text-ink'

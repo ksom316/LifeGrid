@@ -74,7 +74,7 @@ export function KnowledgeVaultPage() {
 
   if (status === 'error') {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-2xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
+      <div className="flex flex-col items-center gap-3 rounded-xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
         <p className="text-sm font-medium text-danger">Life Grid couldn't load your notes.</p>
         {error && <p className="max-w-md text-xs text-ink-soft">{error}</p>}
         <Button variant="secondary" onClick={refresh}>
@@ -88,7 +88,7 @@ export function KnowledgeVaultPage() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-[1.75rem] font-bold tracking-tight text-ink">Knowledge Vault</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-ink">Knowledge Vault</h1>
           <p className="mt-1.5 text-sm text-ink-soft">
             Capture ideas, references, and research, and link them to your projects.
           </p>
@@ -103,7 +103,7 @@ export function KnowledgeVaultPage() {
       </div>
 
       {notes.length > 0 && (
-        <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-4 sm:flex-row sm:flex-wrap sm:items-end">
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:flex-wrap sm:items-end">
           <div className="flex-1 sm:min-w-[220px]">
             <Field label="Search">
               <div className="relative">
@@ -161,7 +161,7 @@ export function KnowledgeVaultPage() {
       )}
 
       {notes.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border-strong bg-surface px-6 py-12">
+        <div className="rounded-xl border border-dashed border-border-strong bg-surface px-6 py-12">
           <EmptyState
             icon={<IconBook width={32} height={32} />}
             title="No notes yet"
@@ -174,7 +174,7 @@ export function KnowledgeVaultPage() {
           />
         </div>
       ) : filteredNotes.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border-strong bg-surface px-6 py-12">
+        <div className="rounded-xl border border-dashed border-border-strong bg-surface px-6 py-12">
           <EmptyState
             icon={<IconSearch width={32} height={32} />}
             title="No notes match your filters"

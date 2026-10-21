@@ -53,7 +53,7 @@ export function TagInput({ tags, onChange, id }: TagInputProps) {
           {tags.map((tag) => (
             <li
               key={tag}
-              className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-2 py-0.5 text-xs font-medium text-brand-ink"
+              className="inline-flex items-center gap-1 rounded-full border border-brand/25 bg-brand/10 px-2 py-0.5 text-[11px] font-medium text-brand-ink"
             >
               {tag}
               <button

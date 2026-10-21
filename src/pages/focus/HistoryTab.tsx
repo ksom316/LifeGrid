@@ -10,7 +10,7 @@ export function HistoryTab() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-[1.75rem] font-bold tracking-tight text-ink">Focus & Reviews</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-ink">Focus & Reviews</h1>
         <p className="mt-1.5 text-sm text-ink-soft">
           Run focus sessions, plan your day, and review your week.
         </p>
@@ -23,7 +23,7 @@ export function HistoryTab() {
           Loading…
         </div>
       ) : status === 'error' ? (
-        <div className="flex flex-col items-center gap-3 rounded-2xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
+        <div className="flex flex-col items-center gap-3 rounded-xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
           <p className="text-sm font-medium text-danger">Life Grid couldn't load your focus data.</p>
           {error && <p className="max-w-md text-xs text-ink-soft">{error}</p>}
           <Button variant="secondary" onClick={refresh}>

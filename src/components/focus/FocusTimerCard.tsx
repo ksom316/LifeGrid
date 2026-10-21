@@ -21,6 +21,8 @@ import { IconPause, IconPlay, IconStop } from '../ui/icons'
 
 const SESSION_TYPES: FocusSessionType[] = ['focus', 'short-break', 'long-break']
 
+const RING_CIRCUMFERENCE = 2 * Math.PI * 52
+
 export function FocusTimerCard() {
   const {
     projects,
@@ -116,21 +118,32 @@ export function FocusTimerCard() {
       <Card title="Focus timer">
         <div className="flex flex-col items-center gap-4 py-4">
           <Badge tone={type === 'focus' ? 'brand' : 'neutral'}>{SESSION_TYPE_LABEL[type]}</Badge>
-          <p
-            className="text-5xl font-semibold tabular-nums text-ink"
-            role="timer"
-            aria-live="polite"
-            aria-label={`${status === 'paused' ? 'Paused at' : 'Time remaining'} ${formatClock(remaining)}`}
-          >
-            {formatClock(remaining)}
-          </p>
-          {status === 'paused' && <Badge tone="warning">Paused</Badge>}
-          <div className="h-2 w-full max-w-xs rounded-full bg-canvas">
-            <div
-              className="h-2 rounded-full bg-brand transition-all"
-              style={{ width: `${percent}%` }}
-            />
+          <div className="relative flex items-center justify-center">
+            <svg className="h-48 w-48" viewBox="0 0 128 128" aria-hidden="true">
+              <circle className="text-canvas" strokeWidth="6" stroke="currentColor" fill="transparent" r="52" cx="64" cy="64" />
+              <circle
+                className="progress-ring-circle text-brand"
+                strokeWidth="6"
+                strokeLinecap="round"
+                stroke="currentColor"
+                fill="transparent"
+                r="52"
+                cx="64"
+                cy="64"
+                strokeDasharray={RING_CIRCUMFERENCE}
+                strokeDashoffset={RING_CIRCUMFERENCE * (percent / 100)}
+              />
+            </svg>
+            <p
+              className="absolute font-mono text-4xl font-bold tracking-tight tabular-nums text-ink"
+              role="timer"
+              aria-live="polite"
+              aria-label={`${status === 'paused' ? 'Paused at' : 'Time remaining'} ${formatClock(remaining)}`}
+            >
+              {formatClock(remaining)}
+            </p>
           </div>
+          {status === 'paused' && <Badge tone="warning">Paused</Badge>}
           {(project || task) && (
             <p className="text-xs text-ink-soft">
               {project && <span>{project.name}</span>}
@@ -185,7 +198,7 @@ export function FocusTimerCard() {
     <Card title="Focus timer">
       {justFinished && (
         <div
-          className={`mb-4 rounded-lg border px-4 py-3 text-sm ${
+          className={`mb-4 rounded-lg border px-4 py-3 text-xs ${
             sessionStatus(justFinished) === 'completed'
               ? 'border-success-soft bg-success-soft text-success'
               : 'border-warning-soft bg-warning-soft text-warning'

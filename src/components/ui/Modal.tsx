@@ -44,10 +44,10 @@ export function Modal({ title, isOpen, onClose, children, maxWidthClassName = 'm
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className={`max-h-[calc(100vh-2rem)] w-full ${maxWidthClassName} overflow-y-auto rounded-2xl border border-border-strong bg-surface-raised p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]`}
+        className={`max-h-[calc(100vh-2rem)] w-full ${maxWidthClassName} overflow-y-auto rounded-xl border border-border bg-surface-raised p-5 shadow-2xl `}
       >
-        <div className="mb-5 flex items-center justify-between border-b border-border pb-4">
-          <h2 id="modal-title" className="text-lg font-semibold tracking-tight text-ink">
+        <div className="mb-4 flex items-center justify-between border-b border-border pb-3">
+          <h2 id="modal-title" className="text-sm font-semibold text-ink">
             {title}
           </h2>
           <button

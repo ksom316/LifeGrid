@@ -32,7 +32,7 @@ export function FocusStatsPanel() {
                   </div>
                   <div className="h-1.5 w-full rounded-full bg-canvas">
                     <div
-                      className="h-1.5 rounded-full bg-brand transition-all"
+                      className="h-1.5 rounded-full bg-gradient-to-r from-brand to-violet-500 transition-all"
                       style={{ width: `${percent}%` }}
                     />
                   </div>

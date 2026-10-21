@@ -22,10 +22,10 @@ export function NoteCard({ note, project, projects }: NoteCardProps) {
   const pinned = notePinned(note)
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-colors hover:border-brand/50">
+    <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-5 shadow-sm transition-colors hover:border-border-strong">
       <div className="flex items-start justify-between gap-2">
         <Link to={`/vault/${note.id}`} className="min-w-0 flex-1 focus-visible:outline-none">
-          <h3 className="truncate text-base font-semibold text-ink hover:text-brand-ink">
+          <h3 className="truncate text-sm font-semibold text-ink hover:text-brand-ink">
             {note.title}
           </h3>
         </Link>
@@ -35,7 +35,7 @@ export function NoteCard({ note, project, projects }: NoteCardProps) {
             onClick={() => toggleNotePin(note.id)}
             aria-label={pinned ? `Unpin "${note.title}"` : `Pin "${note.title}"`}
             aria-pressed={pinned}
-            className={`rounded-md p-1 hover:bg-brand-soft hover:text-brand-ink ${
+            className={`rounded-md p-2 sm:p-1 hover:bg-brand-soft hover:text-brand-ink ${
               pinned ? 'text-brand' : 'text-ink-soft'
             }`}
           >
@@ -45,7 +45,7 @@ export function NoteCard({ note, project, projects }: NoteCardProps) {
             type="button"
             onClick={() => setEditOpen(true)}
             aria-label={`Edit "${note.title}"`}
-            className="rounded-md p-1 text-ink-soft hover:bg-surface-hover hover:text-ink"
+            className="rounded-md p-2 sm:p-1 text-ink-soft hover:bg-surface-hover hover:text-ink"
           >
             <IconPencil width={14} height={14} />
           </button>
@@ -53,7 +53,7 @@ export function NoteCard({ note, project, projects }: NoteCardProps) {
             type="button"
             onClick={() => setDeleteOpen(true)}
             aria-label={`Delete "${note.title}"`}
-            className="rounded-md p-1 text-ink-soft hover:bg-danger-soft hover:text-danger"
+            className="rounded-md p-2 sm:p-1 text-ink-soft hover:bg-danger-soft hover:text-danger"
           >
             <IconTrash width={14} height={14} />
           </button>
@@ -61,7 +61,7 @@ export function NoteCard({ note, project, projects }: NoteCardProps) {
       </div>
 
       {note.content && (
-        <p className="line-clamp-3 whitespace-pre-wrap text-sm text-ink-soft">{note.content}</p>
+        <p className="line-clamp-3 whitespace-pre-wrap text-xs text-ink-soft">{note.content}</p>
       )}
 
       <div className="flex flex-wrap items-center gap-1.5">

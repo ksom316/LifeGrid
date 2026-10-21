@@ -26,7 +26,7 @@ export function NoteDetailPage() {
 
   if (status === 'error') {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-2xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
+      <div className="flex flex-col items-center gap-3 rounded-xl border border-danger-soft bg-danger-soft px-6 py-10 text-center">
         <p className="text-sm font-medium text-danger">Life Grid couldn't load this note.</p>
         {error && <p className="max-w-md text-xs text-ink-soft">{error}</p>}
         <Button variant="secondary" onClick={refresh}>
@@ -40,7 +40,7 @@ export function NoteDetailPage() {
 
   if (!note) {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border-strong bg-surface px-6 py-12 text-center">
+      <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border-strong bg-surface px-6 py-12 text-center">
         <IconBook width={32} height={32} className="text-muted" />
         <p className="text-sm font-medium text-ink">Note not found</p>
         <p className="max-w-sm text-sm text-ink-soft">
@@ -69,7 +69,7 @@ export function NoteDetailPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-[1.75rem] font-bold tracking-tight text-ink">{note.title}</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-ink">{note.title}</h1>
             {pinned && <Badge tone="brand">Pinned</Badge>}
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -117,7 +117,7 @@ export function NoteDetailPage() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-border bg-surface p-5">
+      <div className="rounded-xl border border-border bg-surface p-5">
         {note.content ? (
           <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink">{note.content}</p>
         ) : (

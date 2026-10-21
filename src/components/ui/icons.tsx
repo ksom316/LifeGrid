@@ -207,3 +207,17 @@ export const IconBell = (props: IconProps) => (
     <path d="M10 19a2 2 0 0 0 4 0" />
   </svg>
 )
+
+export const IconCalendar = (props: IconProps) => (
+  <svg {...base(props)}>
+    <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
+    <path d="M3.5 10h17M8 3v4M16 3v4" />
+  </svg>
+)
+
+export const IconSparkles = (props: IconProps) => (
+  <svg {...base(props)}>
+    <path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3Z" />
+    <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z" />
+  </svg>
+)

@@ -9,41 +9,37 @@
  * had, just with both ends of it redesigned.
  */
 @theme {
-  --font-sans:
-    system-ui, -apple-system, 'Segoe UI Variable', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
   /*
-   * Three deliberate lightness tiers, not two. Chrome (sidebar/top bar)
-   * sits on `chrome` — nearly the same tone as `canvas` so navigation
-   * recedes — while content surfaces (`surface`) are a clearly distinct
-   * step lighter so cards actually read as elevated panels rather than
-   * blending into the page. `surface-raised` (modals/popovers) and
-   * `surface-hover` step up again from there. On a near-black page,
-   * box-shadow alone is invisible (shadows need a lighter ambient to
-   * read against), so the gap between these steps — not shadow blur —
-   * is what carries the elevation.
+   * Surface tiers follow the Life Grid command-center reference: a near-black
+   * page (`canvas`), a slightly lifted sidebar/top bar (`chrome`), and cards
+   * (`surface`) one step above that. Inset wells inside cards (list rows,
+   * inputs, project tiles) drop back to `canvas`, which is what gives the
+   * reference its layered "panel within a panel" look.
    */
-  --color-canvas: #08080b;
-  --color-chrome: #0c0c10;
-  --color-surface: #18181f;
-  --color-surface-raised: #202029;
-  --color-surface-hover: #26262f;
-  --color-border: #2a2a34;
-  --color-border-strong: #3c3c49;
-  --color-ink: #f4f3f8;
-  --color-ink-soft: #a9a7b6;
-  --color-muted: #716f80;
+  --color-canvas: #0b0d12;
+  --color-chrome: #12151e;
+  --color-surface: #181c28;
+  --color-surface-raised: #181c28;
+  --color-surface-hover: #202636;
+  --color-border: #262c40;
+  --color-border-strong: #333b54;
+  --color-ink: #f1f5f9;
+  --color-ink-soft: #94a3b8;
+  --color-muted: #64748b;
 
-  --color-brand: #8d7bff;
-  --color-brand-soft: #241f45;
-  --color-brand-ink: #c9c0ff;
+  --color-brand: #6366f1;
+  --color-brand-strong: #4f46e5;
+  --color-brand-soft: #1b1f45;
+  --color-brand-ink: #a5b4fc;
 
-  --color-success: #5fc98b;
-  --color-success-soft: #15291f;
-  --color-warning: #e0ab52;
-  --color-warning-soft: #332710;
-  --color-danger: #ea7a74;
-  --color-danger-soft: #341c1a;
+  --color-success: #34d399;
+  --color-success-soft: #10291f;
+  --color-warning: #fbbf24;
+  --color-warning-soft: #2e2410;
+  --color-danger: #f87171;
+  --color-danger-soft: #331c1f;
 }
 
 /*
@@ -59,8 +55,8 @@
  */
 @media (prefers-color-scheme: light) {
   :root {
-    --color-canvas: #f3f2f8;
-    --color-chrome: #f7f6fb;
+    --color-canvas: #f4f5fa;
+    --color-chrome: #ffffff;
     --color-surface: #ffffff;
     --color-surface-raised: #ffffff;
     --color-surface-hover: #f1f0f9;
@@ -70,9 +66,10 @@
     --color-ink-soft: #5c5969;
     --color-muted: #938fa0;
 
-    --color-brand: #5b4bd6;
-    --color-brand-soft: #efecfb;
-    --color-brand-ink: #3c2fa0;
+    --color-brand: #5558e6;
+    --color-brand-strong: #4f46e5;
+    --color-brand-soft: #eceefd;
+    --color-brand-ink: #3730a3;
 
     --color-success: #2f8f5b;
     --color-success-soft: #e7f5ed;
@@ -140,21 +137,11 @@ body {
   background-clip: padding-box;
 }
 
-/* Soft radial glow behind the app shell for a "command center" feel, kept
-   subtle enough not to affect text contrast anywhere content sits on top. */
-.app-glow {
-  background-image:
-    radial-gradient(60rem 30rem at 15% -10%, color-mix(in srgb, var(--color-brand) 10%, transparent), transparent),
-    radial-gradient(40rem 24rem at 100% 0%, color-mix(in srgb, var(--color-brand) 6%, transparent), transparent);
-  background-repeat: no-repeat;
-}
-
-.grid-texture {
-  background-image:
-    linear-gradient(to right, var(--color-border) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
-  background-size: 28px 28px;
-  opacity: 0.4;
+/* Progress ring (focus dial) eases its offset like the reference timer. */
+.progress-ring-circle {
+  transition: stroke-dashoffset 0.35s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
 }
 
 @media (prefers-reduced-motion: reduce) {

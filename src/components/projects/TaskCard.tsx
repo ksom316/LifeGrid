@@ -68,7 +68,7 @@ export function TaskCard({ task, projectId, projects, highlighted = false }: Tas
             type="button"
             onClick={() => setEditOpen(true)}
             aria-label={`Edit "${task.title}"`}
-            className="rounded-md p-1 text-ink-soft hover:bg-surface hover:text-ink"
+            className="rounded-md p-2 text-ink-soft sm:p-1 hover:bg-surface hover:text-ink"
           >
             <IconPencil width={14} height={14} />
           </button>
@@ -76,7 +76,7 @@ export function TaskCard({ task, projectId, projects, highlighted = false }: Tas
             type="button"
             onClick={() => setDeleteOpen(true)}
             aria-label={`Delete "${task.title}"`}
-            className="rounded-md p-1 text-ink-soft hover:bg-danger-soft hover:text-danger"
+            className="rounded-md p-2 text-ink-soft sm:p-1 hover:bg-danger-soft hover:text-danger"
           >
             <IconTrash width={14} height={14} />
           </button>
