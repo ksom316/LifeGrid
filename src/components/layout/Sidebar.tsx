@@ -17,7 +17,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
-  const { dataSource, projects, notes } = useAppData()
+  const { dataSource, projects } = useAppData()
   useEffect(() => {
     if (!isOpen) return
     const handleKey = (e: KeyboardEvent) => {
@@ -37,12 +37,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       icon: IconFolder,
       count: activeProjects > 0 ? `${activeProjects} Active` : undefined,
     },
-    {
-      to: '/vault',
-      label: 'Knowledge Vault',
-      icon: IconBook,
-      count: notes.length > 0 ? String(notes.length) : undefined,
-    },
+    { to: '/vault', label: 'Knowledge Vault', icon: IconBook },
     { to: '/focus', label: 'Focus & Reviews', icon: IconTimer },
   ]
   const systemItems: NavItem[] = [{ to: '/settings', label: 'Settings', icon: IconSettings }]
@@ -65,10 +60,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="flex h-16 items-center justify-between border-b border-border/60 px-5">
             <div className="flex items-center gap-3">
               <BrandMark />
-              <div>
-                <p className="text-sm font-semibold tracking-wide text-ink">Life Grid</p>
-                <p className="text-[10px] font-medium tracking-wider text-ink-soft uppercase">Command OS</p>
-              </div>
+              <p className="text-sm font-semibold tracking-wide text-ink">Life Grid</p>
             </div>
             <button
               type="button"
