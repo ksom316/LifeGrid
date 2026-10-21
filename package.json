@@ -1,0 +1,47 @@
+{
+  "name": "life-grid",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:neon": "node server/test/neon/run.mjs",
+    "db:migrate": "node db/migrate.mjs"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.2.0",
+    "idb": "^8.0.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4",
+    "ws": "^8.22.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^24.19.2",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@types/ws": "^8.18.2",
+    "@vercel/node": "^26.0.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitest/ui": "^5.0.5",
+    "autoprefixer": "^10.6.1",
+    "fake-indexeddb": "^6.2.6",
+    "jsdom": "^29.1.1",
+    "oxlint": "^1.81.0",
+    "pg-mem": "^3.0.14",
+    "postcss": "^8.5.30",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.5"
+  }
+}
