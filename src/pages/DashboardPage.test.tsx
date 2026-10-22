@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it } from 'vitest'
 import 'fake-indexeddb/auto'
 import { dailyPlansRepo } from '../data/dailyPlans'
@@ -9,6 +9,7 @@ import { tasksRepo } from '../data/tasks'
 import { weeklyReviewsRepo } from '../data/weeklyReviews'
 import { createRepository } from '../data/repository'
 import { renderShellApp } from '../test/testUtils'
+import { todayKey } from '../utils/date'
 import type { DailyPlan, WeeklyReview } from '../types/domain'
 
 const dailyPlanRawRepo = createRepository<DailyPlan>('dailyPlans')
@@ -38,9 +39,10 @@ beforeEach(async () => {
 })
 
 describe('DashboardPage — priorities and deadlines navigation', () => {
-  it('links a high-priority task to its project and highlights it on arrival', async () => {
+  it("links a task planned as today's priority to its project and highlights it on arrival", async () => {
     const project = await projectsRepo.create({ name: 'Garden' })
     const task = await tasksRepo.create({ title: 'Prune the roses', projectId: project.id, priority: 'high' })
+    await dailyPlansRepo.addTask(todayKey(), task.id)
 
     renderShellApp('/')
 
@@ -49,7 +51,8 @@ describe('DashboardPage — priorities and deadlines navigation', () => {
   })
 
   it('renders a priority task with no project as plain text rather than a dead link', async () => {
-    await tasksRepo.create({ title: 'Freestanding priority', priority: 'high' })
+    const task = await tasksRepo.create({ title: 'Freestanding priority', priority: 'high' })
+    await dailyPlansRepo.addTask(todayKey(), task.id)
 
     renderShellApp('/')
 
@@ -77,5 +80,59 @@ describe('DashboardPage — priorities and deadlines navigation', () => {
     const taxesLink = await screen.findByRole('link', { name: /Taxes/ })
     expect(gardenLink).toHaveAttribute('href', `/projects/${garden.id}`)
     expect(taxesLink).toHaveAttribute('href', `/projects/${taxes.id}`)
+  })
+})
+
+describe('DashboardPage — today\'s priority completion', () => {
+  it('keeps a completed priority visible with a checkmark instead of removing it', async () => {
+    // priority: 'high' with no project/due date keeps this task out of the
+    // Unassigned-tasks card's own criteria, so it only renders once.
+    const task = await tasksRepo.create({ title: 'Draft the proposal', priority: 'high' })
+    await dailyPlansRepo.addTask(todayKey(), task.id)
+
+    renderShellApp('/')
+    const toggle = await screen.findByRole('button', { name: /mark "draft the proposal" as done/i })
+    expect(toggle).toHaveAttribute('aria-pressed', 'false')
+
+    fireEvent.click(toggle)
+
+    // Still in the document — not removed — and now shows done state.
+    const doneToggle = await screen.findByRole('button', { name: /mark "draft the proposal" as not done/i })
+    expect(doneToggle).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByText('Draft the proposal', { selector: 'span' })).toHaveClass('line-through')
+  })
+
+  it('persists completion to the task and keeps it in the daily plan, not just in the UI', async () => {
+    const task = await tasksRepo.create({ title: 'Ship the release', priority: 'high' })
+    const today = todayKey()
+    await dailyPlansRepo.addTask(today, task.id)
+
+    renderShellApp('/')
+    const toggle = await screen.findByRole('button', { name: /mark "ship the release" as done/i })
+    fireEvent.click(toggle)
+    await screen.findByRole('button', { name: /mark "ship the release" as not done/i })
+
+    await waitFor(async () => {
+      const updatedTask = await tasksRepo.get(task.id)
+      expect(updatedTask?.status).toBe('done')
+    })
+    // Completing the task must not drop it from the plan — a fresh render
+    // (simulating reopening the app) still has it to show as done.
+    const plan = await dailyPlansRepo.get(today)
+    expect(plan.taskIds).toContain(task.id)
+  })
+
+  it("does not show yesterday's completed priority in today's plan", async () => {
+    const yesterdayTask = await tasksRepo.create({ title: 'Yesterday only', status: 'done' })
+    const yesterday = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10)
+    await dailyPlansRepo.addTask(yesterday, yesterdayTask.id)
+
+    const todayTask = await tasksRepo.create({ title: "Today's task", priority: 'high' })
+    await dailyPlansRepo.addTask(todayKey(), todayTask.id)
+
+    renderShellApp('/')
+
+    expect(await screen.findByText("Today's task")).toBeInTheDocument()
+    expect(screen.queryByText('Yesterday only')).not.toBeInTheDocument()
   })
 })

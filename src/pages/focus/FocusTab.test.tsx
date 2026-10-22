@@ -189,9 +189,10 @@ describe('FocusTab — daily planning', () => {
 
   it('visibly reflects completion in the priority list instead of leaving the row unchanged', async () => {
     // Regression test: completing a daily priority used to leave its row
-    // pixel-identical (no strikethrough, no filled checkbox, same label),
-    // unlike the Dashboard's priorities card, which removes a task from view
-    // on completion — so a user had no feedback their click registered.
+    // pixel-identical (no strikethrough, no filled checkbox, same label) —
+    // a user had no feedback their click registered. The Dashboard's
+    // priorities card now shares this same daily-plan data and behavior
+    // (see DashboardPage.test.tsx), so this covers both surfaces.
     const task = await tasksRepo.create({ title: 'Write the report' })
     const today = new Date().toISOString().slice(0, 10)
     await dailyPlansRepo.addTask(today, task.id)

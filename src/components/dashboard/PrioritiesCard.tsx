@@ -1,25 +1,32 @@
 import { Link } from 'react-router-dom'
 import { useAppData } from '../../state/AppDataContext'
 import type { Task } from '../../types/domain'
+import { todayKey } from '../../utils/date'
 import { Badge } from '../ui/Badge'
 import { Card } from '../ui/Card'
 import { EmptyState } from '../ui/EmptyState'
 import { IconCheck, IconFlag } from '../ui/icons'
-import { isOverdue, isToday } from '../../utils/date'
 
 const PRIORITY_TONE = { high: 'danger', medium: 'warning', low: 'neutral' } as const
 
+/**
+ * Mirrors the Focus tab's DailyPlanner: "today's priorities" is the same
+ * date-keyed daily plan in both places, not a separately auto-computed
+ * list. That's what makes a completed priority stay visible (checked off,
+ * not removed from the plan) and what makes a new day start with a clean
+ * slate — tomorrow's plan is a different record with its own empty
+ * taskIds, so nothing carries over unless re-added.
+ */
 export function PrioritiesCard() {
-  const { tasks, projects, toggleTaskDone } = useAppData()
+  const { tasks, projects, dailyPlans, toggleTaskDone } = useAppData()
+  const today = todayKey()
+  const plan = dailyPlans.find((p) => p.id === today)
+  const priorityTaskIds = plan?.taskIds ?? []
 
-  const priorities = tasks
-    .filter((t) => t.status !== 'done')
-    .filter((t) => t.priority === 'high' || (t.dueDate && (isToday(t.dueDate) || isOverdue(t.dueDate))))
-    .sort((a, b) => {
-      const order = { high: 0, medium: 1, low: 2 }
-      return order[a.priority] - order[b.priority]
-    })
-    .slice(0, 6)
+  const priorities = [...priorityTaskIds]
+    .map((id) => tasks.find((t) => t.id === id))
+    .filter((t): t is Task => Boolean(t))
+    .sort((a, b) => Number(a.status === 'done') - Number(b.status === 'done'))
 
   return (
     <Card
@@ -33,8 +40,13 @@ export function PrioritiesCard() {
       {priorities.length === 0 ? (
         <EmptyState
           icon={<IconFlag width={28} height={28} />}
-          title="Nothing urgent today"
-          description="High-priority tasks and anything due today will show up here."
+          title="No priorities picked for today"
+          description="Plan your day on the Focus tab to see them here."
+          action={
+            <Link to="/focus" className="text-xs font-medium text-brand-ink hover:underline">
+              Plan today
+            </Link>
+          }
         />
       ) : (
         <ul className="flex flex-col gap-2">
@@ -64,26 +76,38 @@ function PriorityRow({
   projectName?: string
   onToggle: () => void
 }) {
+  const done = task.status === 'done'
   return (
     <li className="flex items-center gap-3 rounded-lg border border-border bg-canvas px-2.5 py-2.5 transition-colors hover:border-border-strong">
       <button
         type="button"
         onClick={onToggle}
-        aria-label={`Mark "${task.title}" as done`}
-        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border-strong text-transparent transition-colors hover:border-brand hover:bg-brand-soft hover:text-brand"
+        aria-label={done ? `Mark "${task.title}" as not done` : `Mark "${task.title}" as done`}
+        aria-pressed={done}
+        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors ${
+          done
+            ? 'border-brand bg-brand text-white'
+            : 'border-border-strong text-transparent hover:border-brand hover:bg-brand-soft hover:text-brand'
+        }`}
       >
         <IconCheck width={12} height={12} />
       </button>
       {projectId ? (
         <Link
           to={`/projects/${projectId}?task=${task.id}`}
-          className="min-w-0 flex-1 truncate text-xs font-medium text-ink hover:text-brand-ink"
+          className={`min-w-0 flex-1 truncate text-xs font-medium hover:text-brand-ink ${
+            done ? 'text-ink-soft line-through' : 'text-ink'
+          }`}
           title={projectName}
         >
           {task.title}
         </Link>
       ) : (
-        <span className="min-w-0 flex-1 truncate text-xs font-medium text-ink">{task.title}</span>
+        <span
+          className={`min-w-0 flex-1 truncate text-xs font-medium ${done ? 'text-ink-soft line-through' : 'text-ink'}`}
+        >
+          {task.title}
+        </span>
       )}
       <Badge tone={PRIORITY_TONE[task.priority]}>{task.priority}</Badge>
     </li>

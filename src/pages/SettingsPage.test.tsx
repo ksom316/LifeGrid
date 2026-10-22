@@ -68,6 +68,20 @@ describe('SettingsPage — data statistics', () => {
     expect(projectsLabel.parentElement).toHaveTextContent('1')
     expect(projectsLabel).toHaveTextContent('+1 sample')
   })
+
+  it('counts a saved daily plan instead of always reading zero', async () => {
+    // Regression test: the count itself was correct, but with no UI path
+    // that had ever actually written a daily-plan record, it always read
+    // zero — indistinguishable from a bug. This proves it tracks real data.
+    const task = await tasksRepo.create({ title: 'Plan me' })
+    await dailyPlansRepo.addTask('2026-10-22', task.id)
+
+    renderSettings()
+
+    await screen.findByText('Data statistics')
+    const label = screen.getByText('Daily plans')
+    expect(label.parentElement).toHaveTextContent('1')
+  })
 })
 
 describe('SettingsPage — export', () => {
