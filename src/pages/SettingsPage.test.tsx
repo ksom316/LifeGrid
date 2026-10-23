@@ -45,16 +45,70 @@ beforeEach(async () => {
   // button's click handler can run without throwing.
   URL.createObjectURL = vi.fn(() => 'blob:mock-url')
   URL.revokeObjectURL = vi.fn()
+  localStorage.removeItem('life-grid-theme')
+  document.documentElement.removeAttribute('data-theme')
 })
 
 afterEach(async () => {
   await clearAllRecords()
   vi.restoreAllMocks()
+  localStorage.removeItem('life-grid-theme')
+  document.documentElement.removeAttribute('data-theme')
 })
 
 function makeBackupFile(content: unknown, name = 'backup.json'): File {
   return new File([JSON.stringify(content)], name, { type: 'application/json' })
 }
+
+describe('SettingsPage — appearance', () => {
+  it('defaults to "Default" with no theme attribute, following the OS setting', async () => {
+    renderSettings()
+
+    const defaultOption = await screen.findByRole('radio', { name: /default/i })
+    expect(defaultOption).toHaveAttribute('aria-checked', 'true')
+    expect(document.documentElement).not.toHaveAttribute('data-theme')
+  })
+
+  it('switches to light mode immediately and persists the choice', async () => {
+    renderSettings()
+
+    fireEvent.click(await screen.findByRole('radio', { name: /^light$/i }))
+
+    expect(document.documentElement).toHaveAttribute('data-theme', 'light')
+    expect(localStorage.getItem('life-grid-theme')).toBe('light')
+  })
+
+  it('switches to dark mode immediately and persists the choice', async () => {
+    renderSettings()
+
+    fireEvent.click(await screen.findByRole('radio', { name: /^dark$/i }))
+
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark')
+    expect(localStorage.getItem('life-grid-theme')).toBe('dark')
+  })
+
+  it('returning to "Default" removes the manual override entirely', async () => {
+    renderSettings()
+
+    fireEvent.click(await screen.findByRole('radio', { name: /^dark$/i }))
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark')
+
+    fireEvent.click(screen.getByRole('radio', { name: /default/i }))
+
+    expect(document.documentElement).not.toHaveAttribute('data-theme')
+    expect(localStorage.getItem('life-grid-theme')).toBe('system')
+  })
+
+  it('restores a previously saved theme choice on load', async () => {
+    localStorage.setItem('life-grid-theme', 'dark')
+
+    renderSettings()
+
+    const darkOption = await screen.findByRole('radio', { name: /^dark$/i })
+    expect(darkOption).toHaveAttribute('aria-checked', 'true')
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark')
+  })
+})
 
 describe('SettingsPage — data statistics', () => {
   it('shows real record counts from actual data', async () => {

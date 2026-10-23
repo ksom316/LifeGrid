@@ -54,7 +54,7 @@
  * and resolve it through the normal cascade at paint time.
  */
 @media (prefers-color-scheme: light) {
-  :root {
+  :root:not([data-theme]) {
     --color-canvas: #f4f5fa;
     --color-chrome: #ffffff;
     --color-surface: #ffffff;
@@ -82,6 +82,69 @@
        select popups) back from the dark default below. */
     color-scheme: light;
   }
+}
+
+/*
+ * Explicit manual choice from the Settings theme toggle (ThemeContext),
+ * applied via a `data-theme` attribute on <html>. These take precedence
+ * over `prefers-color-scheme` above — not through source order (a media
+ * query can't be "beaten" by order alone) but because an attribute
+ * selector is more specific than a bare `:root`. "System" (the default)
+ * leaves `data-theme` unset entirely, so the media query above still
+ * drives the OS-follows behavior the app always had.
+ */
+:root[data-theme='light'] {
+  --color-canvas: #f4f5fa;
+  --color-chrome: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-surface-hover: #f1f0f9;
+  --color-border: #e1dfec;
+  --color-border-strong: #cdc9e0;
+  --color-ink: #17151f;
+  --color-ink-soft: #5c5969;
+  --color-muted: #938fa0;
+
+  --color-brand: #5558e6;
+  --color-brand-strong: #4f46e5;
+  --color-brand-soft: #eceefd;
+  --color-brand-ink: #3730a3;
+
+  --color-success: #2f8f5b;
+  --color-success-soft: #e7f5ed;
+  --color-warning: #b4791e;
+  --color-warning-soft: #faf0dd;
+  --color-danger: #c0433f;
+  --color-danger-soft: #fbeae9;
+
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --color-canvas: #0b0d12;
+  --color-chrome: #12151e;
+  --color-surface: #181c28;
+  --color-surface-raised: #181c28;
+  --color-surface-hover: #202636;
+  --color-border: #262c40;
+  --color-border-strong: #333b54;
+  --color-ink: #f1f5f9;
+  --color-ink-soft: #94a3b8;
+  --color-muted: #64748b;
+
+  --color-brand: #6366f1;
+  --color-brand-strong: #4f46e5;
+  --color-brand-soft: #1b1f45;
+  --color-brand-ink: #a5b4fc;
+
+  --color-success: #34d399;
+  --color-success-soft: #10291f;
+  --color-warning: #fbbf24;
+  --color-warning-soft: #2e2410;
+  --color-danger: #f87171;
+  --color-danger-soft: #331c1f;
+
+  color-scheme: dark;
 }
 
 html,

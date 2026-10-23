@@ -12,18 +12,23 @@ import { ProjectDetailPage } from '../pages/ProjectDetailPage'
 import { ProjectsPage } from '../pages/ProjectsPage'
 import { AppDataProvider } from '../state/AppDataContext'
 import { AuthProvider } from '../state/AuthContext'
+import { ThemeProvider } from '../state/ThemeContext'
 
 /**
- * Every render helper wraps with AuthProvider so AppDataProvider's
- * useAuth() call has a provider to read from, exactly like the real app
- * (see src/App.tsx). In jsdom there is no server to answer
- * /api/auth/session, so the request fails immediately and AuthProvider
- * settles to 'signed-out' — these tests exercise the app exactly as it
- * behaves today, signed out and local-only, unless a test explicitly deals
- * with auth state itself.
+ * Every render helper wraps with ThemeProvider + AuthProvider, matching the
+ * real app's provider nesting (see src/App.tsx), so any component reading
+ * useTheme() or useAuth() has a provider to read from. In jsdom there is no
+ * server to answer /api/auth/session, so the request fails immediately and
+ * AuthProvider settles to 'signed-out' — these tests exercise the app
+ * exactly as it behaves today, signed out and local-only, unless a test
+ * explicitly deals with auth state itself.
  */
 function withAuth(children: ReactElement) {
-  return <AuthProvider>{children}</AuthProvider>
+  return (
+    <ThemeProvider>
+      <AuthProvider>{children}</AuthProvider>
+    </ThemeProvider>
+  )
 }
 
 /** Renders a single page at a given path, wrapped with the app's real data provider and router. */

@@ -11,6 +11,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <title>Life Grid</title>
+    <script>
+      // Applies a saved manual theme choice before first paint, so the page
+      // never flashes dark-then-light (or vice versa) while React loads.
+      // Mirrors ThemeContext's own storage key/values exactly; kept here as
+      // plain inline JS (not an import) because it must block rendering.
+      (function () {
+        try {
+          var stored = localStorage.getItem('life-grid-theme')
+          if (stored === 'light' || stored === 'dark') {
+            document.documentElement.setAttribute('data-theme', stored)
+          }
+        } catch (e) {}
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

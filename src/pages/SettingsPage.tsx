@@ -1,4 +1,5 @@
 import { AccountSection } from '../components/settings/AccountSection'
+import { AppearanceSection } from '../components/settings/AppearanceSection'
 import { DangerZoneSection } from '../components/settings/DangerZoneSection'
 import { DataStatsSection } from '../components/settings/DataStatsSection'
 import { ExportSection } from '../components/settings/ExportSection'
@@ -20,6 +21,7 @@ export function SettingsPage() {
         </p>
       </div>
 
+      <AppearanceSection />
       <AccountSection />
 
       {status === 'loading' ? (

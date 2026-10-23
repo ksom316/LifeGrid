@@ -11,28 +11,31 @@ import { ProjectsPage } from './pages/ProjectsPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { AppDataProvider } from './state/AppDataContext'
 import { AuthProvider } from './state/AuthContext'
+import { ThemeProvider } from './state/ThemeContext'
 
 function App() {
   return (
-    <AuthProvider>
-      <AppDataProvider>
-        <BrowserRouter>
-          <AppShell>
-            <Routes>
-              <Route path="/" element={<DashboardPage />} />
-              <Route path="/projects" element={<ProjectsPage />} />
-              <Route path="/projects/:id" element={<ProjectDetailPage />} />
-              <Route path="/vault" element={<KnowledgeVaultPage />} />
-              <Route path="/vault/:id" element={<NoteDetailPage />} />
-              <Route path="/focus" element={<FocusTab />} />
-              <Route path="/focus/history" element={<HistoryTab />} />
-              <Route path="/focus/reviews" element={<ReviewsTab />} />
-              <Route path="/settings" element={<SettingsPage />} />
-            </Routes>
-          </AppShell>
-        </BrowserRouter>
-      </AppDataProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <AppDataProvider>
+          <BrowserRouter>
+            <AppShell>
+              <Routes>
+                <Route path="/" element={<DashboardPage />} />
+                <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/projects/:id" element={<ProjectDetailPage />} />
+                <Route path="/vault" element={<KnowledgeVaultPage />} />
+                <Route path="/vault/:id" element={<NoteDetailPage />} />
+                <Route path="/focus" element={<FocusTab />} />
+                <Route path="/focus/history" element={<HistoryTab />} />
+                <Route path="/focus/reviews" element={<ReviewsTab />} />
+                <Route path="/settings" element={<SettingsPage />} />
+              </Routes>
+            </AppShell>
+          </BrowserRouter>
+        </AppDataProvider>
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 
