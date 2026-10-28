@@ -1,10 +1,12 @@
 import { useEffect, useId, useState } from 'react'
 import type { FormEvent } from 'react'
+import { noteAutocorrectEnabled } from '../../data/notes'
 import { useAppData } from '../../state/AppDataContext'
 import type { Note, Project } from '../../types/domain'
 import { Button } from '../ui/Button'
 import { Field, inputClasses } from '../ui/Field'
 import { Modal } from '../ui/Modal'
+import { NoteEditorField } from './NoteEditorField'
 import { TagInput } from './TagInput'
 
 interface NoteFormModalProps {
@@ -23,10 +25,11 @@ interface FormState {
   content: string
   tags: string[]
   projectId: string
+  autocorrect: boolean
 }
 
 function emptyState(projectId?: string): FormState {
-  return { title: '', content: '', tags: [], projectId: projectId ?? '' }
+  return { title: '', content: '', tags: [], projectId: projectId ?? '', autocorrect: true }
 }
 
 function stateFromNote(note: Note): FormState {
@@ -35,6 +38,7 @@ function stateFromNote(note: Note): FormState {
     content: note.content,
     tags: note.tags,
     projectId: note.projectId ?? '',
+    autocorrect: noteAutocorrectEnabled(note),
   }
 }
 
@@ -54,6 +58,7 @@ export function NoteFormModal({
   const [titleError, setTitleError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const tagsFieldId = useId()
+  const contentFieldId = useId()
 
   useEffect(() => {
     if (isOpen) {
@@ -80,6 +85,7 @@ export function NoteFormModal({
         content: form.content.trim(),
         tags: form.tags,
         projectId: projectId ?? (form.projectId || undefined),
+        autocorrect: form.autocorrect,
       }
       const saved =
         isEditing && note ? await updateNote(note.id, payload) : await addNote(payload)
@@ -101,15 +107,27 @@ export function NoteFormModal({
             placeholder="e.g. Ideas for Q1"
           />
         </Field>
-        <Field label="Content">
-          <textarea
-            className={`${inputClasses} font-mono`}
+        {/*
+          Not <Field>: Field wraps its child in one <label>, but this
+          control's own toolbar has visible text (e.g. "Auto-correct")
+          that would get folded into that label's accessible name,
+          corrupting it. A sibling <label htmlFor> (same pattern as Tags
+          below) names the control correctly without wrapping it.
+        */}
+        <div className="mb-3">
+          <label htmlFor={contentFieldId} className="mb-1.5 block text-xs text-ink-soft">
+            Content
+          </label>
+          <NoteEditorField
+            id={contentFieldId}
             value={form.content}
-            onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))}
+            onChange={(content) => setForm((f) => ({ ...f, content }))}
+            autocorrectEnabled={form.autocorrect}
+            onAutocorrectChange={(autocorrect) => setForm((f) => ({ ...f, autocorrect }))}
             rows={8}
             placeholder="Write freely — line breaks are preserved."
           />
-        </Field>
+        </div>
         <div className="mb-3">
           <label htmlFor={tagsFieldId} className="mb-1.5 block text-xs text-ink-soft">
             Tags

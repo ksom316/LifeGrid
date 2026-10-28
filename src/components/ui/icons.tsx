@@ -241,3 +241,61 @@ export const IconMonitor = (props: IconProps) => (
     <path d="M8 20h8M12 16v4" />
   </svg>
 )
+
+export const IconListBullet = (props: IconProps) => (
+  <svg {...base(props)}>
+    <circle cx="4.5" cy="6" r="1.3" fill="currentColor" stroke="none" />
+    <circle cx="4.5" cy="12" r="1.3" fill="currentColor" stroke="none" />
+    <circle cx="4.5" cy="18" r="1.3" fill="currentColor" stroke="none" />
+    <path d="M9 6h11M9 12h11M9 18h11" />
+  </svg>
+)
+
+export const IconListDash = (props: IconProps) => (
+  <svg {...base(props)}>
+    <path d="M3.5 6h3M3.5 12h3M3.5 18h3" />
+    <path d="M9 6h11M9 12h11M9 18h11" />
+  </svg>
+)
+
+export const IconListNumbered = (props: IconProps) => (
+  <svg {...base(props)}>
+    <path d="M9 6h11M9 12h11M9 18h11" />
+    <path d="M4 4.5v3M3.3 4.5h1.4M3.3 10.5h1.6a.9.9 0 0 0 .1-1.8H3.4a.9.9 0 0 1 .1-1.7h1.5M3.3 15.5h1.7a1 1 0 0 1 0 2H4.4l1 .1a1 1 0 0 1 0 2H3.3" />
+  </svg>
+)
+
+export const IconListCheck = (props: IconProps) => (
+  <svg {...base(props)}>
+    <rect x="3" y="4" width="4.5" height="4.5" rx="1" />
+    <path d="M4 6.2l.9.9L6.5 5.5" />
+    <rect x="3" y="15.5" width="4.5" height="4.5" rx="1" />
+    <path d="M10.5 6h10M10.5 17.75h10" />
+  </svg>
+)
+
+export const IconCode = (props: IconProps) => (
+  <svg {...base(props)}>
+    <path d="M8.5 7 3.5 12l5 5M15.5 7l5 5-5 5" />
+  </svg>
+)
+
+export const IconIndentIncrease = (props: IconProps) => (
+  <svg {...base(props)}>
+    <path d="M3.5 5h17M3.5 19h17M11.5 10h9M11.5 14h9" />
+    <path d="M3.5 9.5 7 12l-3.5 2.5z" fill="currentColor" stroke="none" />
+  </svg>
+)
+
+export const IconIndentDecrease = (props: IconProps) => (
+  <svg {...base(props)}>
+    <path d="M3.5 5h17M3.5 19h17M11.5 10h9M11.5 14h9" />
+    <path d="M7 9.5 3.5 12 7 14.5z" fill="currentColor" stroke="none" />
+  </svg>
+)
+
+export const IconChevronDown = (props: IconProps) => (
+  <svg {...base(props)}>
+    <path d="M6 9l6 6 6-6" />
+  </svg>
+)

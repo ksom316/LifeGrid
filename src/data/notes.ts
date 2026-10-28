@@ -9,12 +9,18 @@ export interface CreateNoteInput {
   tags?: string[]
   projectId?: string
   pinned?: boolean
+  autocorrect?: boolean
   isDemo?: boolean
 }
 
 /** Reads a note's pinned state, defaulting to false for records created before pinning existed. */
 export function notePinned(note: Note): boolean {
   return note.pinned ?? false
+}
+
+/** Reads a note's auto-correct setting, defaulting to true (enabled) for records created before this existed. */
+export function noteAutocorrectEnabled(note: Note): boolean {
+  return note.autocorrect ?? true
 }
 
 export const notesRepo = {
@@ -32,6 +38,7 @@ export const notesRepo = {
       tags: input.tags ?? [],
       projectId: input.projectId,
       pinned: input.pinned ?? false,
+      autocorrect: input.autocorrect ?? true,
       createdAt: timestamp,
       updatedAt: timestamp,
       isDemo: input.isDemo,

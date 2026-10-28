@@ -72,6 +72,8 @@ export interface Note extends BaseRecord {
   projectId?: ID
   /** Optional for records created before pinning existed; treat missing as false. */
   pinned?: boolean
+  /** Per-note editor auto-correct/spellcheck setting. Optional for records created before this existed; treat missing as true (enabled). */
+  autocorrect?: boolean
 }
 
 export type FocusSessionType = 'focus' | 'short-break' | 'long-break'

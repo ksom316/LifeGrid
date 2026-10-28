@@ -12,6 +12,7 @@ interface NoteRow {
   content: string
   tags: string[]
   pinned: boolean
+  autocorrect: boolean | null
   is_demo: boolean
   created_at: unknown
   updated_at: unknown
@@ -25,6 +26,7 @@ function mapRow(row: NoteRow): Note {
     tags: row.tags,
     projectId: row.project_id ?? undefined,
     pinned: row.pinned,
+    autocorrect: row.autocorrect ?? undefined,
     isDemo: row.is_demo || undefined,
     createdAt: toDateTimeString(row.created_at),
     updatedAt: toDateTimeString(row.updated_at),
@@ -48,6 +50,7 @@ export interface CreateNoteInput {
   tags?: string[]
   projectId?: string
   pinned?: boolean
+  autocorrect?: boolean
   isDemo?: boolean
   createdAt?: string
   updatedAt?: string
@@ -58,8 +61,8 @@ export async function createNote(sql: Sql, userId: string, input: CreateNoteInpu
   const id = input.id ?? randomUUID()
   const now = new Date().toISOString()
   await sql.query(
-    `insert into notes (id, user_id, project_id, title, content, tags, pinned, is_demo, created_at, updated_at)
-     values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+    `insert into notes (id, user_id, project_id, title, content, tags, pinned, autocorrect, is_demo, created_at, updated_at)
+     values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
     [
       id,
       userId,
@@ -68,6 +71,7 @@ export async function createNote(sql: Sql, userId: string, input: CreateNoteInpu
       input.content ?? '',
       input.tags ?? [],
       input.pinned ?? false,
+      input.autocorrect ?? null,
       input.isDemo ?? false,
       input.createdAt ?? now,
       input.updatedAt ?? now,
@@ -82,6 +86,7 @@ export interface UpdateNoteInput {
   tags?: string[]
   projectId?: string | null
   pinned?: boolean
+  autocorrect?: boolean
 }
 
 export async function updateNote(sql: Sql, userId: string, id: string, patch: UpdateNoteInput): Promise<Note> {
@@ -95,10 +100,11 @@ export async function updateNote(sql: Sql, userId: string, id: string, patch: Up
     tags: patch.tags ?? existing.tags,
     project_id: patch.projectId === undefined ? (existing.projectId ?? null) : patch.projectId,
     pinned: patch.pinned ?? existing.pinned ?? false,
+    autocorrect: patch.autocorrect ?? existing.autocorrect ?? null,
   }
   await sql.query(
-    `update notes set title=$1, content=$2, tags=$3, project_id=$4, pinned=$5, updated_at=$6 where user_id = $7 and id = $8`,
-    [next.title, next.content, next.tags, next.project_id, next.pinned, new Date().toISOString(), userId, id],
+    `update notes set title=$1, content=$2, tags=$3, project_id=$4, pinned=$5, autocorrect=$6, updated_at=$7 where user_id = $8 and id = $9`,
+    [next.title, next.content, next.tags, next.project_id, next.pinned, next.autocorrect, new Date().toISOString(), userId, id],
   )
   return (await getNote(sql, userId, id))!
 }

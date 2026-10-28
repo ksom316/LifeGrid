@@ -100,10 +100,17 @@ function noteSpec(): TableSpec {
   return {
     table: 'notes',
     idColumn: 'id',
-    insertColumns: ['id', 'user_id', 'project_id', 'title', 'content', 'tags', 'pinned', 'is_demo', 'created_at', 'updated_at'],
+    insertColumns: [
+      'id', 'user_id', 'project_id', 'title', 'content', 'tags', 'pinned', 'autocorrect', 'is_demo', 'created_at', 'updated_at',
+    ],
     values: (userId, r) => {
-      const n = r as unknown as { projectId?: string; title: string; content: string; tags: string[]; pinned?: boolean }
-      return [r.id, userId, n.projectId ?? null, n.title, n.content, n.tags, n.pinned ?? false, r.isDemo ?? false, r.createdAt, r.updatedAt]
+      const n = r as unknown as {
+        projectId?: string; title: string; content: string; tags: string[]; pinned?: boolean; autocorrect?: boolean
+      }
+      return [
+        r.id, userId, n.projectId ?? null, n.title, n.content, n.tags, n.pinned ?? false, n.autocorrect ?? null,
+        r.isDemo ?? false, r.createdAt, r.updatedAt,
+      ]
     },
   }
 }

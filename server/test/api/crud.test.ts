@@ -86,6 +86,26 @@ describe('note CRUD', () => {
     await noteById(mockReq({ method: 'GET', cookie: user.cookie, query: { id } }), getRes.res)
     expect(getRes.statusCode()).toBe(404)
   })
+
+  it('defaults a new note to autocorrect enabled, and persists turning it off', async () => {
+    const createRes = mockRes()
+    await notesIndex(mockReq({ method: 'POST', cookie: user.cookie, body: { title: 'Snippet' } }), createRes.res)
+    const note = (createRes.body() as { note: { id: string; autocorrect?: boolean } }).note
+    // Undefined (not explicitly false) still means "enabled" — see
+    // noteAutocorrectEnabled in src/data/notes.ts.
+    expect(note.autocorrect).not.toBe(false)
+
+    const patchRes = mockRes()
+    await noteById(
+      mockReq({ method: 'PATCH', cookie: user.cookie, query: { id: note.id }, body: { autocorrect: false } }),
+      patchRes.res,
+    )
+    expect((patchRes.body() as { note: { autocorrect: boolean } }).note.autocorrect).toBe(false)
+
+    const getRes = mockRes()
+    await noteById(mockReq({ method: 'GET', cookie: user.cookie, query: { id: note.id } }), getRes.res)
+    expect((getRes.body() as { note: { autocorrect: boolean } }).note.autocorrect).toBe(false)
+  })
 })
 
 describe('daily plans', () => {

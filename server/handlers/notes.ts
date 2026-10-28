@@ -22,6 +22,7 @@ export async function handleNotesIndex(req: VercelRequest, res: VercelResponse, 
     tags: optionalStringArray(body.tags, 'tags'),
     projectId: optionalUuid(body.projectId, 'projectId'),
     pinned: optionalBoolean(body.pinned, 'pinned'),
+    autocorrect: optionalBoolean(body.autocorrect, 'autocorrect'),
   })
   res.status(201).json({ note })
 }
@@ -54,6 +55,7 @@ export async function handleNoteById(
     tags: optionalStringArray(body.tags, 'tags'),
     projectId: body.projectId === null ? null : optionalUuid(body.projectId, 'projectId'),
     pinned: optionalBoolean(body.pinned, 'pinned'),
+    autocorrect: optionalBoolean(body.autocorrect, 'autocorrect'),
   })
   res.status(200).json({ note })
 }

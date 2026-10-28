@@ -11,6 +11,7 @@ import type { LifeGridBackup } from '../../../src/types/backup.ts'
 // into api/backup.ts (dispatching on ?action=) — see vercel.json's rewrites.
 import tasksIndex from '../../../api/tasks.ts'
 import projectsIndex from '../../../api/projects.ts'
+import notesIndex from '../../../api/notes.ts'
 import backupDispatcher from '../../../api/backup.ts'
 import clearRoute from '../../../api/data/clear.ts'
 
@@ -114,6 +115,25 @@ describe('backup preview and restore', () => {
     await projectsIndex(mockReq({ method: 'GET', cookie: alice.cookie }), listRes.res)
     const projects = (listRes.body() as { projects: { id: string }[] }).projects
     expect(projects.map((p) => p.id)).toContain(projectId)
+  })
+
+  it('restores a note with autocorrect disabled, not silently resetting it to enabled', async () => {
+    const noteId = '33333333-3333-3333-3333-333333333333'
+    const now = new Date().toISOString()
+    const backup = validBackup({
+      notes: [
+        { id: noteId, title: 'Snippet', content: '```\ncode\n```', tags: [], pinned: false, autocorrect: false, createdAt: now, updatedAt: now },
+      ],
+    })
+    const res = mockRes()
+    await restoreRoute(mockReq({ method: 'POST', cookie: alice.cookie, body: { strategy: 'merge', backup } }), res.res)
+    expect(res.statusCode()).toBe(200)
+
+    const getRes = mockRes()
+    await notesIndex(mockReq({ method: 'GET', cookie: alice.cookie, query: { id: noteId } }), getRes.res)
+    const note = (getRes.body() as { note: { autocorrect: boolean; content: string } }).note
+    expect(note.autocorrect).toBe(false)
+    expect(note.content).toBe('```\ncode\n```')
   })
 
   it("replace strategy clears only the importing user's existing data, never another user's", async () => {

@@ -2,17 +2,19 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { notePinned } from '../data/notes'
 import { useAppData } from '../state/AppDataContext'
+import { NoteContent } from '../components/notes/NoteContent'
 import { NoteFormModal } from '../components/notes/NoteFormModal'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { ConfirmDialog } from '../components/ui/ConfirmDialog'
 import { IconArrowLeft, IconBook, IconFolder, IconPencil, IconPin, IconTrash } from '../components/ui/icons'
 import { formatLongDate } from '../utils/date'
+import { toggleChecklistLine } from '../utils/noteFormatting'
 
 export function NoteDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { status, error, notes, projects, deleteNote, toggleNotePin, refresh } = useAppData()
+  const { status, error, notes, projects, deleteNote, toggleNotePin, updateNote, refresh } = useAppData()
   const [isEditOpen, setEditOpen] = useState(false)
   const [isDeleteOpen, setDeleteOpen] = useState(false)
 
@@ -55,6 +57,10 @@ export function NoteDetailPage() {
 
   const project = projects.find((p) => p.id === note.projectId)
   const pinned = notePinned(note)
+
+  const handleToggleChecklistLine = (lineIndex: number) => {
+    updateNote(note.id, { content: toggleChecklistLine(note.content, lineIndex) })
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -119,7 +125,7 @@ export function NoteDetailPage() {
 
       <div className="rounded-xl border border-border bg-surface p-5">
         {note.content ? (
-          <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink">{note.content}</p>
+          <NoteContent content={note.content} interactive onToggleLine={handleToggleChecklistLine} />
         ) : (
           <p className="text-sm text-ink-soft">This note has no content yet.</p>
         )}
