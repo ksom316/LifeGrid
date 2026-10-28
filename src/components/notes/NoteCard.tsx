@@ -7,8 +7,8 @@ import { formatShortDate } from '../../utils/date'
 import { ConfirmDialog } from '../ui/ConfirmDialog'
 import { ColorBadge } from '../ui/ColorSwatch'
 import { IconFolder, IconPencil, IconPin, IconTrash } from '../ui/icons'
-import { accentBorderStyle, resolveProjectColor } from '../../utils/colors'
-import { resolveTagColor } from '../../utils/tags'
+import { cardTintStyle, resolveProjectColor } from '../../utils/colors'
+import { resolveNoteColor, resolveTagColor } from '../../utils/tags'
 import { NoteFormModal } from './NoteFormModal'
 
 interface NoteCardProps {
@@ -22,13 +22,12 @@ export function NoteCard({ note, project, projects }: NoteCardProps) {
   const [isEditOpen, setEditOpen] = useState(false)
   const [isDeleteOpen, setDeleteOpen] = useState(false)
   const pinned = notePinned(note)
+  const cardColor = resolveNoteColor(note, project, tagColors)
 
   return (
     <div
-      className={`flex flex-col gap-3 rounded-xl border border-border bg-surface p-5 shadow-sm transition-colors hover:border-border-strong ${
-        project ? 'border-t-2' : ''
-      }`}
-      style={project ? accentBorderStyle(resolveProjectColor(project)) : undefined}
+      className="flex flex-col gap-3 rounded-xl border p-5 shadow-sm transition-colors hover:border-border-strong"
+      style={cardTintStyle(cardColor)}
     >
       <div className="flex items-start justify-between gap-2">
         <Link to={`/vault/${note.id}`} className="min-w-0 flex-1 focus-visible:outline-none">

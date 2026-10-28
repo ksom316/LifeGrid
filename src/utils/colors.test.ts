@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   PALETTE_COLORS,
   badgeStyle,
+  cardTintStyle,
   colorForKey,
   colorHex,
   colorLabel,
@@ -66,6 +67,62 @@ describe('colorForKey', () => {
   it('distributes different keys across more than one colour (not a constant)', () => {
     const results = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'].map(colorForKey))
     expect(results.size).toBeGreaterThan(1)
+  })
+})
+
+describe('expanded palette', () => {
+  it('has approximately 20 colours', () => {
+    expect(PALETTE_COLORS.length).toBeGreaterThanOrEqual(18)
+    expect(PALETTE_COLORS.length).toBeLessThanOrEqual(24)
+  })
+
+  it('keeps the original 8 colours at their original hex values (preserves existing saved/rendered colours)', () => {
+    const original: Record<string, string> = {
+      violet: '#8b7bff',
+      blue: '#3b82f6',
+      teal: '#14b8a6',
+      emerald: '#10b981',
+      amber: '#f59e0b',
+      rose: '#f43f5e',
+      pink: '#ec4899',
+      slate: '#64748b',
+    }
+    for (const [name, hex] of Object.entries(original)) {
+      expect(isPaletteColor(name)).toBe(true)
+      expect(colorHex(name as never)).toBe(hex)
+    }
+  })
+
+  it('every colour has a distinct hex value (no accidental duplicates)', () => {
+    const hexes = PALETTE_COLORS.map((c) => colorHex(c))
+    expect(new Set(hexes).size).toBe(PALETTE_COLORS.length)
+  })
+
+  it('distributes many distinct keys across a wide spread of the expanded palette', () => {
+    const keys = Array.from({ length: 200 }, (_, i) => `key-${i}`)
+    const used = new Set(keys.map(colorForKey))
+    // Not every one of the 20 colours is guaranteed to appear, but a wide
+    // automatic spread (not just a handful of buckets) is expected.
+    expect(used.size).toBeGreaterThan(10)
+  })
+})
+
+describe('cardTintStyle', () => {
+  it('derives background and border from the theme tokens via color-mix, same adaptive technique as badgeStyle', () => {
+    const style = cardTintStyle('emerald')
+    expect(style.backgroundColor).toContain('color-mix')
+    expect(style.backgroundColor).toContain('#10b981')
+    expect(style.backgroundColor).toContain('var(--color-surface)')
+    expect(style.borderColor).toContain('color-mix')
+    expect(style.borderColor).toContain('var(--color-border)')
+  })
+
+  it('tints the background much more subtly than a badge, to keep body text readable', () => {
+    const card = cardTintStyle('rose')
+    const badge = badgeStyle('rose')
+    const cardPercent = Number(String(card.backgroundColor).match(/(\d+)%/)?.[1])
+    const badgePercent = Number(String(badge.backgroundColor).match(/(\d+)%/)?.[1])
+    expect(cardPercent).toBeLessThan(badgePercent)
   })
 })
 

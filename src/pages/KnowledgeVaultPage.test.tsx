@@ -6,6 +6,8 @@ import { notesRepo } from '../data/notes'
 import { projectsRepo } from '../data/projects'
 import { tasksRepo } from '../data/tasks'
 import { renderVaultApp } from '../test/testUtils'
+import { colorForKey, colorHex, resolveProjectColor } from '../utils/colors'
+import { resolveTagColor } from '../utils/tags'
 
 async function clearAllRecords() {
   const [projects, tasks, notes, sessions] = await Promise.all([
@@ -183,6 +185,34 @@ describe('KnowledgeVaultPage', () => {
     fireEvent.click(projectLink)
 
     expect(await screen.findByRole('heading', { name: 'Kitchen remodel' })).toBeInTheDocument()
+  })
+
+  it("tints a note card's background with its project's colour when linked to a project", async () => {
+    const project = await projectsRepo.create({ name: 'Kitchen remodel', color: 'teal' })
+    await notesRepo.create({ title: 'Design notes', projectId: project.id, tags: ['should-be-ignored'] })
+
+    renderVaultApp('/vault')
+    const heading = await screen.findByText('Design notes')
+    const card = heading.closest('div[style]') as HTMLElement
+    expect(card.style.backgroundColor).toContain(colorHex(resolveProjectColor(project)))
+  })
+
+  it("tints a note card's background with its first tag's colour when it has no project", async () => {
+    await notesRepo.create({ title: 'Tagged note', tags: ['planning', 'ideas'] })
+
+    renderVaultApp('/vault')
+    const heading = await screen.findByText('Tagged note')
+    const card = heading.closest('div[style]') as HTMLElement
+    expect(card.style.backgroundColor).toContain(colorHex(resolveTagColor([], 'planning')))
+  })
+
+  it("tints a note card's background with a colour derived from its own id when it has neither a project nor tags", async () => {
+    const note = await notesRepo.create({ title: 'Plain note' })
+
+    renderVaultApp('/vault')
+    const heading = await screen.findByText('Plain note')
+    const card = heading.closest('div[style]') as HTMLElement
+    expect(card.style.backgroundColor).toContain(colorHex(colorForKey(note.id)))
   })
 
   it('isolates demo data: removing it never deletes real notes', async () => {

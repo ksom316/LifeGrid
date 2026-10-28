@@ -1,16 +1,42 @@
 import type { CSSProperties } from 'react'
 
 /**
- * The one shared colour palette for both projects and tags. Deliberately
- * restrained (8 hues) rather than a full colour wheel — "distinct enough to
- * tell things apart at a glance," not a rainbow. `violet`/`teal`/`amber`/
- * `rose`/`slate` are the original five ProjectColor values (see
- * src/types/domain.ts) and must keep their exact spelling: every existing
- * project already has one of these five stored as plain text in its
- * `color` column, and this array has to stay a superset of that for old
- * records to keep resolving correctly.
+ * The one shared colour palette for both projects and tags. Expanded from
+ * the original 8 hues to ~20 for a more distinctive automatic spread across
+ * many projects/tags, while staying a curated, well-balanced set rather
+ * than a full colour wheel. The original 8 (`violet`/`blue`/`teal`/
+ * `emerald`/`amber`/`rose`/`pink`/`slate`) keep their exact names *and*
+ * hex values — every project/tag colour ever stored uses one of these as
+ * plain text, and both the name and its rendered hue must stay stable so
+ * existing manually-picked colours and saved preferences never visibly
+ * change. New entries are appended, never inserted earlier in the array:
+ * colorForKey's hash-mod-length distribution shifts if colours are
+ * reordered or removed, which would silently reassign existing automatic
+ * (unset) colours on next render — appending only ever adds new possible
+ * outcomes for keys that previously hashed into the (now larger) tail.
  */
-export const PALETTE_COLORS = ['violet', 'blue', 'teal', 'emerald', 'amber', 'rose', 'pink', 'slate'] as const
+export const PALETTE_COLORS = [
+  'violet',
+  'blue',
+  'teal',
+  'emerald',
+  'amber',
+  'rose',
+  'pink',
+  'slate',
+  'indigo',
+  'sky',
+  'cyan',
+  'green',
+  'lime',
+  'yellow',
+  'orange',
+  'red',
+  'fuchsia',
+  'purple',
+  'brown',
+  'stone',
+] as const
 export type PaletteColor = (typeof PALETTE_COLORS)[number]
 
 const HEX: Record<PaletteColor, string> = {
@@ -22,6 +48,18 @@ const HEX: Record<PaletteColor, string> = {
   rose: '#f43f5e',
   pink: '#ec4899',
   slate: '#64748b',
+  indigo: '#6366f1',
+  sky: '#0ea5e9',
+  cyan: '#06b6d4',
+  green: '#22c55e',
+  lime: '#84cc16',
+  yellow: '#eab308',
+  orange: '#f97316',
+  red: '#ef4444',
+  fuchsia: '#d946ef',
+  purple: '#a855f7',
+  brown: '#92400e',
+  stone: '#78716c',
 }
 
 const LABELS: Record<PaletteColor, string> = {
@@ -33,6 +71,18 @@ const LABELS: Record<PaletteColor, string> = {
   rose: 'Rose',
   pink: 'Pink',
   slate: 'Slate',
+  indigo: 'Indigo',
+  sky: 'Sky',
+  cyan: 'Cyan',
+  green: 'Green',
+  lime: 'Lime',
+  yellow: 'Yellow',
+  orange: 'Orange',
+  red: 'Red',
+  fuchsia: 'Fuchsia',
+  purple: 'Purple',
+  brown: 'Brown',
+  stone: 'Stone',
 }
 
 export function isPaletteColor(value: unknown): value is PaletteColor {
@@ -123,4 +173,21 @@ export function badgeStyle(color: PaletteColor): CSSProperties {
 /** A slim top-edge accent border style, in the palette hue — only the top border, so the card's other edges keep their normal neutral border. */
 export function accentBorderStyle(color: PaletteColor): CSSProperties {
   return { borderTopColor: colorHex(color) }
+}
+
+/**
+ * A whole-card background tint in the palette hue, for surfaces (e.g. a
+ * Knowledge Vault note card) that want their full background to carry the
+ * colour rather than just a thin accent line. Mixed very lightly (4%)
+ * against the theme's own surface token via color-mix() — the same
+ * dark/light-adaptive technique as badgeStyle — so body text set in the
+ * card's normal ink colours stays readable; the border is mixed a bit
+ * stronger (22%) to keep the card's edge legible against its neighbours.
+ */
+export function cardTintStyle(color: PaletteColor): CSSProperties {
+  const hex = colorHex(color)
+  return {
+    backgroundColor: `color-mix(in srgb, ${hex} 4%, var(--color-surface))`,
+    borderColor: `color-mix(in srgb, ${hex} 22%, var(--color-border))`,
+  }
 }
