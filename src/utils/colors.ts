@@ -74,6 +74,30 @@ export function colorForKey(key: string): PaletteColor {
   return PALETTE_COLORS[index]
 }
 
+/**
+ * Resolves an identity colour (project or tag) given a possibly-unset
+ * stored value and the stable key to derive a default from: a real palette
+ * value is always an explicit choice and wins outright; anything else
+ * (missing, '', or an unrecognised value) falls back to colorForKey(key)
+ * rather than a flat neutral — so an item that was never customised still
+ * gets its own distinct, stable colour instead of looking "unset".
+ */
+export function resolveIdentityColor(value: unknown, key: string): PaletteColor {
+  return isPaletteColor(value) ? value : colorForKey(key)
+}
+
+/**
+ * A project's effective colour: its own explicit `color` if set, else a
+ * default derived from its id. Prefer this over resolveColor(project.color)
+ * everywhere a project's colour is displayed — resolveColor's fallback is a
+ * flat neutral 'slate' for genuinely invalid data (e.g. a corrupted
+ * backup), which is the wrong fallback for "never explicitly chosen" (the
+ * common case for every project's `color` is '' until a user picks one).
+ */
+export function resolveProjectColor(project: { id: string; color: unknown }): PaletteColor {
+  return resolveIdentityColor(project.color, project.id)
+}
+
 /** Solid-fill style for a small identity dot/swatch — the same hue in both themes, by design (an identity colour shouldn't shift when the theme does). */
 export function dotStyle(color: PaletteColor): CSSProperties {
   return { backgroundColor: colorHex(color) }

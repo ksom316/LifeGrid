@@ -6,6 +6,7 @@ import { ColorDot } from '../ui/ColorSwatch'
 import { EmptyState } from '../ui/EmptyState'
 import { IconTimer } from '../ui/icons'
 import { formatShortDate, isOverdue } from '../../utils/date'
+import { resolveProjectColor } from '../../utils/colors'
 
 export function DeadlinesCard() {
   const { tasks, projects } = useAppData()
@@ -52,7 +53,7 @@ export function DeadlinesCard() {
                 )}
                 {project && (
                   <span className="hidden items-center gap-1.5 truncate text-xs text-ink-soft sm:flex">
-                    <ColorDot color={project.color} />
+                    <ColorDot color={resolveProjectColor(project)} />
                     {project.name}
                   </span>
                 )}

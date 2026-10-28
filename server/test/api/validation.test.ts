@@ -112,6 +112,12 @@ describe('project validation', () => {
     await projectsIndex(mockReq({ method: 'POST', cookie: user.cookie, body: { name: 'x', color: 'chartreuse' } }), res.res)
     expect(res.statusCode()).toBe(400)
   })
+
+  it('accepts "" (automatic colour) rather than treating it as an unrecognized value', async () => {
+    const res = mockRes()
+    await projectsIndex(mockReq({ method: 'POST', cookie: user.cookie, body: { name: 'x', color: '' } }), res.res)
+    expect(res.statusCode()).toBe(201)
+  })
 })
 
 describe('note validation', () => {

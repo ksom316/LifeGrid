@@ -117,6 +117,25 @@ describe('backup preview and restore', () => {
     expect(projects.map((p) => p.id)).toContain(projectId)
   })
 
+  it('restores a project with automatic colour ("") without coercing it to a concrete palette value', async () => {
+    const projectId = '22222222-2222-2222-2222-222222222223'
+    const backup = validBackup({
+      projects: [
+        { id: projectId, name: 'Automatic colour project', description: '', status: 'active', color: '', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+      ],
+    })
+    const res = mockRes()
+    await restoreRoute(mockReq({ method: 'POST', cookie: alice.cookie, body: { strategy: 'merge', backup } }), res.res)
+    expect(res.statusCode()).toBe(200)
+
+    const listRes = mockRes()
+    await projectsIndex(mockReq({ method: 'GET', cookie: alice.cookie }), listRes.res)
+    const restored = (listRes.body() as { projects: { id: string; color: string }[] }).projects.find(
+      (p) => p.id === projectId,
+    )
+    expect(restored?.color).toBe('')
+  })
+
   it('restores a note with autocorrect disabled, not silently resetting it to enabled', async () => {
     const noteId = '33333333-3333-3333-3333-333333333333'
     const now = new Date().toISOString()

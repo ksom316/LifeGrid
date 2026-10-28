@@ -4,11 +4,23 @@ import { notFound, readJsonBody, requireMethod } from '../http.js'
 import { asRecord, optionalDate, optionalEnum, optionalString, optionalUuid, requireString } from '../validation.js'
 import { createProject, deleteProjectPreservingRecords, getProject, listProjects, updateProject } from '../repositories/projects.js'
 import { PALETTE_COLORS } from '../../src/utils/colors.js'
-import type { ProjectPriority, ProjectStatus } from '../../src/types/domain.js'
+import type { ProjectColor, ProjectPriority, ProjectStatus } from '../../src/types/domain.js'
 
 const STATUSES: ProjectStatus[] = ['active', 'paused', 'completed', 'archived']
 const PRIORITIES: ProjectPriority[] = ['low', 'medium', 'high']
 const COLORS = PALETTE_COLORS
+
+/**
+ * '' is a valid, meaningful value here — it's how a client asks to reset a
+ * project back to its automatic, id-derived colour (see Project.color's
+ * doc comment in src/types/domain.ts) — so it has to be accepted
+ * separately from optionalEnum, which would otherwise reject it as not one
+ * of the palette values.
+ */
+function optionalColorOrAuto(value: unknown, field: string): ProjectColor | '' | undefined {
+  if (value === '') return ''
+  return optionalEnum(value, field, COLORS)
+}
 
 /** Bodies moved verbatim out of the former api/projects/{index,[id]}.ts. */
 
@@ -33,7 +45,7 @@ export async function handleProjectsIndex(
     priority: optionalEnum(body.priority, 'priority', PRIORITIES),
     startDate: optionalDate(body.startDate, 'startDate'),
     targetDate: optionalDate(body.targetDate, 'targetDate'),
-    color: optionalEnum(body.color, 'color', COLORS),
+    color: optionalColorOrAuto(body.color, 'color'),
   })
   res.status(201).json({ project })
 }
@@ -67,7 +79,7 @@ export async function handleProjectById(
     priority: optionalEnum(body.priority, 'priority', PRIORITIES),
     startDate: body.startDate === null ? null : optionalDate(body.startDate, 'startDate'),
     targetDate: body.targetDate === null ? null : optionalDate(body.targetDate, 'targetDate'),
-    color: optionalEnum(body.color, 'color', COLORS),
+    color: optionalColorOrAuto(body.color, 'color'),
   })
   res.status(200).json({ project })
 }

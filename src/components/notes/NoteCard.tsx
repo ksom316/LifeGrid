@@ -7,7 +7,7 @@ import { formatShortDate } from '../../utils/date'
 import { ConfirmDialog } from '../ui/ConfirmDialog'
 import { ColorBadge } from '../ui/ColorSwatch'
 import { IconFolder, IconPencil, IconPin, IconTrash } from '../ui/icons'
-import { accentBorderStyle, resolveColor } from '../../utils/colors'
+import { accentBorderStyle, resolveProjectColor } from '../../utils/colors'
 import { resolveTagColor } from '../../utils/tags'
 import { NoteFormModal } from './NoteFormModal'
 
@@ -28,7 +28,7 @@ export function NoteCard({ note, project, projects }: NoteCardProps) {
       className={`flex flex-col gap-3 rounded-xl border border-border bg-surface p-5 shadow-sm transition-colors hover:border-border-strong ${
         project ? 'border-t-2' : ''
       }`}
-      style={project ? accentBorderStyle(resolveColor(project.color)) : undefined}
+      style={project ? accentBorderStyle(resolveProjectColor(project)) : undefined}
     >
       <div className="flex items-start justify-between gap-2">
         <Link to={`/vault/${note.id}`} className="min-w-0 flex-1 focus-visible:outline-none">
@@ -75,7 +75,7 @@ export function NoteCard({ note, project, projects }: NoteCardProps) {
         <div className="flex flex-wrap items-center gap-1.5">
           {project && (
             <Link to={`/projects/${project.id}`} onClick={(e) => e.stopPropagation()}>
-              <ColorBadge color={project.color} icon={<IconFolder width={10} height={10} />}>
+              <ColorBadge color={resolveProjectColor(project)} icon={<IconFolder width={10} height={10} />}>
                 {project.name}
               </ColorBadge>
             </Link>

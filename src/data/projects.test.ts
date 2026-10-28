@@ -5,7 +5,7 @@ import { tasksRepo } from './tasks'
 import { notesRepo } from './notes'
 import { focusSessionsRepo } from './focusSessions'
 import { clearDemoData, seedDemoData } from './demoData'
-import { PALETTE_COLORS, colorForKey } from '../utils/colors'
+import { PALETTE_COLORS, colorForKey, resolveProjectColor } from '../utils/colors'
 
 async function clearAllRecords() {
   const projects = await projectsRepo.list()
@@ -28,15 +28,28 @@ describe('projectsRepo', () => {
     expect(project.name).toBe('My Project')
     expect(project.status).toBe('active')
     expect(project.priority).toBe('medium')
-    expect(PALETTE_COLORS).toContain(project.color)
-    expect(project.color).toBe(colorForKey(project.id))
     expect(project.id).toBeTruthy()
     expect(project.createdAt).toBe(project.updatedAt)
+  })
+
+  it('leaves colour unset (automatic) when none is chosen, resolving to a stable id-derived default', async () => {
+    const project = await projectsRepo.create({ name: 'Auto colour' })
+    expect(project.color).toBe('')
+    expect(PALETTE_COLORS).toContain(resolveProjectColor(project))
+    expect(resolveProjectColor(project)).toBe(colorForKey(project.id))
   })
 
   it('respects an explicitly chosen colour instead of the deterministic default', async () => {
     const project = await projectsRepo.create({ name: 'Colour pick', color: 'rose' })
     expect(project.color).toBe('rose')
+    expect(resolveProjectColor(project)).toBe('rose')
+  })
+
+  it('different projects distribute across more than one automatic colour', async () => {
+    const names = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']
+    const created = await Promise.all(names.map((name) => projectsRepo.create({ name })))
+    const colors = new Set(created.map((p) => resolveProjectColor(p)))
+    expect(colors.size).toBeGreaterThan(1)
   })
 
 
@@ -56,6 +69,20 @@ describe('projectsRepo', () => {
 
   it('throws when updating a project that does not exist', async () => {
     await expect(projectsRepo.update('missing-id', { name: 'x' })).rejects.toThrow()
+  })
+
+  it('an explicit colour persists across reload and is never silently overwritten', async () => {
+    const project = await projectsRepo.create({ name: 'Picked', color: 'teal' })
+    const reloaded = await projectsRepo.get(project.id)
+    expect(reloaded?.color).toBe('teal')
+  })
+
+  it('can be reset back to automatic colour after an explicit choice', async () => {
+    const project = await projectsRepo.create({ name: 'Reset me', color: 'teal' })
+    expect(project.color).toBe('teal')
+    const reset = await projectsRepo.update(project.id, { color: '' })
+    expect(reset.color).toBe('')
+    expect(resolveProjectColor(reset)).toBe(colorForKey(project.id))
   })
 
   it('deletes a project while preserving and unassigning its tasks, notes, and focus sessions', async () => {
@@ -102,6 +129,13 @@ describe('tasksRepo', () => {
 })
 
 describe('demo data', () => {
+  it('seeds the demo project with an automatic colour rather than a hardcoded one', async () => {
+    await seedDemoData()
+    const all = await projectsRepo.list()
+    const demoProject = all.find((p) => p.isDemo)
+    expect(demoProject?.color).toBe('')
+  })
+
   it('seeds demo records and removes only those tagged isDemo', async () => {
     await projectsRepo.create({ name: 'Real project' })
     await seedDemoData()

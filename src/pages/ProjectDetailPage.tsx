@@ -10,7 +10,7 @@ import { TaskFormModal } from '../components/projects/TaskFormModal'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
-import { ColorDot } from '../components/ui/ColorSwatch'
+import { ColorDot, ColorSwatchPicker } from '../components/ui/ColorSwatch'
 import { ConfirmDialog } from '../components/ui/ConfirmDialog'
 import {
   IconArrowLeft,
@@ -22,6 +22,8 @@ import {
 import { formatLongDate, formatShortDate } from '../utils/date'
 import { sessionStatus, sessionType } from '../utils/focusTimer'
 import { computeProjectTaskStats } from '../utils/projectStats'
+import { resolveProjectColor } from '../utils/colors'
+import type { PaletteColor } from '../utils/colors'
 
 const STATUS_TONE: Record<ProjectStatus, 'brand' | 'success' | 'neutral'> = {
   active: 'brand',
@@ -37,11 +39,13 @@ export function ProjectDetailPage() {
   const [searchParams] = useSearchParams()
   const highlightTaskId = searchParams.get('task') ?? undefined
   const navigate = useNavigate()
-  const { status, error, projects, tasks, notes, focusSessions, deleteProject, refresh } = useAppData()
+  const { status, error, projects, tasks, notes, focusSessions, deleteProject, updateProject, refresh } =
+    useAppData()
   const [isEditOpen, setEditOpen] = useState(false)
   const [isAddTaskOpen, setAddTaskOpen] = useState(false)
   const [isAddNoteOpen, setAddNoteOpen] = useState(false)
   const [isDeleteOpen, setDeleteOpen] = useState(false)
+  const [isColorPickerOpen, setColorPickerOpen] = useState(false)
 
   if (status === 'loading') {
     return (
@@ -105,11 +109,40 @@ export function ProjectDetailPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <ColorDot color={project.color} className="h-3 w-3" />
+            <button
+              type="button"
+              onClick={() => setColorPickerOpen((open) => !open)}
+              aria-label="Change project colour"
+              aria-expanded={isColorPickerOpen}
+              className="rounded-full p-0.5 hover:bg-surface-hover"
+            >
+              <ColorDot color={resolveProjectColor(project)} className="h-3 w-3" />
+            </button>
             <h1 className="text-2xl font-bold tracking-tight text-ink">{project.name}</h1>
             <Badge tone={STATUS_TONE[project.status]}>{project.status}</Badge>
             <Badge tone={PRIORITY_TONE[projectPriority(project)]}>{projectPriority(project)}</Badge>
           </div>
+          {isColorPickerOpen && (
+            <div className="mt-2 inline-flex flex-col gap-1.5 rounded-lg border border-border bg-surface p-2">
+              <p className="text-[11px] text-ink-soft">Project colour</p>
+              {/*
+                The raw stored value, not resolveProjectColor(project): when
+                colour is automatic ('') this correctly shows no swatch
+                selected. Passing the derived display colour here would
+                falsely highlight it as "already chosen", and re-clicking
+                that same swatch would freeze an automatic colour into an
+                explicit override with no visible change to prompt it.
+              */}
+              <ColorSwatchPicker
+                value={project.color}
+                aria-label="Project colour"
+                onChange={(color: PaletteColor) => {
+                  updateProject(project.id, { color })
+                  setColorPickerOpen(false)
+                }}
+              />
+            </div>
+          )}
           {project.description && (
             <p className="mt-2 max-w-2xl text-sm text-ink-soft">{project.description}</p>
           )}

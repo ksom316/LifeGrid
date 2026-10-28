@@ -7,6 +7,7 @@ import { Card } from '../ui/Card'
 import { ColorDot } from '../ui/ColorSwatch'
 import { EmptyState } from '../ui/EmptyState'
 import { IconCheck, IconFlag } from '../ui/icons'
+import { resolveProjectColor } from '../../utils/colors'
 
 const PRIORITY_TONE = { high: 'danger', medium: 'warning', low: 'neutral' } as const
 
@@ -51,16 +52,19 @@ export function PrioritiesCard() {
         />
       ) : (
         <ul className="flex flex-col gap-2">
-          {priorities.map((task) => (
-            <PriorityRow
-              key={task.id}
-              task={task}
-              projectId={task.projectId}
-              projectName={projects.find((p) => p.id === task.projectId)?.name}
-              projectColor={projects.find((p) => p.id === task.projectId)?.color}
-              onToggle={() => toggleTaskDone(task.id)}
-            />
-          ))}
+          {priorities.map((task) => {
+            const project = projects.find((p) => p.id === task.projectId)
+            return (
+              <PriorityRow
+                key={task.id}
+                task={task}
+                projectId={task.projectId}
+                projectName={project?.name}
+                projectColor={project ? resolveProjectColor(project) : undefined}
+                onToggle={() => toggleTaskDone(task.id)}
+              />
+            )
+          })}
         </ul>
       )}
     </Card>

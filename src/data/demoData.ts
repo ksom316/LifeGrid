@@ -13,7 +13,6 @@ export async function seedDemoData(): Promise<void> {
     name: 'Life Grid Launch',
     description: 'Ship the V1 foundation: shell, dashboard, and data layer.',
     status: 'active',
-    color: 'violet',
     isDemo: true,
   })
 

@@ -8,6 +8,8 @@ import {
   dotStyle,
   isPaletteColor,
   resolveColor,
+  resolveIdentityColor,
+  resolveProjectColor,
 } from './colors'
 
 describe('isPaletteColor', () => {
@@ -78,6 +80,45 @@ describe('colorHex / colorLabel', () => {
     for (const c of PALETTE_COLORS) {
       expect(colorLabel(c).length).toBeGreaterThan(0)
     }
+  })
+})
+
+describe('resolveIdentityColor', () => {
+  it('passes through a valid explicit colour unchanged', () => {
+    expect(resolveIdentityColor('rose', 'any-key')).toBe('rose')
+  })
+
+  it('derives a default from the key when the value is unset, empty, or invalid', () => {
+    for (const value of [undefined, null, '', 'not-a-colour']) {
+      expect(resolveIdentityColor(value, 'proj-123')).toBe(colorForKey('proj-123'))
+    }
+  })
+
+  it('is deterministic for a given key', () => {
+    const a = resolveIdentityColor(undefined, 'stable-key')
+    const b = resolveIdentityColor(undefined, 'stable-key')
+    expect(a).toBe(b)
+  })
+})
+
+describe('resolveProjectColor', () => {
+  it('uses the explicit colour when the project has one', () => {
+    expect(resolveProjectColor({ id: 'p1', color: 'amber' })).toBe('amber')
+  })
+
+  it('derives a stable default from the project id when colour is empty/unset', () => {
+    expect(resolveProjectColor({ id: 'p1', color: '' })).toBe(colorForKey('p1'))
+    expect(resolveProjectColor({ id: 'p1', color: undefined })).toBe(colorForKey('p1'))
+  })
+
+  it('falls back safely for a corrupted/unknown stored value', () => {
+    expect(resolveProjectColor({ id: 'p1', color: 'not-a-real-colour' })).toBe(colorForKey('p1'))
+  })
+
+  it('different project ids distribute across more than one colour', () => {
+    const ids = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+    const colors = new Set(ids.map((id) => resolveProjectColor({ id, color: '' })))
+    expect(colors.size).toBeGreaterThan(1)
   })
 })
 

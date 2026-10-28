@@ -21,7 +21,18 @@ export interface Project extends BaseRecord {
   priority?: ProjectPriority
   startDate?: string
   targetDate?: string
-  color: ProjectColor
+  /**
+   * '' means "no explicit choice — derive a stable colour from this
+   * project's own id" (see resolveProjectColor in src/utils/colors.ts).
+   * A real palette value here is always an intentional user choice, and is
+   * never silently recomputed or overwritten. Projects created before this
+   * sentinel existed may still hold a concrete legacy value (most commonly
+   * 'violet', the old universal default) — those are left exactly as they
+   * are, since there's no way to tell a genuine choice from a leftover
+   * default; a user can deliberately reset one back to automatic from the
+   * project edit form.
+   */
+  color: ProjectColor | ''
 }
 
 /**

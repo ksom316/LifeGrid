@@ -2,7 +2,6 @@ import { createId, createRepository, nowISO } from './repository'
 import { focusSessionsRepo } from './focusSessions'
 import { notesRepo } from './notes'
 import { tasksRepo } from './tasks'
-import { colorForKey } from '../utils/colors'
 import type { Project, ProjectColor, ProjectPriority, ProjectStatus } from '../types/domain'
 
 const repo = createRepository<Project>('projects')
@@ -14,7 +13,7 @@ export interface CreateProjectInput {
   priority?: ProjectPriority
   startDate?: string
   targetDate?: string
-  color?: ProjectColor
+  color?: ProjectColor | ''
   isDemo?: boolean
 }
 
@@ -40,7 +39,10 @@ export const projectsRepo = {
       priority: input.priority ?? 'medium',
       startDate: input.startDate,
       targetDate: input.targetDate,
-      color: input.color ?? colorForKey(id),
+      // '' (not a precomputed colorForKey(id)) when no explicit colour was
+      // chosen: the default is derived on read (resolveProjectColor), so it
+      // never gets frozen into storage as if it were a deliberate choice.
+      color: input.color ?? '',
       createdAt: timestamp,
       updatedAt: timestamp,
       isDemo: input.isDemo,

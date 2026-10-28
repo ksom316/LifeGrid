@@ -70,6 +70,36 @@ describe('project CRUD', () => {
     expect(tasks[0].title).toBe('Buy tiles')
     expect(tasks[0].projectId).toBeUndefined()
   })
+
+  it('leaves colour unset (automatic) when none is given at creation', async () => {
+    const createRes = mockRes()
+    await projectsIndex(mockReq({ method: 'POST', cookie: user.cookie, body: { name: 'No colour yet' } }), createRes.res)
+    expect((createRes.body() as { project: { color: string } }).project.color).toBe('')
+  })
+
+  it('accepts an explicit "" on creation (not just an omitted field) as a request for automatic colour', async () => {
+    const createRes = mockRes()
+    await projectsIndex(
+      mockReq({ method: 'POST', cookie: user.cookie, body: { name: 'Explicit empty', color: '' } }),
+      createRes.res,
+    )
+    expect(createRes.statusCode()).toBe(201)
+    expect((createRes.body() as { project: { color: string } }).project.color).toBe('')
+  })
+
+  it('persists an explicit colour and lets it be reset back to automatic', async () => {
+    const createRes = mockRes()
+    await projectsIndex(
+      mockReq({ method: 'POST', cookie: user.cookie, body: { name: 'Coloured', color: 'teal' } }),
+      createRes.res,
+    )
+    const id = (createRes.body() as { project: { id: string; color: string } }).project.id
+    expect((createRes.body() as { project: { color: string } }).project.color).toBe('teal')
+
+    const resetRes = mockRes()
+    await projectById(mockReq({ method: 'PATCH', cookie: user.cookie, query: { id }, body: { color: '' } }), resetRes.res)
+    expect((resetRes.body() as { project: { color: string } }).project.color).toBe('')
+  })
 })
 
 describe('note CRUD', () => {

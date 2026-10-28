@@ -10,6 +10,7 @@ import { ConfirmDialog } from '../components/ui/ConfirmDialog'
 import { ColorBadge } from '../components/ui/ColorSwatch'
 import { IconArrowLeft, IconBook, IconFolder, IconPencil, IconPin, IconTrash } from '../components/ui/icons'
 import { formatLongDate } from '../utils/date'
+import { resolveProjectColor } from '../utils/colors'
 import { toggleChecklistLine } from '../utils/noteFormatting'
 import { resolveTagColor } from '../utils/tags'
 
@@ -84,7 +85,7 @@ export function NoteDetailPage() {
             <div className="mt-2 flex flex-wrap items-center gap-2">
               {project && (
                 <Link to={`/projects/${project.id}`}>
-                  <ColorBadge color={project.color} icon={<IconFolder width={10} height={10} />}>
+                  <ColorBadge color={resolveProjectColor(project)} icon={<IconFolder width={10} height={10} />}>
                     {project.name}
                   </ColorBadge>
                 </Link>

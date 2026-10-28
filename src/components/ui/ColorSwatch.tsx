@@ -48,7 +48,10 @@ interface ColorSwatchPickerProps {
 
 /** A row of clickable colour swatches, used wherever a project or tag colour is chosen — an accessible alternative to typing a hex code. */
 export function ColorSwatchPicker({ value, onChange, 'aria-label': ariaLabel }: ColorSwatchPickerProps) {
-  const selected = value == null ? null : resolveColor(value)
+  // Falsy (undefined, null, '') means "nothing explicitly chosen yet" — shown
+  // with no swatch highlighted, rather than resolveColor's 'slate' fallback,
+  // which would misleadingly look like an actual selection.
+  const selected = value ? resolveColor(value) : null
   return (
     <div role="radiogroup" aria-label={ariaLabel ?? 'Colour'} className="flex flex-wrap gap-2">
       {PALETTE_COLORS.map((color) => {

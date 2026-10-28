@@ -25,8 +25,8 @@ interface FormState {
   priority: ProjectPriority
   startDate: string
   targetDate: string
-  /** Undefined for a brand-new project until the user picks a swatch — left unset, the data layer assigns a stable deterministic default rather than always defaulting to the same colour. */
-  color: ProjectColor | undefined
+  /** '' means "automatic" — left this way, the project's colour is derived from its own id (see resolveProjectColor) rather than a value frozen into storage. */
+  color: ProjectColor | ''
 }
 
 function emptyState(): FormState {
@@ -37,7 +37,7 @@ function emptyState(): FormState {
     priority: 'medium',
     startDate: '',
     targetDate: '',
-    color: undefined,
+    color: '',
   }
 }
 
@@ -178,11 +178,22 @@ export function ProjectFormModal({ isOpen, onClose, project, onSaved }: ProjectF
           </Field>
         </div>
         <Field label="Colour">
-          <ColorSwatchPicker
-            value={form.color}
-            aria-label="Project colour"
-            onChange={(c: ProjectColor) => setForm((f) => ({ ...f, color: c }))}
-          />
+          <div className="flex flex-wrap items-center gap-3">
+            <ColorSwatchPicker
+              value={form.color}
+              aria-label="Project colour"
+              onChange={(c: ProjectColor) => setForm((f) => ({ ...f, color: c }))}
+            />
+            {form.color && (
+              <button
+                type="button"
+                onClick={() => setForm((f) => ({ ...f, color: '' }))}
+                className="text-xs font-medium text-ink-soft hover:text-ink hover:underline"
+              >
+                Use automatic colour
+              </button>
+            )}
+          </div>
         </Field>
         <div className="mt-2 flex justify-end gap-2">
           <Button type="button" variant="ghost" onClick={onClose}>

@@ -168,6 +168,36 @@ describe('ProjectDetailPage', () => {
     expect(stored?.name).toBe('Backyard patio & pergola')
   })
 
+  it('the inline colour picker does not pre-select a swatch for a project with no explicit colour', async () => {
+    const project = await projectsRepo.create({ name: 'Backyard patio' })
+    expect(project.color).toBe('')
+
+    renderProjectsApp(`/projects/${project.id}`)
+    await screen.findByRole('heading', { name: 'Backyard patio' })
+
+    fireEvent.click(screen.getByRole('button', { name: /change project colour/i }))
+    const picker = await screen.findByRole('radiogroup', { name: /project colour/i })
+    for (const radio of within(picker).getAllByRole('radio')) {
+      expect(radio).toHaveAttribute('aria-checked', 'false')
+    }
+  })
+
+  it('picking a colour from the inline picker persists it as an explicit override', async () => {
+    const project = await projectsRepo.create({ name: 'Backyard patio' })
+
+    renderProjectsApp(`/projects/${project.id}`)
+    await screen.findByRole('heading', { name: 'Backyard patio' })
+
+    fireEvent.click(screen.getByRole('button', { name: /change project colour/i }))
+    const picker = await screen.findByRole('radiogroup', { name: /project colour/i })
+    fireEvent.click(within(picker).getByRole('radio', { name: 'Teal' }))
+
+    await waitFor(async () => {
+      const stored = await projectsRepo.get(project.id)
+      expect(stored?.color).toBe('teal')
+    })
+  })
+
   it('deletes a project, redirects to the list, and preserves its tasks as unassigned', async () => {
     const project = await projectsRepo.create({ name: 'Backyard patio' })
     const task = await tasksRepo.create({ title: 'Lay the stones', projectId: project.id })

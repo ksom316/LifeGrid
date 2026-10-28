@@ -2,7 +2,6 @@ import { randomUUID } from 'node:crypto'
 import type { Sql } from '../db.js'
 import { notFound } from '../http.js'
 import { toDateStringOrUndefined, toDateTimeString } from '../mapping.js'
-import { colorForKey } from '../../src/utils/colors.js'
 import type { Project, ProjectColor, ProjectPriority, ProjectStatus } from '../../src/types/domain.js'
 
 interface ProjectRow {
@@ -28,7 +27,7 @@ function mapRow(row: ProjectRow): Project {
     priority: (row.priority ?? undefined) as ProjectPriority | undefined,
     startDate: toDateStringOrUndefined(row.start_date),
     targetDate: toDateStringOrUndefined(row.target_date),
-    color: row.color as ProjectColor,
+    color: row.color as ProjectColor | '',
     isDemo: row.is_demo || undefined,
     createdAt: toDateTimeString(row.created_at),
     updatedAt: toDateTimeString(row.updated_at),
@@ -55,7 +54,7 @@ export interface CreateProjectInput {
   priority?: ProjectPriority
   startDate?: string
   targetDate?: string
-  color?: ProjectColor
+  color?: ProjectColor | ''
   isDemo?: boolean
   createdAt?: string
   updatedAt?: string
@@ -72,7 +71,9 @@ export async function createProject(sql: Sql, userId: string, input: CreateProje
     priority: input.priority ?? 'medium',
     start_date: input.startDate ?? null,
     target_date: input.targetDate ?? null,
-    color: input.color ?? colorForKey(id),
+    // '' when unset, same reasoning as src/data/projects.ts's create(): the
+    // automatic default is derived on read, never frozen into storage.
+    color: input.color ?? '',
     is_demo: input.isDemo ?? false,
     created_at: input.createdAt ?? now,
     updated_at: input.updatedAt ?? now,
@@ -105,7 +106,7 @@ export interface UpdateProjectInput {
   priority?: ProjectPriority
   startDate?: string | null
   targetDate?: string | null
-  color?: ProjectColor
+  color?: ProjectColor | ''
 }
 
 export async function updateProject(
