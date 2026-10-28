@@ -70,6 +70,46 @@ describe('colorForKey', () => {
   })
 })
 
+function rgb(hex: string): [number, number, number] {
+  return [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)]
+}
+
+function rgbDistance(a: string, b: string): number {
+  const [r1, g1, b1] = rgb(a)
+  const [r2, g2, b2] = rgb(b)
+  return Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2)
+}
+
+describe('palette colour distinctness', () => {
+  // Colours whose nearest neighbour on the hue wheel is a *fixed* original-8
+  // colour (violet, rose) were tuned so the pair is still easy to tell
+  // apart — via lightness/saturation, since the original 8's hue can't move.
+  it('indigo is clearly distinguishable from its closest neighbour, violet', () => {
+    expect(rgbDistance(colorHex('indigo'), colorHex('violet'))).toBeGreaterThan(60)
+  })
+
+  it('red is clearly distinguishable from its closest neighbour, rose', () => {
+    expect(rgbDistance(colorHex('red'), colorHex('rose'))).toBeGreaterThan(40)
+  })
+
+  it('sky is clearly distinguishable from its closest neighbour, cyan', () => {
+    expect(rgbDistance(colorHex('sky'), colorHex('cyan'))).toBeGreaterThan(60)
+  })
+
+  it('brown is clearly distinguishable from orange and stone (same hue family)', () => {
+    expect(rgbDistance(colorHex('brown'), colorHex('orange'))).toBeGreaterThan(60)
+    expect(rgbDistance(colorHex('brown'), colorHex('stone'))).toBeGreaterThan(30)
+  })
+
+  it('no two palette colours render identically', () => {
+    for (let i = 0; i < PALETTE_COLORS.length; i++) {
+      for (let j = i + 1; j < PALETTE_COLORS.length; j++) {
+        expect(colorHex(PALETTE_COLORS[i])).not.toBe(colorHex(PALETTE_COLORS[j]))
+      }
+    }
+  })
+})
+
 describe('expanded palette', () => {
   it('has approximately 20 colours', () => {
     expect(PALETTE_COLORS.length).toBeGreaterThanOrEqual(18)
@@ -117,12 +157,23 @@ describe('cardTintStyle', () => {
     expect(style.borderColor).toContain('var(--color-border)')
   })
 
-  it('tints the background much more subtly than a badge, to keep body text readable', () => {
-    const card = cardTintStyle('rose')
-    const badge = badgeStyle('rose')
-    const cardPercent = Number(String(card.backgroundColor).match(/(\d+)%/)?.[1])
-    const badgePercent = Number(String(badge.backgroundColor).match(/(\d+)%/)?.[1])
-    expect(cardPercent).toBeLessThan(badgePercent)
+  it('reads its mix strength from the theme-aware --card-tint-* custom properties, with a reasonable fallback', () => {
+    const style = cardTintStyle('rose')
+    expect(style.backgroundColor).toContain('var(--card-tint-bg,')
+    expect(style.borderColor).toContain('var(--card-tint-border,')
+  })
+
+  it('is tinted noticeably stronger than the old flat 4% (clearly distinct, not a faint hint of colour)', () => {
+    const style = cardTintStyle('rose')
+    const fallbackPercent = Number(String(style.backgroundColor).match(/,\s*(\d+)%\)/)?.[1])
+    expect(fallbackPercent).toBeGreaterThanOrEqual(10)
+  })
+
+  it('the border mix is always stronger than the background mix, for a legible edge', () => {
+    const style = cardTintStyle('rose')
+    const bgPercent = Number(String(style.backgroundColor).match(/,\s*(\d+)%\)/)?.[1])
+    const borderPercent = Number(String(style.borderColor).match(/,\s*(\d+)%\)/)?.[1])
+    expect(borderPercent).toBeGreaterThan(bgPercent)
   })
 })
 

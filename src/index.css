@@ -43,6 +43,20 @@
 }
 
 /*
+ * Knowledge Vault card tint strength (see cardTintStyle in
+ * src/utils/colors.ts) — not a Tailwind design token, so kept out of
+ * `@theme` above and declared the same way the light/dark `--color-*`
+ * overrides below are: a plain `:root` default (dark, since dark is this
+ * app's unconditional default — see the comment at the top of this file),
+ * overridden for light under both the media query and the explicit
+ * `data-theme` attribute.
+ */
+:root {
+  --card-tint-bg: 16%;
+  --card-tint-border: 34%;
+}
+
+/*
  * Tailwind's `@theme` at-rule always registers its variables at `:root`
  * regardless of any `@media` it's nested inside — the nesting is discarded
  * at build time, so a second `@theme` block can't be used to scope an
@@ -77,6 +91,12 @@
     --color-warning-soft: #faf0dd;
     --color-danger: #c0433f;
     --color-danger-soft: #fbeae9;
+
+    /* See cardTintStyle (src/utils/colors.ts): light's near-white surface
+       needs a lighter touch than dark's near-black one before a tinted
+       card starts to feel heavier than its neighbours. */
+    --card-tint-bg: 9%;
+    --card-tint-border: 26%;
 
     /* Switches native control chrome (checkboxes, date/time pickers,
        select popups) back from the dark default below. */
@@ -117,6 +137,9 @@
   --color-danger: #c0433f;
   --color-danger-soft: #fbeae9;
 
+  --card-tint-bg: 9%;
+  --card-tint-border: 26%;
+
   color-scheme: light;
 }
 
@@ -143,6 +166,9 @@
   --color-warning-soft: #2e2410;
   --color-danger: #f87171;
   --color-danger-soft: #331c1f;
+
+  --card-tint-bg: 16%;
+  --card-tint-border: 34%;
 
   color-scheme: dark;
 }

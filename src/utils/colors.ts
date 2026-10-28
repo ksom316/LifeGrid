@@ -48,17 +48,22 @@ const HEX: Record<PaletteColor, string> = {
   rose: '#f43f5e',
   pink: '#ec4899',
   slate: '#64748b',
-  indigo: '#6366f1',
-  sky: '#0ea5e9',
+  // indigo/sky/red/brown were tuned (not the stock Tailwind 500 shade) to
+  // stay visually distinct from their closest palette neighbours — indigo
+  // vs. violet, sky vs. cyan, red vs. rose, and brown vs. orange/stone were
+  // all too close in raw hue to tell apart at a glance; see
+  // src/utils/colors.test.ts's "expanded palette" spacing checks.
+  indigo: '#4338ca',
+  sky: '#38bdf8',
   cyan: '#06b6d4',
   green: '#22c55e',
   lime: '#84cc16',
   yellow: '#eab308',
   orange: '#f97316',
-  red: '#ef4444',
+  red: '#dc2626',
   fuchsia: '#d946ef',
   purple: '#a855f7',
-  brown: '#92400e',
+  brown: '#92603c',
   stone: '#78716c',
 }
 
@@ -178,16 +183,21 @@ export function accentBorderStyle(color: PaletteColor): CSSProperties {
 /**
  * A whole-card background tint in the palette hue, for surfaces (e.g. a
  * Knowledge Vault note card) that want their full background to carry the
- * colour rather than just a thin accent line. Mixed very lightly (4%)
- * against the theme's own surface token via color-mix() — the same
- * dark/light-adaptive technique as badgeStyle — so body text set in the
- * card's normal ink colours stays readable; the border is mixed a bit
- * stronger (22%) to keep the card's edge legible against its neighbours.
+ * colour rather than just a thin accent line. The mix strength comes from
+ * the `--card-tint-bg`/`--card-tint-border` custom properties (defined per
+ * theme in src/index.css, next to the other `--color-*` tokens) rather
+ * than a fixed percentage here, because dark and light surfaces tolerate
+ * different amounts of tint before body text (set in the card's normal,
+ * unmixed ink colours) gets harder to read: dark's near-black base can take
+ * a visibly stronger mix than light's near-white base before the two
+ * themes feel equally saturated. The `var(..., 16%)` fallback only matters
+ * if index.css's tokens are ever missing (e.g. a test render without the
+ * stylesheet loaded).
  */
 export function cardTintStyle(color: PaletteColor): CSSProperties {
   const hex = colorHex(color)
   return {
-    backgroundColor: `color-mix(in srgb, ${hex} 4%, var(--color-surface))`,
-    borderColor: `color-mix(in srgb, ${hex} 22%, var(--color-border))`,
+    backgroundColor: `color-mix(in srgb, ${hex} var(--card-tint-bg, 16%), var(--color-surface))`,
+    borderColor: `color-mix(in srgb, ${hex} var(--card-tint-border, 34%), var(--color-border))`,
   }
 }
