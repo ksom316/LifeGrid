@@ -8,7 +8,7 @@ import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { ConfirmDialog } from '../components/ui/ConfirmDialog'
 import { ColorBadge } from '../components/ui/ColorSwatch'
-import { IconArrowLeft, IconBook, IconFolder, IconPencil, IconPin, IconTrash } from '../components/ui/icons'
+import { IconArrowLeft, IconBook, IconFolder, IconPencil, IconPin, IconPinFilled, IconTrash } from '../components/ui/icons'
 import { formatLongDate } from '../utils/date'
 import { resolveProjectColor } from '../utils/colors'
 import { toggleChecklistLine } from '../utils/noteFormatting'
@@ -104,7 +104,13 @@ export function NoteDetailPage() {
         <div className="flex shrink-0 gap-2">
           <Button
             variant="secondary"
-            icon={<IconPin width={16} height={16} />}
+            icon={
+              pinned ? (
+                <IconPinFilled width={16} height={16} className="text-brand-ink" />
+              ) : (
+                <IconPin width={16} height={16} />
+              )
+            }
             onClick={() => toggleNotePin(note.id)}
             aria-pressed={pinned}
           >

@@ -61,13 +61,21 @@ describe('NoteDetailPage', () => {
     renderVaultApp(`/vault/${note.id}`)
     await screen.findByRole('heading', { name: 'Pin candidate' })
 
-    fireEvent.click(screen.getByRole('button', { name: /^pin$/i }))
+    const pinButton = screen.getByRole('button', { name: /^pin$/i })
+    expect(pinButton).toHaveAttribute('aria-pressed', 'false')
+    expect(pinButton.querySelector('svg path')?.getAttribute('fill')).not.toBe('currentColor')
+
+    fireEvent.click(pinButton)
 
     await waitFor(async () => {
       const updated = await notesRepo.get(note.id)
       expect(notePinned(updated!)).toBe(true)
     })
-    expect(await screen.findByRole('button', { name: /^unpin$/i })).toBeInTheDocument()
+    const unpinButton = await screen.findByRole('button', { name: /^unpin$/i })
+    expect(unpinButton).toHaveAttribute('aria-pressed', 'true')
+    // Pinned shows the filled pin icon, matching the Knowledge Vault card's treatment.
+    expect(unpinButton.querySelector('svg path')?.getAttribute('fill')).toBe('currentColor')
+    expect(screen.getByText('Pinned')).toBeInTheDocument()
   })
 
   it('edits note details and persists the change after reload semantics', async () => {

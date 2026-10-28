@@ -162,6 +162,14 @@ export const IconPin = (props: IconProps) => (
   </svg>
 )
 
+/** Solid/filled treatment of IconPin — same outline, head filled instead of stroked — for a pinned (active) state that reads as "stuck in" rather than just a colour change on the outline. */
+export const IconPinFilled = (props: IconProps) => (
+  <svg {...base(props)}>
+    <path d="M9 4h6l-1 6 3 3v2H7v-2l3-3-1-6Z" fill="currentColor" stroke="none" />
+    <path d="M12 15v5" />
+  </svg>
+)
+
 export const IconTag = (props: IconProps) => (
   <svg {...base(props)}>
     <path d="M12 2h7a1 1 0 0 1 1 1v7a1 1 0 0 1-.3.7l-9 9a1 1 0 0 1-1.4 0l-7-7a1 1 0 0 1 0-1.4l9-9A1 1 0 0 1 12 2Z" />

@@ -174,6 +174,71 @@ describe('KnowledgeVaultPage', () => {
     })
   })
 
+  describe('pin icon visual state', () => {
+    function pinIconFill(button: HTMLElement): string | null {
+      return button.querySelector('svg path')?.getAttribute('fill') ?? null
+    }
+
+    it('shows a muted outline pin icon for an unpinned note', async () => {
+      await notesRepo.create({ title: 'Unpinned note' })
+
+      renderVaultApp('/vault')
+      const pinButton = await screen.findByRole('button', { name: 'Pin "Unpinned note"' })
+
+      expect(pinButton).toHaveAttribute('aria-pressed', 'false')
+      // The outline icon's head path has no solid fill.
+      expect(pinIconFill(pinButton)).not.toBe('currentColor')
+      // No persistent accent background/border for the muted, unpinned state
+      // (hover:bg-brand-soft is fine — only the non-hover persistent tint is checked).
+      expect(pinButton.className).not.toContain('bg-brand/10')
+    })
+
+    it('shows a highlighted, filled pin icon for a pinned note', async () => {
+      await notesRepo.create({ title: 'Pinned note', pinned: true })
+
+      renderVaultApp('/vault')
+      const pinButton = await screen.findByRole('button', { name: 'Unpin "Pinned note"' })
+
+      expect(pinButton).toHaveAttribute('aria-pressed', 'true')
+      // The filled icon's head path is solid.
+      expect(pinIconFill(pinButton)).toBe('currentColor')
+      // A persistent accent background marks the pinned state, not just a hover effect.
+      expect(pinButton.className).toContain('bg-brand/10')
+    })
+
+    it('swaps between the outline and filled pin icon immediately when toggled', async () => {
+      await notesRepo.create({ title: 'Toggle me' })
+
+      renderVaultApp('/vault')
+      let pinButton = await screen.findByRole('button', { name: 'Pin "Toggle me"' })
+      expect(pinIconFill(pinButton)).not.toBe('currentColor')
+
+      fireEvent.click(pinButton)
+
+      pinButton = await screen.findByRole('button', { name: 'Unpin "Toggle me"' })
+      expect(pinIconFill(pinButton)).toBe('currentColor')
+
+      fireEvent.click(pinButton)
+
+      pinButton = await screen.findByRole('button', { name: 'Pin "Toggle me"' })
+      expect(pinIconFill(pinButton)).not.toBe('currentColor')
+    })
+
+    it('persists the pinned state across a reload', async () => {
+      const note = await notesRepo.create({ title: 'Reload check' })
+
+      renderVaultApp('/vault')
+      fireEvent.click(await screen.findByRole('button', { name: 'Pin "Reload check"' }))
+      await screen.findByRole('button', { name: 'Unpin "Reload check"' })
+
+      expect((await notesRepo.get(note.id))?.pinned).toBe(true)
+
+      renderVaultApp('/vault')
+      const pinButtons = await screen.findAllByRole('button', { name: 'Unpin "Reload check"' })
+      expect(pinButtons.length).toBeGreaterThan(0)
+    })
+  })
+
   it('links a note to a project, shows the project badge, and navigates to it', async () => {
     const project = await projectsRepo.create({ name: 'Kitchen remodel' })
     await notesRepo.create({ title: 'Design notes', projectId: project.id })

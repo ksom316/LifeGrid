@@ -7,7 +7,7 @@ import type { Note, Project } from '../../types/domain'
 import { formatShortDate } from '../../utils/date'
 import { ConfirmDialog } from '../ui/ConfirmDialog'
 import { ColorBadge } from '../ui/ColorSwatch'
-import { IconFolder, IconPencil, IconPin, IconTrash } from '../ui/icons'
+import { IconFolder, IconPencil, IconPin, IconPinFilled, IconTrash } from '../ui/icons'
 import { cardTintStyle, resolveProjectColor } from '../../utils/colors'
 import { resolveNoteColor, resolveTagColor } from '../../utils/tags'
 import { NoteFormModal } from './NoteFormModal'
@@ -74,11 +74,13 @@ export function NoteCard({ note, project, projects }: NoteCardProps) {
             }}
             aria-label={pinned ? `Unpin "${note.title}"` : `Pin "${note.title}"`}
             aria-pressed={pinned}
-            className={`rounded-md p-2 sm:p-1 hover:bg-brand-soft hover:text-brand-ink ${
-              pinned ? 'text-brand' : 'text-ink-soft'
+            className={`rounded-md p-2 transition-colors sm:p-1 ${
+              pinned
+                ? 'border border-brand/25 bg-brand/10 text-brand-ink hover:bg-brand/20'
+                : 'border border-transparent text-ink-soft hover:bg-brand-soft hover:text-brand-ink'
             }`}
           >
-            <IconPin width={14} height={14} />
+            {pinned ? <IconPinFilled width={14} height={14} /> : <IconPin width={14} height={14} />}
           </button>
           <button
             type="button"
