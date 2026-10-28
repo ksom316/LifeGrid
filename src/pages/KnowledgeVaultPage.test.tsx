@@ -187,6 +187,119 @@ describe('KnowledgeVaultPage', () => {
     expect(await screen.findByRole('heading', { name: 'Kitchen remodel' })).toBeInTheDocument()
   })
 
+  describe('whole-card click behaviour', () => {
+    it('clicking anywhere on the card (not just the title) opens the note', async () => {
+      await notesRepo.create({ title: 'Trip planning', content: 'Pack sunscreen and chargers.' })
+
+      renderVaultApp('/vault')
+      await screen.findByText('Trip planning')
+
+      // Click the content preview, not the title.
+      fireEvent.click(screen.getByText('Pack sunscreen and chargers.'))
+
+      expect(await screen.findByRole('heading', { name: 'Trip planning' })).toBeInTheDocument()
+    })
+
+    it('is reachable by keyboard and opens the note on Enter', async () => {
+      await notesRepo.create({ title: 'Reading list' })
+
+      renderVaultApp('/vault')
+      const card = await screen.findByRole('link', { name: 'Reading list' })
+      card.focus()
+      fireEvent.keyDown(card, { key: 'Enter' })
+
+      expect(await screen.findByRole('heading', { name: 'Reading list' })).toBeInTheDocument()
+    })
+
+    it('is reachable by keyboard and opens the note on Space', async () => {
+      await notesRepo.create({ title: 'Grocery list' })
+
+      renderVaultApp('/vault')
+      const card = await screen.findByRole('link', { name: 'Grocery list' })
+      card.focus()
+      fireEvent.keyDown(card, { key: ' ' })
+
+      expect(await screen.findByRole('heading', { name: 'Grocery list' })).toBeInTheDocument()
+    })
+
+    it('clicking the pin button toggles the pin without navigating away', async () => {
+      await notesRepo.create({ title: 'Focus note' })
+
+      renderVaultApp('/vault')
+      await screen.findByText('Focus note')
+
+      const pinButton = screen.getByRole('button', { name: 'Pin "Focus note"' })
+      fireEvent.click(pinButton)
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: 'Unpin "Focus note"' })).toBeInTheDocument()
+      })
+      // Still on the list page, not navigated to the note detail route
+      // (which renders a distinct "Back to Knowledge Vault" link).
+      expect(screen.queryByText(/back to knowledge vault/i)).not.toBeInTheDocument()
+    })
+
+    it('clicking the edit button opens the edit dialog without navigating away', async () => {
+      await notesRepo.create({ title: 'Edit target' })
+
+      renderVaultApp('/vault')
+      await screen.findByText('Edit target')
+
+      fireEvent.click(screen.getByRole('button', { name: 'Edit "Edit target"' }))
+
+      const dialog = await screen.findByRole('dialog')
+      expect(within(dialog).getByText('Edit note')).toBeInTheDocument()
+      // The card behind the dialog is still the list card, not the detail page.
+      expect(screen.queryByText(/back to knowledge vault/i)).not.toBeInTheDocument()
+    })
+
+    it('typing in and saving the edit dialog does not navigate away from the list', async () => {
+      const note = await notesRepo.create({ title: 'Edit target' })
+
+      renderVaultApp('/vault')
+      await screen.findByText('Edit target')
+      fireEvent.click(screen.getByRole('button', { name: 'Edit "Edit target"' }))
+
+      const dialog = await screen.findByRole('dialog')
+      fireEvent.change(within(dialog).getByLabelText('Title'), { target: { value: 'Edited title' } })
+      fireEvent.click(within(dialog).getByRole('button', { name: /save changes/i }))
+
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+      expect(await screen.findByText('Edited title')).toBeInTheDocument()
+      // Confirms the save round-tripped through the real update, not just UI state.
+      expect((await notesRepo.get(note.id))?.title).toBe('Edited title')
+      // Still on the vault list, not redirected to the note detail page.
+      expect(screen.queryByRole('heading', { level: 1, name: 'Edited title' })).not.toBeInTheDocument()
+    })
+
+    it('clicking the delete button opens the confirm dialog without navigating, and confirming removes the note', async () => {
+      await notesRepo.create({ title: 'Doomed note' })
+
+      renderVaultApp('/vault')
+      await screen.findByText('Doomed note')
+
+      fireEvent.click(screen.getByRole('button', { name: 'Delete "Doomed note"' }))
+      const dialog = await screen.findByRole('dialog')
+      expect(within(dialog).getByRole('heading', { name: 'Delete note' })).toBeInTheDocument()
+
+      fireEvent.click(within(dialog).getByRole('button', { name: /delete note/i }))
+
+      await waitFor(() => expect(screen.queryByText('Doomed note')).not.toBeInTheDocument())
+    })
+
+    it("clicking the project badge navigates to the project, not the note's own detail page", async () => {
+      const project = await projectsRepo.create({ name: 'Kitchen remodel' })
+      await notesRepo.create({ title: 'Design notes', projectId: project.id })
+
+      renderVaultApp('/vault')
+      await screen.findByText('Design notes')
+      fireEvent.click(screen.getByRole('link', { name: /kitchen remodel/i }))
+
+      expect(await screen.findByRole('heading', { name: 'Kitchen remodel' })).toBeInTheDocument()
+      expect(screen.queryByRole('heading', { name: 'Design notes' })).not.toBeInTheDocument()
+    })
+  })
+
   it("tints a note card's background with its project's colour when linked to a project", async () => {
     const project = await projectsRepo.create({ name: 'Kitchen remodel', color: 'teal' })
     await notesRepo.create({ title: 'Design notes', projectId: project.id, tags: ['should-be-ignored'] })
