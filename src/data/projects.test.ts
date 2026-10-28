@@ -5,6 +5,7 @@ import { tasksRepo } from './tasks'
 import { notesRepo } from './notes'
 import { focusSessionsRepo } from './focusSessions'
 import { clearDemoData, seedDemoData } from './demoData'
+import { PALETTE_COLORS, colorForKey } from '../utils/colors'
 
 async function clearAllRecords() {
   const projects = await projectsRepo.list()
@@ -27,9 +28,15 @@ describe('projectsRepo', () => {
     expect(project.name).toBe('My Project')
     expect(project.status).toBe('active')
     expect(project.priority).toBe('medium')
-    expect(project.color).toBe('violet')
+    expect(PALETTE_COLORS).toContain(project.color)
+    expect(project.color).toBe(colorForKey(project.id))
     expect(project.id).toBeTruthy()
     expect(project.createdAt).toBe(project.updatedAt)
+  })
+
+  it('respects an explicitly chosen colour instead of the deterministic default', async () => {
+    const project = await projectsRepo.create({ name: 'Colour pick', color: 'rose' })
+    expect(project.color).toBe('rose')
   })
 
 

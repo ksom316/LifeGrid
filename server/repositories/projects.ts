@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto'
 import type { Sql } from '../db.js'
 import { notFound } from '../http.js'
 import { toDateStringOrUndefined, toDateTimeString } from '../mapping.js'
+import { colorForKey } from '../../src/utils/colors.js'
 import type { Project, ProjectColor, ProjectPriority, ProjectStatus } from '../../src/types/domain.js'
 
 interface ProjectRow {
@@ -71,7 +72,7 @@ export async function createProject(sql: Sql, userId: string, input: CreateProje
     priority: input.priority ?? 'medium',
     start_date: input.startDate ?? null,
     target_date: input.targetDate ?? null,
-    color: input.color ?? 'violet',
+    color: input.color ?? colorForKey(id),
     is_demo: input.isDemo ?? false,
     created_at: input.createdAt ?? now,
     updated_at: input.updatedAt ?? now,

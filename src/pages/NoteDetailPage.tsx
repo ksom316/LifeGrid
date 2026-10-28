@@ -7,14 +7,16 @@ import { NoteFormModal } from '../components/notes/NoteFormModal'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { ConfirmDialog } from '../components/ui/ConfirmDialog'
+import { ColorBadge } from '../components/ui/ColorSwatch'
 import { IconArrowLeft, IconBook, IconFolder, IconPencil, IconPin, IconTrash } from '../components/ui/icons'
 import { formatLongDate } from '../utils/date'
 import { toggleChecklistLine } from '../utils/noteFormatting'
+import { resolveTagColor } from '../utils/tags'
 
 export function NoteDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { status, error, notes, projects, deleteNote, toggleNotePin, updateNote, refresh } = useAppData()
+  const { status, error, notes, projects, tagColors, deleteNote, toggleNotePin, updateNote, refresh } = useAppData()
   const [isEditOpen, setEditOpen] = useState(false)
   const [isDeleteOpen, setDeleteOpen] = useState(false)
 
@@ -78,21 +80,22 @@ export function NoteDetailPage() {
             <h1 className="text-2xl font-bold tracking-tight text-ink">{note.title}</h1>
             {pinned && <Badge tone="brand">Pinned</Badge>}
           </div>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            {note.tags.map((tag) => (
-              <Badge key={tag} tone="neutral">
-                {tag}
-              </Badge>
-            ))}
-            {project && (
-              <Link to={`/projects/${project.id}`}>
-                <Badge tone="brand">
-                  <IconFolder width={10} height={10} className="mr-1" />
-                  {project.name}
-                </Badge>
-              </Link>
-            )}
-          </div>
+          {(note.tags.length > 0 || project) && (
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              {project && (
+                <Link to={`/projects/${project.id}`}>
+                  <ColorBadge color={project.color} icon={<IconFolder width={10} height={10} />}>
+                    {project.name}
+                  </ColorBadge>
+                </Link>
+              )}
+              {note.tags.map((tag) => (
+                <ColorBadge key={tag} color={resolveTagColor(tagColors, tag)}>
+                  {tag}
+                </ColorBadge>
+              ))}
+            </div>
+          )}
           <p className="mt-2 text-xs text-ink-soft">
             Updated {formatLongDate(note.updatedAt)} · Created {formatLongDate(note.createdAt)}
           </p>

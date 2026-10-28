@@ -1,5 +1,5 @@
 import { type DBSchema, type IDBPDatabase, openDB } from 'idb'
-import type { DailyPlan, FocusSession, Note, Project, Task, WeeklyReview } from '../types/domain'
+import type { DailyPlan, FocusSession, Note, Project, Task, TagColor, WeeklyReview } from '../types/domain'
 import { DB_VERSION } from '../types/dbVersion'
 
 const DB_NAME = 'life-grid'
@@ -12,6 +12,7 @@ export const STORE_NAMES = [
   'focusSessions',
   'dailyPlans',
   'weeklyReviews',
+  'tagColors',
 ] as const
 export type StoreName = (typeof STORE_NAMES)[number]
 
@@ -45,6 +46,11 @@ interface LifeGridSchema extends DBSchema {
   weeklyReviews: {
     key: string
     value: WeeklyReview
+  }
+  /** Keyed by its own id, which is the normalized tag name. */
+  tagColors: {
+    key: string
+    value: TagColor
   }
 }
 
@@ -81,6 +87,9 @@ export function getDb(): Promise<IDBPDatabase<LifeGridSchema>> {
         }
         if (!db.objectStoreNames.contains('weeklyReviews')) {
           db.createObjectStore('weeklyReviews', { keyPath: 'id' })
+        }
+        if (!db.objectStoreNames.contains('tagColors')) {
+          db.createObjectStore('tagColors', { keyPath: 'id' })
         }
       },
     }).catch((err) => {

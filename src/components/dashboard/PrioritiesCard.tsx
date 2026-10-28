@@ -4,6 +4,7 @@ import type { Task } from '../../types/domain'
 import { todayKey } from '../../utils/date'
 import { Badge } from '../ui/Badge'
 import { Card } from '../ui/Card'
+import { ColorDot } from '../ui/ColorSwatch'
 import { EmptyState } from '../ui/EmptyState'
 import { IconCheck, IconFlag } from '../ui/icons'
 
@@ -56,6 +57,7 @@ export function PrioritiesCard() {
               task={task}
               projectId={task.projectId}
               projectName={projects.find((p) => p.id === task.projectId)?.name}
+              projectColor={projects.find((p) => p.id === task.projectId)?.color}
               onToggle={() => toggleTaskDone(task.id)}
             />
           ))}
@@ -69,11 +71,13 @@ function PriorityRow({
   task,
   projectId,
   projectName,
+  projectColor,
   onToggle,
 }: {
   task: Task
   projectId?: string
   projectName?: string
+  projectColor?: unknown
   onToggle: () => void
 }) {
   const done = task.status === 'done'
@@ -95,12 +99,13 @@ function PriorityRow({
       {projectId ? (
         <Link
           to={`/projects/${projectId}?task=${task.id}`}
-          className={`min-w-0 flex-1 truncate text-xs font-medium hover:text-brand-ink ${
+          className={`flex min-w-0 flex-1 items-center gap-1.5 truncate text-xs font-medium hover:text-brand-ink ${
             done ? 'text-ink-soft line-through' : 'text-ink'
           }`}
           title={projectName}
         >
-          {task.title}
+          <ColorDot color={projectColor} />
+          <span className="truncate">{task.title}</span>
         </Link>
       ) : (
         <span

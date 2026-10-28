@@ -12,6 +12,7 @@ import { type CreateNoteInput, notesRepo } from '../data/notes'
 import { type CreateProjectInput, projectsRepo } from '../data/projects'
 import { type CompleteTaskResult, type CreateTaskInput, tasksRepo } from '../data/tasks'
 import { type WeeklyReviewFields, weeklyReviewsRepo } from '../data/weeklyReviews'
+import { tagColorsRepo } from '../data/tagColors'
 import { remoteBackupRepo } from '../data/remote/backup'
 import { remoteDailyPlansRepo } from '../data/remote/dailyPlans'
 import { remoteFocusSessionsRepo } from '../data/remote/focusSessions'
@@ -19,14 +20,17 @@ import { remoteNotesRepo } from '../data/remote/notes'
 import { remoteProjectsRepo } from '../data/remote/projects'
 import { remoteTasksRepo } from '../data/remote/tasks'
 import { remoteWeeklyReviewsRepo } from '../data/remote/weeklyReviews'
+import { remoteTagColorsRepo } from '../data/remote/tagColors'
 import { useAuth } from './AuthContext'
 import type { LifeGridBackup, RestoreResult, RestoreStrategy } from '../types/backup'
+import type { PaletteColor } from '../utils/colors'
 import type {
   DailyPlan,
   FocusSession,
   Note,
   Project,
   Task,
+  TagColor,
   WeeklyReview,
 } from '../types/domain'
 
@@ -41,6 +45,7 @@ interface AppDataState {
   focusSessions: FocusSession[]
   dailyPlans: DailyPlan[]
   weeklyReviews: WeeklyReview[]
+  tagColors: TagColor[]
   hasDemoData: boolean
   isEmpty: boolean
   refresh: () => Promise<void>
@@ -65,6 +70,7 @@ interface AppDataState {
   addDailyPriority: (date: string, taskId: string) => Promise<void>
   removeDailyPriority: (date: string, taskId: string) => Promise<void>
   upsertWeeklyReview: (weekStart: string, fields: WeeklyReviewFields) => Promise<WeeklyReview>
+  setTagColor: (tag: string, color: PaletteColor) => Promise<void>
   loadSampleData: () => Promise<void>
   removeSampleData: () => Promise<void>
   restoreFromBackup: (backup: LifeGridBackup, strategy: RestoreStrategy) => Promise<RestoreResult>
@@ -92,6 +98,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       focusSessions: isHosted ? remoteFocusSessionsRepo : focusSessionsRepo,
       dailyPlans: isHosted ? remoteDailyPlansRepo : dailyPlansRepo,
       weeklyReviews: isHosted ? remoteWeeklyReviewsRepo : weeklyReviewsRepo,
+      tagColors: isHosted ? remoteTagColorsRepo : tagColorsRepo,
     }),
     [isHosted],
   )
@@ -104,16 +111,18 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
   const [focusSessions, setFocusSessions] = useState<FocusSession[]>([])
   const [dailyPlans, setDailyPlans] = useState<DailyPlan[]>([])
   const [weeklyReviews, setWeeklyReviews] = useState<WeeklyReview[]>([])
+  const [tagColors, setTagColors] = useState<TagColor[]>([])
 
   const refresh = useCallback(async () => {
     try {
-      const [p, t, n, f, dp, wr] = await Promise.all([
+      const [p, t, n, f, dp, wr, tc] = await Promise.all([
         repos.projects.list(),
         repos.tasks.list(),
         repos.notes.list(),
         repos.focusSessions.list(),
         repos.dailyPlans.list(),
         repos.weeklyReviews.list(),
+        repos.tagColors.list(),
       ])
       setProjects(p)
       setTasks(t)
@@ -121,6 +130,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       setFocusSessions(f)
       setDailyPlans(dp)
       setWeeklyReviews(wr)
+      setTagColors(tc)
       setStatus('ready')
       setError(null)
     } catch (err) {
@@ -274,6 +284,14 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     [repos, refresh],
   )
 
+  const setTagColor = useCallback(
+    async (tag: string, color: PaletteColor) => {
+      await repos.tagColors.setColor(tag, color)
+      await refresh()
+    },
+    [repos, refresh],
+  )
+
   // Sample/demo data is always a local-only, IndexedDB concept — seeding or
   // clearing it never touches the hosted account, so these two intentionally
   // do NOT go through `repos`. The Settings/Dashboard UI only offers them
@@ -320,6 +338,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     focusSessions,
     dailyPlans,
     weeklyReviews,
+    tagColors,
     hasDemoData,
     isEmpty,
     refresh,
@@ -344,6 +363,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     addDailyPriority,
     removeDailyPriority,
     upsertWeeklyReview,
+    setTagColor,
     loadSampleData,
     removeSampleData,
     restoreFromBackup,

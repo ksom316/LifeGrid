@@ -12,6 +12,7 @@ import tasksDispatcher from '../../../api/tasks.ts'
 import notesDispatcher from '../../../api/notes.ts'
 import dailyPlansDispatcher from '../../../api/daily-plans.ts'
 import weeklyReviewsDispatcher from '../../../api/weekly-reviews.ts'
+import tagColorsDispatcher from '../../../api/tag-colors.ts'
 
 const projectsIndex = projectsDispatcher
 const projectById = projectsDispatcher
@@ -20,6 +21,7 @@ const notesIndex = notesDispatcher
 const noteById = notesDispatcher
 const dailyPlanByDate = dailyPlansDispatcher
 const weeklyReviewByWeek = weeklyReviewsDispatcher
+const tagColors = tagColorsDispatcher
 
 let sql: SqlPool
 let user: { id: string; cookie: string }
@@ -139,6 +141,52 @@ describe('daily plans', () => {
     await dailyPlanByDate(mockReq({ method: 'GET', cookie: user.cookie, query: { date: '2099-01-01' } }), res.res)
     expect(res.statusCode()).toBe(200)
     expect((res.body() as { dailyPlan: { taskIds: string[] } }).dailyPlan.taskIds).toEqual([])
+  })
+})
+
+describe('tag colours', () => {
+  it('sets and lists a tag colour override', async () => {
+    await tagColors(mockReq({ method: 'PUT', cookie: user.cookie, body: { tag: 'work', color: 'rose' } }), mockRes().res)
+
+    const res = mockRes()
+    await tagColors(mockReq({ method: 'GET', cookie: user.cookie }), res.res)
+    const list = (res.body() as { tagColors: { id: string; color: string }[] }).tagColors
+    expect(list).toEqual([expect.objectContaining({ id: 'work', color: 'rose' })])
+  })
+
+  it('setting a colour for the same tag twice updates it in place rather than duplicating', async () => {
+    await tagColors(mockReq({ method: 'PUT', cookie: user.cookie, body: { tag: 'work', color: 'rose' } }), mockRes().res)
+    await tagColors(mockReq({ method: 'PUT', cookie: user.cookie, body: { tag: 'work', color: 'teal' } }), mockRes().res)
+
+    const res = mockRes()
+    await tagColors(mockReq({ method: 'GET', cookie: user.cookie }), res.res)
+    const list = (res.body() as { tagColors: { id: string; color: string }[] }).tagColors
+    expect(list).toHaveLength(1)
+    expect(list[0].color).toBe('teal')
+  })
+
+  it('normalizes tag text (trim/lowercase) so the same tag is addressed consistently', async () => {
+    await tagColors(mockReq({ method: 'PUT', cookie: user.cookie, body: { tag: '  Work  ', color: 'rose' } }), mockRes().res)
+
+    const res = mockRes()
+    await tagColors(mockReq({ method: 'GET', cookie: user.cookie }), res.res)
+    const list = (res.body() as { tagColors: { id: string; color: string }[] }).tagColors
+    expect(list).toEqual([expect.objectContaining({ id: 'work', color: 'rose' })])
+  })
+
+  it('rejects an invalid colour value', async () => {
+    const res = mockRes()
+    await tagColors(mockReq({ method: 'PUT', cookie: user.cookie, body: { tag: 'work', color: 'not-a-colour' } }), res.res)
+    expect(res.statusCode()).toBe(400)
+  })
+
+  it('removes a tag colour override', async () => {
+    await tagColors(mockReq({ method: 'PUT', cookie: user.cookie, body: { tag: 'work', color: 'rose' } }), mockRes().res)
+    await tagColors(mockReq({ method: 'DELETE', cookie: user.cookie, body: { tag: 'work' } }), mockRes().res)
+
+    const res = mockRes()
+    await tagColors(mockReq({ method: 'GET', cookie: user.cookie }), res.res)
+    expect((res.body() as { tagColors: unknown[] }).tagColors).toEqual([])
   })
 })
 

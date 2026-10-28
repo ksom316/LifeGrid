@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useAppData } from '../../state/AppDataContext'
 import { Badge } from '../ui/Badge'
 import { Card } from '../ui/Card'
+import { ColorDot } from '../ui/ColorSwatch'
 import { EmptyState } from '../ui/EmptyState'
 import { IconTimer } from '../ui/icons'
 import { formatShortDate, isOverdue } from '../../utils/date'
@@ -50,7 +51,8 @@ export function DeadlinesCard() {
                   <span className="min-w-0 flex-1 truncate text-xs font-medium text-ink">{task.title}</span>
                 )}
                 {project && (
-                  <span className="hidden truncate text-xs text-ink-soft sm:block">
+                  <span className="hidden items-center gap-1.5 truncate text-xs text-ink-soft sm:flex">
+                    <ColorDot color={project.color} />
                     {project.name}
                   </span>
                 )}

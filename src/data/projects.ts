@@ -2,6 +2,7 @@ import { createId, createRepository, nowISO } from './repository'
 import { focusSessionsRepo } from './focusSessions'
 import { notesRepo } from './notes'
 import { tasksRepo } from './tasks'
+import { colorForKey } from '../utils/colors'
 import type { Project, ProjectColor, ProjectPriority, ProjectStatus } from '../types/domain'
 
 const repo = createRepository<Project>('projects')
@@ -30,15 +31,16 @@ export const projectsRepo = {
 
   async create(input: CreateProjectInput): Promise<Project> {
     const timestamp = nowISO()
+    const id = createId()
     const project: Project = {
-      id: createId(),
+      id,
       name: input.name.trim(),
       description: input.description?.trim() ?? '',
       status: input.status ?? 'active',
       priority: input.priority ?? 'medium',
       startDate: input.startDate,
       targetDate: input.targetDate,
-      color: input.color ?? 'violet',
+      color: input.color ?? colorForKey(id),
       createdAt: timestamp,
       updatedAt: timestamp,
       isDemo: input.isDemo,

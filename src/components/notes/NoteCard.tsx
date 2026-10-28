@@ -4,9 +4,11 @@ import { notePinned } from '../../data/notes'
 import { useAppData } from '../../state/AppDataContext'
 import type { Note, Project } from '../../types/domain'
 import { formatShortDate } from '../../utils/date'
-import { Badge } from '../ui/Badge'
 import { ConfirmDialog } from '../ui/ConfirmDialog'
+import { ColorBadge } from '../ui/ColorSwatch'
 import { IconFolder, IconPencil, IconPin, IconTrash } from '../ui/icons'
+import { accentBorderStyle, resolveColor } from '../../utils/colors'
+import { resolveTagColor } from '../../utils/tags'
 import { NoteFormModal } from './NoteFormModal'
 
 interface NoteCardProps {
@@ -16,13 +18,18 @@ interface NoteCardProps {
 }
 
 export function NoteCard({ note, project, projects }: NoteCardProps) {
-  const { deleteNote, toggleNotePin } = useAppData()
+  const { deleteNote, toggleNotePin, tagColors } = useAppData()
   const [isEditOpen, setEditOpen] = useState(false)
   const [isDeleteOpen, setDeleteOpen] = useState(false)
   const pinned = notePinned(note)
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-5 shadow-sm transition-colors hover:border-border-strong">
+    <div
+      className={`flex flex-col gap-3 rounded-xl border border-border bg-surface p-5 shadow-sm transition-colors hover:border-border-strong ${
+        project ? 'border-t-2' : ''
+      }`}
+      style={project ? accentBorderStyle(resolveColor(project.color)) : undefined}
+    >
       <div className="flex items-start justify-between gap-2">
         <Link to={`/vault/${note.id}`} className="min-w-0 flex-1 focus-visible:outline-none">
           <h3 className="truncate text-sm font-semibold text-ink hover:text-brand-ink">
@@ -64,21 +71,22 @@ export function NoteCard({ note, project, projects }: NoteCardProps) {
         <p className="line-clamp-3 whitespace-pre-wrap text-xs text-ink-soft">{note.content}</p>
       )}
 
-      <div className="flex flex-wrap items-center gap-1.5">
-        {note.tags.map((tag) => (
-          <Badge key={tag} tone="neutral">
-            {tag}
-          </Badge>
-        ))}
-        {project && (
-          <Link to={`/projects/${project.id}`} onClick={(e) => e.stopPropagation()}>
-            <Badge tone="brand">
-              <IconFolder width={10} height={10} className="mr-1" />
-              {project.name}
-            </Badge>
-          </Link>
-        )}
-      </div>
+      {(note.tags.length > 0 || project) && (
+        <div className="flex flex-wrap items-center gap-1.5">
+          {project && (
+            <Link to={`/projects/${project.id}`} onClick={(e) => e.stopPropagation()}>
+              <ColorBadge color={project.color} icon={<IconFolder width={10} height={10} />}>
+                {project.name}
+              </ColorBadge>
+            </Link>
+          )}
+          {note.tags.map((tag) => (
+            <ColorBadge key={tag} color={resolveTagColor(tagColors, tag)}>
+              {tag}
+            </ColorBadge>
+          ))}
+        </div>
+      )}
 
       <p className="text-xs text-ink-soft">Updated {formatShortDate(note.updatedAt)}</p>
 

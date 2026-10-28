@@ -4,6 +4,8 @@ import type { Project, ProjectStatus, Task } from '../../types/domain'
 import { formatShortDate, isOverdue } from '../../utils/date'
 import { computeProjectTaskStats } from '../../utils/projectStats'
 import { Badge } from '../ui/Badge'
+import { ColorDot } from '../ui/ColorSwatch'
+import { colorHex, resolveColor } from '../../utils/colors'
 
 const STATUS_TONE: Record<ProjectStatus, 'brand' | 'success' | 'neutral'> = {
   active: 'brand',
@@ -13,14 +15,6 @@ const STATUS_TONE: Record<ProjectStatus, 'brand' | 'success' | 'neutral'> = {
 }
 
 const PRIORITY_TONE = { high: 'danger', medium: 'warning', low: 'neutral' } as const
-
-const COLOR_DOT: Record<string, string> = {
-  violet: 'bg-brand',
-  teal: 'bg-teal-500',
-  amber: 'bg-amber-500',
-  rose: 'bg-rose-500',
-  slate: 'bg-slate-500',
-}
 
 interface ProjectCardProps {
   project: Project
@@ -39,7 +33,7 @@ export function ProjectCard({ project, tasks }: ProjectCardProps) {
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">
-          <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${COLOR_DOT[project.color]}`} />
+          <ColorDot color={project.color} />
           <h3 className="truncate text-sm font-semibold text-ink">{project.name}</h3>
         </div>
         <Badge tone={PRIORITY_TONE[projectPriority(project)]}>{projectPriority(project)}</Badge>
@@ -70,8 +64,8 @@ export function ProjectCard({ project, tasks }: ProjectCardProps) {
         </div>
         <div className="h-1.5 w-full rounded-full bg-canvas">
           <div
-            className="h-1.5 rounded-full bg-gradient-to-r from-brand to-violet-500 transition-all"
-            style={{ width: `${stats.percent}%` }}
+            className="h-1.5 rounded-full transition-all"
+            style={{ width: `${stats.percent}%`, backgroundColor: colorHex(resolveColor(project.color)) }}
           />
         </div>
       </div>

@@ -3,10 +3,10 @@ import type { FormEvent } from 'react'
 import { useAppData } from '../../state/AppDataContext'
 import type { Project, ProjectColor, ProjectPriority, ProjectStatus } from '../../types/domain'
 import { Button } from '../ui/Button'
+import { ColorSwatchPicker } from '../ui/ColorSwatch'
 import { Field, inputClasses } from '../ui/Field'
 import { Modal } from '../ui/Modal'
 
-const PROJECT_COLORS: ProjectColor[] = ['violet', 'teal', 'amber', 'rose', 'slate']
 const PROJECT_STATUSES: ProjectStatus[] = ['active', 'paused', 'completed', 'archived']
 const PROJECT_PRIORITIES: ProjectPriority[] = ['low', 'medium', 'high']
 
@@ -25,7 +25,8 @@ interface FormState {
   priority: ProjectPriority
   startDate: string
   targetDate: string
-  color: ProjectColor
+  /** Undefined for a brand-new project until the user picks a swatch — left unset, the data layer assigns a stable deterministic default rather than always defaulting to the same colour. */
+  color: ProjectColor | undefined
 }
 
 function emptyState(): FormState {
@@ -36,7 +37,7 @@ function emptyState(): FormState {
     priority: 'medium',
     startDate: '',
     targetDate: '',
-    color: 'violet',
+    color: undefined,
   }
 }
 
@@ -177,17 +178,11 @@ export function ProjectFormModal({ isOpen, onClose, project, onSaved }: ProjectF
           </Field>
         </div>
         <Field label="Colour">
-          <select
-            className={inputClasses}
+          <ColorSwatchPicker
             value={form.color}
-            onChange={(e) => setForm((f) => ({ ...f, color: e.target.value as ProjectColor }))}
-          >
-            {PROJECT_COLORS.map((c) => (
-              <option key={c} value={c}>
-                {c[0].toUpperCase() + c.slice(1)}
-              </option>
-            ))}
-          </select>
+            aria-label="Project colour"
+            onChange={(c: ProjectColor) => setForm((f) => ({ ...f, color: c }))}
+          />
         </Field>
         <div className="mt-2 flex justify-end gap-2">
           <Button type="button" variant="ghost" onClick={onClose}>

@@ -10,6 +10,7 @@ import { TaskFormModal } from '../components/projects/TaskFormModal'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
+import { ColorDot } from '../components/ui/ColorSwatch'
 import { ConfirmDialog } from '../components/ui/ConfirmDialog'
 import {
   IconArrowLeft,
@@ -104,6 +105,7 @@ export function ProjectDetailPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
+            <ColorDot color={project.color} className="h-3 w-3" />
             <h1 className="text-2xl font-bold tracking-tight text-ink">{project.name}</h1>
             <Badge tone={STATUS_TONE[project.status]}>{project.status}</Badge>
             <Badge tone={PRIORITY_TONE[projectPriority(project)]}>{projectPriority(project)}</Badge>

@@ -3,11 +3,12 @@ import type { AuthedContext } from '../http.js'
 import { notFound, readJsonBody, requireMethod } from '../http.js'
 import { asRecord, optionalDate, optionalEnum, optionalString, optionalUuid, requireString } from '../validation.js'
 import { createProject, deleteProjectPreservingRecords, getProject, listProjects, updateProject } from '../repositories/projects.js'
-import type { ProjectColor, ProjectPriority, ProjectStatus } from '../../src/types/domain.js'
+import { PALETTE_COLORS } from '../../src/utils/colors.js'
+import type { ProjectPriority, ProjectStatus } from '../../src/types/domain.js'
 
 const STATUSES: ProjectStatus[] = ['active', 'paused', 'completed', 'archived']
 const PRIORITIES: ProjectPriority[] = ['low', 'medium', 'high']
-const COLORS: ProjectColor[] = ['violet', 'teal', 'amber', 'rose', 'slate']
+const COLORS = PALETTE_COLORS
 
 /** Bodies moved verbatim out of the former api/projects/{index,[id]}.ts. */
 

@@ -5,4 +5,4 @@
  * without pulling IndexedDB-only code into a Node serverless function
  * bundle. src/data/db.ts re-exports this for existing imports.
  */
-export const DB_VERSION = 2
+export const DB_VERSION = 3

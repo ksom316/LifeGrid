@@ -1,3 +1,5 @@
+import type { PaletteColor } from '../utils/colors.js'
+
 export type ID = string
 
 export interface BaseRecord {
@@ -22,7 +24,14 @@ export interface Project extends BaseRecord {
   color: ProjectColor
 }
 
-export type ProjectColor = 'violet' | 'teal' | 'amber' | 'rose' | 'slate'
+/**
+ * Kept as its own alias (not used inline) so existing imports of
+ * `ProjectColor` elsewhere keep working unchanged. Backed by the shared
+ * palette in src/utils/colors.ts — every value ever stored here (the
+ * original 'violet'|'teal'|'amber'|'rose'|'slate') is still a valid
+ * PaletteColor, so no migration is needed for this widening.
+ */
+export type ProjectColor = PaletteColor
 
 export type TaskStatus = 'todo' | 'in-progress' | 'done'
 export type TaskPriority = 'low' | 'medium' | 'high'
@@ -74,6 +83,18 @@ export interface Note extends BaseRecord {
   pinned?: boolean
   /** Per-note editor auto-correct/spellcheck setting. Optional for records created before this existed; treat missing as true (enabled). */
   autocorrect?: boolean
+}
+
+/**
+ * A user's explicit colour choice for a tag, keyed by the tag's own
+ * normalized text (`id` IS the tag name — same "one record per key, no
+ * separate id" shape as DailyPlan). A tag with no record here isn't
+ * "uncoloured" — src/utils/colors.ts's colorForKey(tagName) gives it a
+ * stable deterministic colour, so this table only needs to hold the tags
+ * someone actually chose a colour for.
+ */
+export interface TagColor extends BaseRecord {
+  color: PaletteColor
 }
 
 export type FocusSessionType = 'focus' | 'short-break' | 'long-break'

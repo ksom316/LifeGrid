@@ -3,14 +3,8 @@ import { useAppData } from '../../state/AppDataContext'
 import { Card } from '../ui/Card'
 import { EmptyState } from '../ui/EmptyState'
 import { IconFolder } from '../ui/icons'
-
-const COLOR_DOT: Record<string, string> = {
-  violet: 'bg-brand',
-  teal: 'bg-teal-500',
-  amber: 'bg-amber-500',
-  rose: 'bg-rose-500',
-  slate: 'bg-slate-500',
-}
+import { ColorDot } from '../ui/ColorSwatch'
+import { colorHex, resolveColor } from '../../utils/colors'
 
 export function ProjectsOverviewCard() {
   const { projects, tasks } = useAppData()
@@ -45,7 +39,7 @@ export function ProjectsOverviewCard() {
                   className="block h-full rounded-lg border border-border bg-canvas p-4 transition-colors hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
                 >
                   <div className="mb-3 flex items-center gap-2">
-                    <span className={`h-2 w-2 shrink-0 rounded-full ${COLOR_DOT[project.color]}`} />
+                    <ColorDot color={project.color} />
                     <span className="flex-1 truncate text-xs font-semibold text-ink">{project.name}</span>
                   </div>
                   {project.description && (
@@ -57,8 +51,8 @@ export function ProjectsOverviewCard() {
                   </div>
                   <div className="h-1 w-full overflow-hidden rounded-full bg-chrome">
                     <div
-                      className="h-full rounded-full bg-emerald-500 transition-all"
-                      style={{ width: `${pct}%` }}
+                      className="h-full rounded-full transition-all"
+                      style={{ width: `${pct}%`, backgroundColor: colorHex(resolveColor(project.color)) }}
                     />
                   </div>
                 </Link>

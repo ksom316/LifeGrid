@@ -27,6 +27,7 @@ import notesDispatcher from '../../../api/notes.ts'
 import focusSessionsDispatcher from '../../../api/focus-sessions.ts'
 import dailyPlansDispatcher from '../../../api/daily-plans.ts'
 import weeklyReviewsDispatcher from '../../../api/weekly-reviews.ts'
+import tagColorsDispatcher from '../../../api/tag-colors.ts'
 
 function withQuery(req: VercelRequest, extra: Record<string, string>): VercelRequest {
   return { ...req, query: { ...(req.query as Record<string, string>), ...extra } } as unknown as VercelRequest
@@ -48,6 +49,7 @@ function focusSessionById(req: VercelRequest, res: VercelResponse) {
 }
 const dailyPlanByDate = dailyPlansDispatcher
 const weeklyReviewByWeek = weeklyReviewsDispatcher
+const tagColors = tagColorsDispatcher
 
 let sql: SqlPool
 let alice: { id: string; cookie: string }
@@ -207,6 +209,14 @@ describe('cross-user isolation — daily plans and weekly reviews (composite-key
     const bobGet = mockRes()
     await weeklyReviewByWeek(mockReq({ method: 'GET', cookie: bob.cookie, query: { weekStart: '2026-03-09' } }), bobGet.res)
     expect(bobGet.statusCode()).toBe(404)
+  })
+
+  it("bob's identically-named tag colour is independent of alice's", async () => {
+    await tagColors(mockReq({ method: 'PUT', cookie: alice.cookie, body: { tag: 'work', color: 'rose' } }), mockRes().res)
+
+    const bobGet = mockRes()
+    await tagColors(mockReq({ method: 'GET', cookie: bob.cookie }), bobGet.res)
+    expect((bobGet.body() as { tagColors: unknown[] }).tagColors).toEqual([])
   })
 })
 
