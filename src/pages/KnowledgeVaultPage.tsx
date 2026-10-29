@@ -10,6 +10,7 @@ import { Field, inputClasses } from '../components/ui/Field'
 import { IconBook, IconPlus, IconSearch } from '../components/ui/icons'
 
 type TagFilter = 'all' | string
+type ProjectFilter = 'all' | 'unassigned' | string
 type SortOption = 'updated' | 'created' | 'title'
 
 const SORT_LABELS: Record<SortOption, string> = {
@@ -35,6 +36,7 @@ export function KnowledgeVaultPage() {
   const { status, error, notes, projects, refresh } = useAppData()
   const [search, setSearch] = useState('')
   const [tagFilter, setTagFilter] = useState<TagFilter>('all')
+  const [projectFilter, setProjectFilter] = useState<ProjectFilter>('all')
   const [sort, setSort] = useState<SortOption>('updated')
   const [isCreateOpen, setCreateOpen] = useState(false)
 
@@ -52,16 +54,20 @@ export function KnowledgeVaultPage() {
         note.title.toLowerCase().includes(query) ||
         note.content.toLowerCase().includes(query)
       const matchesTag = tagFilter === 'all' || note.tags.includes(tagFilter)
-      return matchesQuery && matchesTag
+      const matchesProject =
+        projectFilter === 'all' ||
+        (projectFilter === 'unassigned' ? !note.projectId : note.projectId === projectFilter)
+      return matchesQuery && matchesTag && matchesProject
     })
     const sorted = sortNotes(filtered, sort)
     // Pinned notes always float to the top, preserving the chosen sort within each group.
     return [...sorted].sort((a, b) => Number(notePinned(b)) - Number(notePinned(a)))
-  }, [notes, search, tagFilter, sort])
+  }, [notes, search, tagFilter, projectFilter, sort])
 
   const clearFilters = () => {
     setSearch('')
     setTagFilter('all')
+    setProjectFilter('all')
   }
 
   if (status === 'loading') {
@@ -135,6 +141,26 @@ export function KnowledgeVaultPage() {
                   {allTags.map((tag) => (
                     <option key={tag} value={tag}>
                       {tag}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            </div>
+          )}
+          {projects.length > 0 && (
+            <div className="sm:w-40">
+              <Field label="Project">
+                <select
+                  className={inputClasses}
+                  value={projectFilter}
+                  onChange={(e) => setProjectFilter(e.target.value)}
+                  aria-label="Filter by project"
+                >
+                  <option value="all">All projects</option>
+                  <option value="unassigned">Unassigned</option>
+                  {projects.map((project) => (
+                    <option key={project.id} value={project.id}>
+                      {project.name}
                     </option>
                   ))}
                 </select>

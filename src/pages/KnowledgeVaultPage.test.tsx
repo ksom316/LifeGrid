@@ -132,6 +132,71 @@ describe('KnowledgeVaultPage', () => {
     expect(screen.getByText('Garden shopping list')).toBeInTheDocument()
   })
 
+  it('filters notes by project, including an "Unassigned" option for notes without a project', async () => {
+    const kitchen = await projectsRepo.create({ name: 'Kitchen remodel' })
+    const garden = await projectsRepo.create({ name: 'Garden plan' })
+    await notesRepo.create({ title: 'Cabinet ideas', projectId: kitchen.id })
+    await notesRepo.create({ title: 'Seed list', projectId: garden.id })
+    await notesRepo.create({ title: 'Loose thought' })
+
+    renderVaultApp('/vault')
+    await screen.findByText('Cabinet ideas')
+
+    fireEvent.change(screen.getByLabelText('Filter by project'), { target: { value: kitchen.id } })
+    expect(screen.getByText('Cabinet ideas')).toBeInTheDocument()
+    expect(screen.queryByText('Seed list')).not.toBeInTheDocument()
+    expect(screen.queryByText('Loose thought')).not.toBeInTheDocument()
+
+    fireEvent.change(screen.getByLabelText('Filter by project'), { target: { value: 'unassigned' } })
+    expect(screen.queryByText('Cabinet ideas')).not.toBeInTheDocument()
+    expect(screen.queryByText('Seed list')).not.toBeInTheDocument()
+    expect(screen.getByText('Loose thought')).toBeInTheDocument()
+
+    fireEvent.change(screen.getByLabelText('Filter by project'), { target: { value: 'all' } })
+    expect(screen.getByText('Cabinet ideas')).toBeInTheDocument()
+    expect(screen.getByText('Seed list')).toBeInTheDocument()
+    expect(screen.getByText('Loose thought')).toBeInTheDocument()
+  })
+
+  it('combines the project filter with search and tag filters, and resets it via clear filters', async () => {
+    const kitchen = await projectsRepo.create({ name: 'Kitchen remodel' })
+    await notesRepo.create({
+      title: 'Cabinet ideas',
+      content: 'Oak finish',
+      tags: ['kitchen'],
+      projectId: kitchen.id,
+    })
+    await notesRepo.create({
+      title: 'Appliance ideas',
+      content: 'Steel finish',
+      tags: ['kitchen', 'appliances'],
+      projectId: kitchen.id,
+    })
+    await notesRepo.create({ title: 'Unrelated note', tags: ['kitchen'] })
+
+    renderVaultApp('/vault')
+    await screen.findByText('Cabinet ideas')
+
+    fireEvent.change(screen.getByLabelText('Filter by project'), { target: { value: kitchen.id } })
+    fireEvent.change(screen.getByLabelText('Filter by tag'), { target: { value: 'kitchen' } })
+    expect(screen.getByText('Cabinet ideas')).toBeInTheDocument()
+    expect(screen.getByText('Appliance ideas')).toBeInTheDocument()
+    expect(screen.queryByText('Unrelated note')).not.toBeInTheDocument()
+
+    fireEvent.change(screen.getByLabelText('Search notes'), { target: { value: 'oak' } })
+    expect(screen.getByText('Cabinet ideas')).toBeInTheDocument()
+    expect(screen.queryByText('Appliance ideas')).not.toBeInTheDocument()
+
+    fireEvent.change(screen.getByLabelText('Search notes'), { target: { value: 'nonexistent' } })
+    expect(await screen.findByText('No notes match your filters')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: /clear filters/i }))
+    expect(await screen.findByText('Cabinet ideas')).toBeInTheDocument()
+    expect(screen.getByText('Appliance ideas')).toBeInTheDocument()
+    expect(screen.getByText('Unrelated note')).toBeInTheDocument()
+    expect(screen.getByLabelText('Filter by project')).toHaveValue('all')
+  })
+
   it('shows a no-results state with a clear-filters action when filters match nothing', async () => {
     await notesRepo.create({ title: 'Garden journal' })
 
